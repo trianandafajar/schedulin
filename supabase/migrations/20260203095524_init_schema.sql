@@ -10,7 +10,8 @@ create table users (
   full_name text,
   avatar_url text,
   role text default 'user', -- user | admin
-  created_at timestamp with time zone default now()
+  created_at timestamp with time zone default now(),
+  updated_at timestamp with time zone default now()
 );
 
 ---------------------------------------------------
@@ -20,7 +21,8 @@ create table business_categories_master (
   id uuid primary key default gen_random_uuid(),
   name text not null unique,
   icon text,
-  created_at timestamp with time zone default now()
+  created_at timestamp with time zone default now(),
+  updated_at timestamp with time zone default now()
 );
 
 ---------------------------------------------------
@@ -35,7 +37,8 @@ create table business (
   address text,
   logo_url text,
   category_id uuid references business_categories_master(id),
-  created_at timestamp with time zone default now()
+  created_at timestamp with time zone default now(),
+  updated_at timestamp with time zone default now()
 );
 
 create index idx_business_owner on business(owner_id);
@@ -51,7 +54,8 @@ create table services (
   duration_minutes int not null,
   price int not null,
   is_active boolean default true,
-  created_at timestamp with time zone default now()
+  created_at timestamp with time zone default now(),
+  updated_at timestamp with time zone default now()
 );
 
 create index idx_services_business on services(business_id);
@@ -67,6 +71,7 @@ create table appointment_slots (
   is_booked boolean default false,
   is_disabled boolean default false,
   created_at timestamp with time zone default now(),
+  updated_at timestamp with time zone default now(),
   unique (business_id, date, time)
 );
 
@@ -86,7 +91,8 @@ create table bookings (
   customer_name text not null,
   customer_phone text not null,
   notes text,
-  created_at timestamp with time zone default now()
+  created_at timestamp with time zone default now(),
+  updated_at timestamp with time zone default now()
 );
 
 create index idx_bookings_business on bookings(business_id);
