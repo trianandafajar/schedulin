@@ -30,13 +30,14 @@ create table business_categories_master (
 ---------------------------------------------------
 create table business (
   id uuid primary key default gen_random_uuid(),
-  owner_id text references users(id) on delete cascade,
+  owner_id text references users(id) on delete cascade unique not null,
   name text not null,
   slug text unique not null,
   description text,
   address text,
   logo_url text,
   category_id uuid references business_categories_master(id),
+  is_public_enabled boolean default false,
   created_at timestamp with time zone default now(),
   updated_at timestamp with time zone default now()
 );

@@ -1,6 +1,15 @@
+import supabase from "@/actions/supabase";
 import AppointmentSettings from "@/components/appointment/AppointmentSettings";
+import { auth } from "@clerk/nextjs/server";
 
-const AppointmentPage: React.FC = () => {
+const AppointmentPage: React.FC = async () => {
+  const { userId } = await auth();
+
+  const { data: business } = await supabase
+    .from("business")
+    .select("id, slug, is_public_enabled")
+    .eq("owner_id", userId)
+    .single();
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       <div className="mx-auto max-w-7xl">
@@ -12,7 +21,7 @@ const AppointmentPage: React.FC = () => {
             Manage your appointment booking settings, opening hours, and holidays
           </p>
         </div>
-        <AppointmentSettings />
+        <AppointmentSettings business={business} />
       </div>
     </div>
   );

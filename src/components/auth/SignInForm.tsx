@@ -8,45 +8,33 @@ import Input from "@/components/form/input/InputField";
 import Label from "@/components/form/Label";
 import Button from "@/components/ui/button/Button";
 import { ChevronLeftIcon, EyeCloseIcon, EyeIcon } from "@/icons";
+import { useAuthService } from "@/service/authService";
 
 export default function SignInForm() {
-  const { isLoaded, signIn, setActive } = useSignIn();
   const [showPassword, setShowPassword] = useState(false);
   const [isChecked, setIsChecked] = useState(false);
-  const router = useRouter();
 
+  const { login, isLoaded } = useAuthService();
+  const router = useRouter();
+  
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false); 
 
-  const handleSubmit = async (e: React.FormEvent) => {
+const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!isLoaded) return;
-    
     setError("");
     setIsLoading(true);
+    if (!isLoaded) return;
 
-    if (!email || !password) {
-      setError("Mohon isi email dan password.");
+    const result = await login(email, password);
+
+    if (result?.success) {
+      router.push('/');
       setIsLoading(false);
-      return;
-    }
-    try {
-      const result = await signIn.create({
-        identifier: email.trim(), 
-        password: password.trim(),
-      });
-      if (result.status === "complete") {
-        await setActive({ session: result.createdSessionId });   
-        router.refresh(); 
-        router.push("/"); 
-      } else {
-        setIsLoading(false);
-      }
-    } catch (err: any) {
-      const errorMessage = err.errors?.[0]?.longMessage || err.message || "Email atau password salah.";
-      setError(errorMessage);
+    } else {
+      setError(result?.error || "Gagal Login");
       setIsLoading(false);
     }
   };
@@ -91,7 +79,7 @@ export default function SignInForm() {
                 Sign in with X
               </button>
             </div> */}
-{/* 
+            {/* 
             <div className="relative py-3 sm:py-5">
               <div className="absolute inset-0 flex items-center">
                 <div className="w-full border-t border-gray-200 dark:border-gray-800"></div>

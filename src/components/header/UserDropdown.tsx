@@ -4,16 +4,14 @@ import Link from "next/link";
 import React, { useState } from "react";
 import { Dropdown } from "../ui/dropdown/Dropdown";
 import { DropdownItem } from "../ui/dropdown/DropdownItem";
-import { useClerk } from "@clerk/nextjs";
-import { useRouter } from "next/router";
-import Button from "../ui/button/Button";
+import { useAuthService } from "@/service/authService";
 
 export default function UserDropdown() {
   const [isOpen, setIsOpen] = useState(false);
-  const { signOut } = useClerk();
+  const { logout } = useAuthService();
 
   const handleLogout = async () => {
-    await signOut({ redirectUrl: '/signin' });
+    await logout();
   };
 function toggleDropdown(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
   e.stopPropagation();

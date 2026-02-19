@@ -7,8 +7,8 @@ import Checkbox from "@/components/form/input/Checkbox";
 import Input from "@/components/form/input/InputField";
 import Label from "@/components/form/Label";
 import { ChevronLeftIcon, EyeCloseIcon, EyeIcon } from "@/icons";
-import { completeOnboarding } from "@/actions/auth";
 import Button from "../ui/button/Button";
+import { completeOnboardingClient, useAuthService } from "@/service/authService";
 
 type Step = 'signup' | 'onboarding' | 'verify';
 
@@ -17,9 +17,8 @@ interface SignUpFormProps {
 }
 
 export default function SignUpForm({ categories }: SignUpFormProps) {
-  const { isLoaded, signUp, setActive } = useSignUp();
+  const { register, verifyEmail, isLoaded } = useAuthService();
   const router = useRouter();
-
   const [step, setStep] = useState<Step>('signup');
 
   const [email, setEmail] = useState("");
@@ -48,22 +47,15 @@ export default function SignUpForm({ categories }: SignUpFormProps) {
       return;
     }
 
-    try {
-      await signUp.create({
-        firstName,
-        lastName,
-        emailAddress: email,
-        password,
-      });
+    const result = await register(email, password, firstName, lastName);
 
-      await signUp.prepareEmailAddressVerification({ strategy: "email_code" });
-
+    if (result?.success) {
       setStep('onboarding');
-    } catch (err: any) {
-      setError(err.errors?.[0]?.longMessage || "Something went wrong");
-    } finally {
-      setIsLoading(false);
+    } else {
+      setError(result?.error || "Registration failed");
     }
+
+    setIsLoading(false);
   };
 
   const handleOnboardingNext = (e: React.FormEvent) => {
@@ -83,47 +75,88 @@ export default function SignUpForm({ categories }: SignUpFormProps) {
     setError("");
     setIsLoading(true);
 
-    try {
-      const completeSignUp = await signUp.attemptEmailAddressVerification({
-        code,
-      });
-      if (completeSignUp.status === "complete") {
-        await setActive({ session: completeSignUp.createdSessionId });
+    const verificationResult = await verifyEmail(code);
 
-        const userId = completeSignUp.createdUserId || signUp.createdUserId;
+    if (verificationResult?.success && verificationResult.userId) {
+      const userFullName = `${firstName} ${lastName}`.trim();
+      const onboardingResult = await completeOnboardingClient(
+        businessName,
+        categoryId,
+        verificationResult.userId,
+        email,
+        userFullName
+      );
 
-        const userEmail = completeSignUp.emailAddress || email;
-        const userFullName = `${firstName} ${lastName}`.trim();
-
-        if (!userId) {
-          console.error("Critical Error: User ID is missing after signup", { completeSignUp, signUp });
-          setError("Account verified but User ID missing. Please refresh and login.");
-          setIsLoading(false);
-          return;
-        }
-
-        const result = await completeOnboarding(
-          businessName,
-          categoryId,
-          userId,
-          userEmail,
-          userFullName
-        );
-        if (result.error) {
-          setError("Account created but business setup failed. Please contact support.");
-        } else {
-          router.push("/");
-        }
+      if (onboardingResult.error) {
+        setError("Account created but business setup failed. Please contact support.");
       } else {
-        console.error(JSON.stringify(completeSignUp, null, 2));
-        setError("Verification incomplete. Please try again.");
+        router.push("/");
       }
-    } catch (err: any) {
-      setError("Verification code incorrect");
-    } finally {
-      setIsLoading(false);
+    } else {
+      setError(verificationResult?.error || "Verification code incorrect");
     }
+
+    setIsLoading(false);
   };
+
+  // const handleOnboardingNext = (e: React.FormEvent) => {
+  //   e.preventDefault();
+  //   setError("");
+
+  //   if (!businessName || !categoryId) {
+  //     setError("Please fill in all business details.");
+  //     return;
+  //   }
+  //   setStep('verify');
+  // };
+
+  // const handleVerification = async (e: React.FormEvent) => {
+  //   e.preventDefault();
+  //   if (!isLoaded) return;
+  //   setError("");
+  //   setIsLoading(true);
+
+  //   try {
+  //     const completeSignUp = await signUp.attemptEmailAddressVerification({
+  //       code,
+  //     });
+  //     if (completeSignUp.status === "complete") {
+  //       await setActive({ session: completeSignUp.createdSessionId });
+
+  //       const userId = completeSignUp.createdUserId || signUp.createdUserId;
+
+  //       const userEmail = completeSignUp.emailAddress || email;
+  //       const userFullName = `${firstName} ${lastName}`.trim();
+
+  //       if (!userId) {
+  //         console.error("Critical Error: User ID is missing after signup", { completeSignUp, signUp });
+  //         setError("Account verified but User ID missing. Please refresh and login.");
+  //         setIsLoading(false);
+  //         return;
+  //       }
+
+  //       const result = await completeOnboardingClient(
+  //         businessName,
+  //         categoryId,
+  //         userId,
+  //         userEmail,
+  //         userFullName
+  //       );
+  //       if (result.error) {
+  //         setError("Account created but business setup failed. Please contact support.");
+  //       } else {
+  //         router.push("/");
+  //       }
+  //     } else {
+  //       console.error(JSON.stringify(completeSignUp, null, 2));
+  //       setError("Verification incomplete. Please try again.");
+  //     }
+  //   } catch (err: any) {
+  //     setError("Verification code incorrect");
+  //   } finally {
+  //     setIsLoading(false);
+  //   }
+  // };
 
   return (
     <div className="flex flex-col flex-1 lg:w-1/2 w-full overflow-y-auto no-scrollbar">

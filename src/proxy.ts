@@ -4,7 +4,10 @@ import { NextResponse } from 'next/server';
 const isPublicRoute = createRouteMatcher([
   '/signin(.*)',
   '/signup(.*)',
-  '/api/webhooks(.*)'
+  '/public/booking(.*)',
+  '/api/webhooks(.*)',
+  '/api(.*)',
+  '/homepage'
 ]);
 
 const isAuthRoute = createRouteMatcher([
@@ -22,14 +25,14 @@ export default clerkMiddleware(async (auth, request) => {
 
   if (userId && isAuthRoute(request)) {  
     const onboardingComplete = sessionClaims?.metadata?.onboardingComplete === true;
-    if (pathname.startsWith('/signup')) {
+    if (pathname.startsWith(process.env.NEXT_PUBLIC_CLERK_SIGN_UP_URL!)) {
       if (onboardingComplete) {
-        return NextResponse.redirect(new URL('/', request.url));
+        return NextResponse.redirect(new URL(process.env.NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL!, request.url));
       }
       return NextResponse.next();
     }
 
-    return NextResponse.redirect(new URL('/', request.url));
+    return NextResponse.redirect(new URL(process.env.NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL!, request.url));
   }
 
   return NextResponse.next();
