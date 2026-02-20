@@ -1,13 +1,18 @@
+import supabase from "@/actions/supabase";
 import axios from "@/app/utils/axios";
 
 export const getBusinessCategories = async () => {
-  const response = await axios('/api/business/categories', {
-    method: 'GET',
-    headers: { 'Content-Type': 'application/json' },
-  });
+  const { data, error } = await supabase
+      .from('business_categories_master')
+      .select('id, name')
+      .order('name');
   
-  if (response.status != 200) throw new Error('Failed to axios categories');
-  return response.data;
+   if (error) {
+    console.error("Categories error:", error);
+    return [];
+  }
+
+  return data ?? [];
 };
 
 export const togglePublicBooking = async (businessId: string, isEnabled: boolean) => {

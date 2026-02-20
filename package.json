@@ -43,7 +43,8 @@
     "supabase": "^2.76.6",
     "svix": "^1.85.0",
     "swiper": "^11.2.10",
-    "tailwind-merge": "^2.6.0"
+    "tailwind-merge": "^2.6.0",
+    "use-resize-observer": "^9.1.0"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.3.1",

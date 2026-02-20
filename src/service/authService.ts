@@ -57,7 +57,7 @@ const register = async (email: string, password: string, firstName: string, last
       });
 
       if (result.status === "complete") {
-        await setActive({ session: result.createdSessionId });
+        // await setActive({ session: result.createdSessionId });
        
         return { 
           success: true, 

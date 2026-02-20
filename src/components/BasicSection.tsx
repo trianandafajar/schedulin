@@ -15,7 +15,7 @@ export interface BasicSectionProps {
 
 export default function BasicSection({ imageUrl, title, overTitle, reversed, children }: PropsWithChildren<BasicSectionProps>) {
   return (
-    <BasicSectionWrapper reversed={reversed}>
+    <BasicSectionWrapper $reversed={reversed}>
       <ImageContainer>
         <NextImage src={imageUrl} alt={title} layout="fill" objectFit="cover" />
       </ImageContainer>
@@ -73,21 +73,16 @@ const ContentContainer = styled.div`
   flex: 1;
 `;
 
-type Props = Pick<BasicSectionProps, 'reversed'>;
-const BasicSectionWrapper = styled(Container)`
+type Props = {
+  $reversed?: boolean;
+};
+
+const BasicSectionWrapper = styled(Container)<Props>`
   display: flex;
   align-items: center;
-  flex-direction: ${(p: Props) => (p.reversed ? 'row-reverse' : 'row')};
+  flex-direction: ${(p) => (p.$reversed ? 'row-reverse' : 'row')};
 
   ${ImageContainer} {
-    margin: ${(p: Props) => (p.reversed ? '0 0 0 5rem' : '0 5rem 0 0')};
-  }
-
-  ${media('<=desktop')} {
-    flex-direction: column;
-
-    ${ImageContainer} {
-      margin: 0 0 2.5rem 0;
-    }
+    margin: ${(p) => (p.$reversed ? '0 0 0 5rem' : '0 5rem 0 0')};
   }
 `;

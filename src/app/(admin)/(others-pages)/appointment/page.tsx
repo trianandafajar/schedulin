@@ -21,7 +21,13 @@ const AppointmentPage: React.FC = async () => {
             Manage your appointment booking settings, opening hours, and holidays
           </p>
         </div>
-        <AppointmentSettings business={business} />
+        {business ? (
+          <AppointmentSettings business={business} />
+        ) : (
+          <p className="text-center text-gray-500 dark:text-gray-400">
+            No business found for this user.
+          </p>
+        )}
       </div>
     </div>
   );

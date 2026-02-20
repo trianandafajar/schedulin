@@ -1,6 +1,6 @@
 import dynamic from 'next/dynamic';
 import NextLink from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 import React, { useRef, useState } from 'react';
 import styled from 'styled-components';
 
@@ -27,6 +27,7 @@ type NavbarContainerProps = { $hidden: boolean; $transparent: boolean };
 
 export default function Navbar({ items }: NavbarProps) {
   const router = useRouter();
+  const pathname = usePathname();
   const { toggle } = Drawer.useDrawer();
   const [scrollingDirection, setScrollingDirection] = useState<ScrollingDirections>('none');
 
@@ -34,10 +35,10 @@ export default function Navbar({ items }: NavbarProps) {
   const lastRoute = useRef('');
   const stepSize = useRef(50);
 
-  useScrollPosition(scrollPositionCallback, [router.asPath], undefined, undefined, 50);
+  useScrollPosition(scrollPositionCallback, [pathname], undefined, undefined, 50);
 
   function scrollPositionCallback({ currPos }: ScrollPositionEffectProps) {
-    const routerPath = router.asPath;
+    const routerPath = pathname;
     const hasRouteChanged = routerPath !== lastRoute.current;
 
     if (hasRouteChanged) {

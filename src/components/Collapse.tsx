@@ -1,5 +1,5 @@
 import { forwardRef, PropsWithChildren } from 'react';
-import AnimateHeight from 'react-animate-height';
+import AnimateHeight, { Height } from 'react-animate-height';
 
 export interface CollapseProps {
   isOpen?: boolean;
@@ -8,42 +8,51 @@ export interface CollapseProps {
   onAnimationEnd?: () => void;
   duration?: number;
   easing?: string;
-  startingHeight?: number | string;
-  endingHeight?: number | string;
+  startingHeight?: Height;
+  endingHeight?: Height;
 }
 
 const Collapse = forwardRef<HTMLDivElement, PropsWithChildren<CollapseProps>>(
   (
     {
-      isOpen,
+      isOpen = false,
       animateOpacity = true,
       onAnimationStart,
       onAnimationEnd,
-      duration,
+      duration = 300,
       easing = 'ease',
       startingHeight = 0,
       endingHeight = 'auto',
+      children,
       ...rest
     },
     ref,
   ) => {
+    const height: Height = isOpen ? endingHeight : startingHeight;
+
     return (
       <AnimateHeight
         duration={duration}
         easing={easing}
         animateOpacity={animateOpacity}
-        height={isOpen ? endingHeight : startingHeight}
+        height={height}
         applyInlineTransitions={false}
-        {...{ onAnimationStart, onAnimationEnd }}
+        onAnimationStart={onAnimationStart}
+        onAnimationEnd={onAnimationEnd}
         style={{
-          transition: 'height .3s ease,opacity .3s ease-in-out,transform .3s ease-in-out',
+          transition:
+            'height .3s ease, opacity .3s ease-in-out, transform .3s ease-in-out',
           backfaceVisibility: 'hidden',
         }}
       >
-        <div ref={ref} {...rest} />
+        <div ref={ref} {...rest}>
+          {children}
+        </div>
       </AnimateHeight>
     );
   },
 );
+
+Collapse.displayName = 'Collapse';
 
 export default Collapse;
