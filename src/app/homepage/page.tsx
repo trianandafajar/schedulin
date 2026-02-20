@@ -2,8 +2,8 @@ import { Metadata } from 'next';
 import HomepageContent from './HomepageContent';
 
 export const metadata: Metadata = {
-  title: 'Test',
-  description: 'Tempor nostrud velit fugiat nostrud duis incididunt Lorem deserunt est tempor aute dolor ad elit.',
+  title: 'Schedulin Homepage',
+  description: 'SaaS aplikasi untuk booking appointment otomatis, reminder, dan manajemen jadwal layanan.',
 };
 
 export default function Homepage() {

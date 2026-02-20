@@ -29,15 +29,15 @@ export default function BasicSection({ imageUrl, title, overTitle, reversed, chi
 }
 
 const Title = styled.h1`
-  font-size: 5.2rem;
+  font-size: 3.8rem;
   font-weight: bold;
-  line-height: 1.1;
-  margin-bottom: 4rem;
+  line-height: 1.15;
+  margin-bottom: 2rem;
   letter-spacing: -0.03em;
 
   ${media('<=tablet')} {
-    font-size: 4.6rem;
-    margin-bottom: 2rem;
+    font-size: 3rem;
+    margin-bottom: 1.5rem;
   }
 `;
 
@@ -83,6 +83,6 @@ const BasicSectionWrapper = styled(Container)<Props>`
   flex-direction: ${(p) => (p.$reversed ? 'row-reverse' : 'row')};
 
   ${ImageContainer} {
-    margin: ${(p) => (p.$reversed ? '0 0 0 5rem' : '0 5rem 0 0')};
+    margin: ${(p) => (p.$reversed ? '0 0 0 3rem' : '0 3rem 0 0')};
   }
 `;

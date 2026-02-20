@@ -15,19 +15,18 @@ export default function Hero() {
   return (
     <HeroWrapper>
       <Contents>
-        <CustomOverTitle>the coolest, saas product you have ever seen</CustomOverTitle>
-        <Heading>Make your life easier with our SaaS</Heading>
+        <CustomOverTitle>appointment booking software for service teams</CustomOverTitle>
+        <Heading>Run your bookings on autopilot.</Heading>
         <Description>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Reiciendis, tempora qui. Explicabo voluptate iure ipsum molestias
-          repudiandae perspiciatis nostrum praesentium, unde pariatur tempora magni rem. Necessitatibus facilis obcaecati ratione.
+          Let clients book available slots online, send automatic reminders, and keep your team calendar in sync without manual back-and-forth.
         </Description>
         <CustomButtonGroup>
           <Button onClick={() => setIsModalOpened(true)}>
-            Start Now <span>&rarr;</span>
+            Book a Demo <span>&rarr;</span>
           </Button>
           <NextLink href="/signup" passHref>
             <Button>
-              Register <span>&rarr;</span>
+              Start Free <span>&rarr;</span>
             </Button>
           </NextLink>
         </CustomButtonGroup>
@@ -41,7 +40,7 @@ export default function Hero() {
 
 const HeroWrapper = styled(Container)`
   display: flex;
-  padding-top: 5rem;
+  padding-top: 3rem;
 
   ${media('<=desktop')} {
     padding-top: 1rem;
@@ -60,7 +59,7 @@ const Contents = styled.div`
 `;
 
 const CustomButtonGroup = styled(ButtonGroup)`
-  margin-top: 4rem;
+  margin-top: 2.5rem;
 `;
 
 const ImageContainer = styled.div`
@@ -83,12 +82,12 @@ const ImageContainer = styled.div`
 `;
 
 const Description = styled.p`
-  font-size: 1.8rem;
+  font-size: 1.5rem;
   opacity: 0.8;
-  line-height: 1.6;
+  line-height: 1.5;
 
   ${media('<=desktop')} {
-    font-size: 1.5rem;
+    font-size: 1.4rem;
   }
 `;
 
@@ -97,14 +96,14 @@ const CustomOverTitle = styled(OverTitle)`
 `;
 
 const Heading = styled.h1`
-  font-size: 7.2rem;
+  font-size: 4.6rem;
   font-weight: bold;
-  line-height: 1.1;
-  margin-bottom: 4rem;
+  line-height: 1.15;
+  margin-bottom: 2rem;
   letter-spacing: -0.03em;
 
   ${media('<=tablet')} {
-    font-size: 4.6rem;
-    margin-bottom: 2rem;
+    font-size: 3.2rem;
+    margin-bottom: 1.5rem;
   }
 `;

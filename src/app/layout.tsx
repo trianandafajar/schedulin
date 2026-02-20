@@ -5,6 +5,7 @@ import { SidebarProvider } from '@/context/SidebarContext';
 import { ThemeProvider } from '@/context/ThemeContext';
 import { ClerkProvider } from '@clerk/nextjs';
 import { NewsletterModalContextProvider } from './contexts/newsletter-modal.context';
+import StyledComponentsRegistry from '@/lib/registry';
 
 const outfit = Outfit({
   subsets: ["latin"],
@@ -16,18 +17,22 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      <body className={`${outfit.className} dark:bg-gray-900`}>
-        <ClerkProvider>
-          <NewsletterModalContextProvider>
-          <ThemeProvider>
-            <SidebarProvider>
-              {children}
-            </SidebarProvider>
-          </ThemeProvider>
-          </NewsletterModalContextProvider>
-        </ClerkProvider>
-      </body>
-    </html>
+    <ClerkProvider>
+      <html lang="en">
+        <body className={`${outfit.className} dark:bg-gray-900`}>
+          <StyledComponentsRegistry>
+
+            <NewsletterModalContextProvider>
+            <ThemeProvider>
+              <SidebarProvider>
+                {children}
+              </SidebarProvider>
+            </ThemeProvider>
+            </NewsletterModalContextProvider>
+          </StyledComponentsRegistry>
+            
+        </body>
+      </html>
+    </ClerkProvider>
   );
 }

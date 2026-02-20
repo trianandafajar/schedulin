@@ -15,21 +15,20 @@ export default function Cta() {
     <CtaWrapper>
       <Container>
         <Stack>
-          <OverTitle>Lorem ipsum dolor sit amet</OverTitle>
-          <SectionTitle>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Temporibus delectus?</SectionTitle>
+          <OverTitle>ready to simplify scheduling?</OverTitle>
+          <SectionTitle>Launch your booking page in minutes.</SectionTitle>
           <Description>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Assumenda beatae accusamus deleniti nihil quas tempora numquam, vitae
-            culpa.
+            Accept appointments 24/7, reduce no-shows, and keep your calendar clean with automated workflows.
           </Description>
           <ButtonGroup>
             <Link href="/signup">
               <Button>
-                Start Now <span>&rarr;</span>
+                Start Free <span>&rarr;</span>
               </Button>
             </Link>
             <Link href="/signin">
               <OutlinedButton>
-                Register <span>&rarr;</span>
+                Sign In <span>&rarr;</span>
               </OutlinedButton>
             </Link>
           </ButtonGroup>
@@ -40,14 +39,14 @@ export default function Cta() {
 }
 
 const Description = styled.div`
-  font-size: 1.8rem;
+  font-size: 1.6rem;
   color: rgba(var(--textSecondary), 0.8);
 `;
 
 const Stack = styled.div`
   display: flex;
   flex-direction: column;
-  padding: 12.5rem 0;
+  padding: 8rem 0;
   color: rgb(var(--textSecondary));
   text-align: center;
   align-items: center;
@@ -55,7 +54,7 @@ const Stack = styled.div`
 
   & > *:not(:first-child) {
     max-width: 80%;
-    margin-top: 4rem;
+    margin-top: 2.2rem;
   }
 
   ${media('<=tablet')} {
