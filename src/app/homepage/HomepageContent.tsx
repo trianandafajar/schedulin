@@ -19,7 +19,7 @@ export default function HomepageContent() {
     { title: 'Awesome SaaS Features', href: '/features' },
     { title: 'Pricing', href: '/pricing' },
     { title: 'Contact', href: '/contact' },
-    { title: 'Sign up', href: '/sign-up', outlined: true },
+    { title: 'Sign up', href: '/signup', outlined: true },
   ];
 
   return (

@@ -21,9 +21,9 @@ export default async function Dashboard() {
         <BookingChart />
       </div>
 
-      <div className="col-span-12">
+      {/* <div className="col-span-12">
         <BookingList />
-      </div>
+      </div> */}
     </div>
   );
 }

@@ -1,6 +1,6 @@
 import BookingList from "@/components/booking/BookingList";
 
-const OrdersPage: React.FC = async () => {
+const BookingPage: React.FC = async () => {
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       <div className="mx-auto max-w-7xl">
@@ -9,7 +9,7 @@ const OrdersPage: React.FC = async () => {
             Oders List
           </h1>
           <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
-            Manage your orders list
+            Manage your booking list
           </p>
         </div>
         <BookingList />
@@ -18,4 +18,4 @@ const OrdersPage: React.FC = async () => {
   );
 };
 
-export default OrdersPage;
+export default BookingPage;

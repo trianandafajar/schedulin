@@ -28,6 +28,7 @@
     "axios": "^1.13.5",
     "css-in-js-media": "^2.0.1",
     "flatpickr": "^4.6.13",
+    "lucide-react": "^0.575.0",
     "next": "16.0.10",
     "nextjs-color-mode": "^1.0.5",
     "react": "^19.2.4",
