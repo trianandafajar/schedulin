@@ -12,6 +12,7 @@ import {
 } from "@fullcalendar/core";
 import { useModal } from "@/hooks/useModal";
 import { Modal } from "@/components/ui/modal";
+import Button from "../ui/button/Button";
 
 interface CalendarEvent extends EventInput {
   extendedProps: {
@@ -64,8 +65,17 @@ const Calendar: React.FC = () => {
 
   const handleDateSelect = (selectInfo: DateSelectArg) => {
     resetModalFields();
-    setEventStartDate(selectInfo.startStr);
-    setEventEndDate(selectInfo.endStr || selectInfo.startStr);
+
+    const formatDateTimeLocal = (str: string) => {
+      if (!str) return "";
+      if (str.includes("T")) {
+        return str.substring(0, 16);
+      }
+      return `${str}T00:00`;
+    };
+
+    setEventStartDate(formatDateTimeLocal(selectInfo.startStr));
+    setEventEndDate(formatDateTimeLocal(selectInfo.endStr || selectInfo.startStr));
     openModal();
   };
 
@@ -73,25 +83,35 @@ const Calendar: React.FC = () => {
     const event = clickInfo.event;
     setSelectedEvent(event as unknown as CalendarEvent);
     setEventTitle(event.title);
-    setEventStartDate(event.start?.toISOString().split("T")[0] || "");
-    setEventEndDate(event.end?.toISOString().split("T")[0] || "");
+
+    const getLocalISOString = (date: Date | null) => {
+      if (!date) return "";
+      const tzoffset = date.getTimezoneOffset() * 60000;
+      return new Date(date.getTime() - tzoffset).toISOString().slice(0, 16);
+    };
+
+    setEventStartDate(getLocalISOString(event.start));
+    setEventEndDate(
+      getLocalISOString(event.end) || getLocalISOString(event.start)
+    );
     setEventLevel(event.extendedProps.calendar);
     openModal();
   };
 
   const handleAddOrUpdateEvent = () => {
+    console.log(eventTitle)
     if (selectedEvent) {
       // Update existing event
       setEvents((prevEvents) =>
         prevEvents.map((event) =>
           event.id === selectedEvent.id
             ? {
-                ...event,
-                title: eventTitle,
-                start: eventStartDate,
-                end: eventEndDate,
-                extendedProps: { calendar: eventLevel },
-              }
+              ...event,
+              title: eventTitle,
+              start: eventStartDate,
+              end: eventEndDate,
+              extendedProps: { calendar: eventLevel },
+            }
             : event
         )
       );
@@ -102,7 +122,7 @@ const Calendar: React.FC = () => {
         title: eventTitle,
         start: eventStartDate,
         end: eventEndDate,
-        allDay: true,
+        allDay: false,
         extendedProps: { calendar: eventLevel },
       };
       setEvents((prevEvents) => [...prevEvents, newEvent]);
@@ -201,9 +221,8 @@ const Calendar: React.FC = () => {
                           />
                           <span className="flex items-center justify-center w-5 h-5 mr-2 border border-gray-300 rounded-full box dark:border-gray-700">
                             <span
-                              className={`h-2 w-2 rounded-full bg-white ${
-                                eventLevel === key ? "block" : "hidden"
-                              }`}  
+                              className={`h-2 w-2 rounded-full bg-white ${eventLevel === key ? "block" : "hidden"
+                                }`}
                             ></span>
                           </span>
                         </span>
@@ -246,20 +265,26 @@ const Calendar: React.FC = () => {
             </div>
           </div>
           <div className="flex items-center gap-3 mt-6 modal-footer sm:justify-end">
-            <button
+            <Button
               onClick={closeModal}
               type="button"
-              className="flex w-full justify-center rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] sm:w-auto"
+              variant="outline"
             >
               Close
-            </button>
-            <button
+            </Button>
+            <Button
               onClick={handleAddOrUpdateEvent}
               type="button"
+              disabled={
+                eventTitle == "" ||
+                eventLevel == "" ||
+                eventEndDate == "" ||
+                eventStartDate == ""
+              }
               className="btn btn-success btn-update-event flex w-full justify-center rounded-lg bg-brand-500 px-4 py-2.5 text-sm font-medium text-white hover:bg-brand-600 sm:w-auto"
             >
               {selectedEvent ? "Update Changes" : "Add Event"}
-            </button>
+            </Button>
           </div>
         </div>
       </Modal>

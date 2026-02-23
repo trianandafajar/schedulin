@@ -43,7 +43,6 @@ export default function PublicBookingPage() {
   const bookedForSelected = bookedSlots[selectedKey] || [];
 
   const isPastDate = (date: Date) => {
-    // Set time to 00:00:00 for comparison
     const dateToCompare = new Date(date);
     dateToCompare.setHours(0, 0, 0, 0);
     
@@ -147,7 +146,6 @@ export default function PublicBookingPage() {
                     date === selectedDate.getDate() &&
                     fullDate.getMonth() === selectedDate.getMonth() &&
                     fullDate.getFullYear() === selectedDate.getFullYear();
-
                   const isPast = isPastDate(fullDate);
 
                   return (
@@ -186,7 +184,6 @@ export default function PublicBookingPage() {
 
                     const isFullDay =
                       bookedForSelected.includes("FULL");
-
                     const pastTime =
                       formatDateKey(selectedDate) === formatDateKey(new Date()) &&
                       isPastTime(selectedDate, time);

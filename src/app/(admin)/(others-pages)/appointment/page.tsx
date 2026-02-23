@@ -1,6 +1,7 @@
 import supabase from "@/actions/supabase";
 import AppointmentSettings from "@/components/appointment/AppointmentSettings";
 import { auth } from "@clerk/nextjs/server";
+import AppointmentSettingsWrapper from "./AppoimentWraper";
 
 const AppointmentPage: React.FC = async () => {
   const { userId } = await auth();

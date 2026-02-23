@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { CopyIcon } from '@/icons';
 import { togglePublicBooking } from "@/service/businessService";
 
@@ -9,6 +9,11 @@ interface AppointmentSettingsProps {
     slug: string;
     is_public_enabled: boolean;
   };
+  schedules: Record<string, DaySchedule>;
+  holidays: Holiday[];
+  setSchedules: Dispatch<SetStateAction<Record<string, DaySchedule>>>;
+  setHolidays: Dispatch<SetStateAction<Holiday[]>>;
+  onSave: ()=>any;
 }
 
 interface DaySchedule {
@@ -33,7 +38,13 @@ const daysOfWeek = [
   "Sunday",
 ];
 
-const AppointmentSettings: React.FC<AppointmentSettingsProps> = ({ business }) => {
+const AppointmentSettings: React.FC<AppointmentSettingsProps> = ({
+  business,
+  schedules,
+  holidays,
+  setSchedules,
+  setHolidays,
+onSave }) => {
   const [isPublic, setIsPublic] = useState(business.is_public_enabled);
   const [isToggling, setIsToggling] = useState(false);
   const [copied, setCopied] = useState(false);
@@ -42,23 +53,53 @@ const AppointmentSettings: React.FC<AppointmentSettingsProps> = ({ business }) =
     const origin = window.location.origin;
     setBookingLink(`${origin}/public/booking/${business.slug}`);
   }, [business.slug]);
+  const [isSaving, setIsSaving] = useState(false);
 
-  const [schedules, setSchedules] = useState<Record<string, DaySchedule>>({
-    Monday: { isOpen: true, startTime: "09:00", endTime: "17:00" },
-    Tuesday: { isOpen: true, startTime: "09:00", endTime: "17:00" },
-    Wednesday: { isOpen: true, startTime: "09:00", endTime: "17:00" },
-    Thursday: { isOpen: true, startTime: "09:00", endTime: "17:00" },
-    Friday: { isOpen: true, startTime: "09:00", endTime: "17:00" },
-    Saturday: { isOpen: false, startTime: "09:00", endTime: "13:00" },
-    Sunday: { isOpen: false, startTime: "", endTime: "" },
-  });
-
-  const [holidays, setHolidays] = useState<Holiday[]>([
-    { id: "1", date: "2026-01-01", name: "New Year's Day" },
-    { id: "2", date: "2026-12-25", name: "Christmas" },
-  ]);
+  useEffect(() => {
+    const origin = window.location.origin;
+    setBookingLink(`${origin}/public/booking/${business.slug}`);
+  }, [business.slug]);
 
   const [newHoliday, setNewHoliday] = useState({ date: "", name: "" });
+
+  // useEffect(() => {
+  //   const loadSettings = async () => {
+  //     setIsLoading(true);
+  //     const { schedulesData, holidaysData } = await getAppointmentSettings(business.id);
+
+  //     if (schedulesData && schedulesData.length > 0) {
+  //       const formattedSchedules: Record<string, DaySchedule> = {};
+  //       schedulesData.forEach((item) => {
+  //         formattedSchedules[item.day_of_week] = {
+  //           isOpen: item.is_open,
+  //           startTime: item.start_time ? item.start_time.substring(0, 5) : "09:00",
+  //           endTime: item.end_time ? item.end_time.substring(0, 5) : "17:00",
+  //         };
+  //       });
+
+  //       daysOfWeek.forEach((day) => {
+  //         if (!formattedSchedules[day]) {
+  //           formattedSchedules[day] = { isOpen: false, startTime: "09:00", endTime: "17:00" };
+  //         }
+  //       });
+  //       setSchedules(formattedSchedules);
+  //     } else {
+  //       const defaultSchedules: Record<string, DaySchedule> = {};
+  //       daysOfWeek.forEach((day) => {
+  //         defaultSchedules[day] = { isOpen: day !== "Sunday", startTime: "09:00", endTime: "17:00" };
+  //       });
+  //       setSchedules(defaultSchedules);
+  //     }
+
+  //     if (holidaysData) {
+  //       setHolidays(holidaysData.map(h => ({ id: h.id, date: h.date, name: h.name })));
+  //     }
+  //     setIsLoading(false);
+  //   };
+
+  //   loadSettings();
+  // }, [business.id]);
+
 
   const handleTogglePublic = async () => {
     const newState = !isPublic;
@@ -105,16 +146,13 @@ const AppointmentSettings: React.FC<AppointmentSettingsProps> = ({ business }) =
     setHolidays((prev) => prev.filter((holiday) => holiday.id !== id));
   };
 
-  const handleSaveSettings = () => {
-    const settings = {
-      isPublic,
-      schedules,
-      holidays,
-    };
-    console.log("Saving to DB:", settings);
-    alert("Jadwal dan Libur berhasil disimpan (Simulasi LocalStorage)!");
-    localStorage.setItem("appointmentSettings", JSON.stringify(settings));
+  const handleSaveSettings = async () => {
+    setIsSaving(true);
+    await onSave();
+    setIsSaving(false);
   };
+
+
 
   return (
     <div className="space-y-6">
@@ -145,8 +183,8 @@ const AppointmentSettings: React.FC<AppointmentSettingsProps> = ({ business }) =
         </div>
         <div
           className={`mt-4 rounded-lg p-3 ${isPublic
-              ? "bg-green-50 text-green-700 dark:bg-green-900/20 dark:text-green-400"
-              : "bg-red-50 text-red-700 dark:bg-red-900/20 dark:text-red-400"
+            ? "bg-green-50 text-green-700 dark:bg-green-900/20 dark:text-green-400"
+            : "bg-red-50 text-red-700 dark:bg-red-900/20 dark:text-red-400"
             }`}
         >
           {isPublic ? (
@@ -301,9 +339,11 @@ const AppointmentSettings: React.FC<AppointmentSettingsProps> = ({ business }) =
       <div className="flex justify-end">
         <button
           onClick={handleSaveSettings}
-          className="rounded-lg bg-brand-500 px-6 py-2.5 text-sm font-medium text-white hover:bg-brand-600 transition-colors shadow-lg shadow-brand-500/20"
+          disabled={isSaving}
+          className={`rounded-lg px-6 py-2.5 text-sm font-medium text-white transition-colors shadow-lg ${isSaving ? "bg-brand-400 cursor-not-allowed" : "bg-brand-500 hover:bg-brand-600 shadow-brand-500/20"
+            }`}
         >
-          Save Settings
+          {isSaving ? "Menyimpan..." : "Save Settings"}
         </button>
       </div>
     </div>

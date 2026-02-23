@@ -20,7 +20,7 @@ export async function POST(req: Request) {
 
     if (userError) throw userError;
 
-    const slug = `${generateSlug(businessName)}-${userId.slice(0, 6)}`;
+    const slug = `${generateSlug(businessName)}-${userId.slice(-6)}`;
 
     const { error: businessError } = await supabase
       .from("business")

@@ -100,6 +100,37 @@ create index idx_bookings_business on bookings(business_id);
 create index idx_bookings_user on bookings(user_id);
 
 ---------------------------------------------------
+-- BUSINESS SCHEDULES 
+---------------------------------------------------
+create table business_schedules (
+  id uuid primary key default gen_random_uuid(),
+  business_id uuid references business(id) on delete cascade,
+  day_of_week text not null, -- 'Monday', 'Tuesday', dll
+  is_open boolean default true,
+  start_time time,
+  end_time time,
+  created_at timestamp with time zone default now(),
+  updated_at timestamp with time zone default now(),
+  unique (business_id, day_of_week)
+);
+
+create index idx_schedules_business on business_schedules(business_id);
+
+---------------------------------------------------
+-- BUSINESS HOLIDAYS 
+---------------------------------------------------
+create table business_holidays (
+  id uuid primary key default gen_random_uuid(),
+  business_id uuid references business(id) on delete cascade,
+  date date not null,
+  name text,
+  created_at timestamp with time zone default now(),
+  unique (business_id, date)
+);
+
+create index idx_holidays_business on business_holidays(business_id);
+
+---------------------------------------------------
 -- SEED DATA
 ---------------------------------------------------
 insert into business_categories_master (name) values
