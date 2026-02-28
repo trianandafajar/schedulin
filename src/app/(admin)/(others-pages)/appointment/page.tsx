@@ -23,7 +23,7 @@ const AppointmentPage: React.FC = async () => {
           </p>
         </div>
         {business ? (
-          <AppointmentSettings business={business} />
+          <AppointmentSettingsWrapper business={business} />
         ) : (
           <p className="text-center text-gray-500 dark:text-gray-400">
             No business found for this user.

@@ -1,18 +1,38 @@
 "use client";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useModal } from "../../hooks/useModal";
 import { Modal } from "../ui/modal";
 import Button from "../ui/button/Button";
 import Input from "../form/input/InputField";
 import Label from "../form/Label";
+import { useUser } from "@clerk/nextjs";
+import supabase from "@/actions/supabase";
 
 export default function UserInfoCard() {
   const { isOpen, openModal, closeModal } = useModal();
+  const { user } = useUser();
   const handleSave = () => {
     // Handle save logic here
     console.log("Saving changes...");
     closeModal();
   };
+  const [business, setBusiness] = useState<any[]>([]);
+
+  useEffect(() => {
+    const loadBookings = async () => {
+      if (!user?.id) return;
+
+      const { data } = await supabase
+        .from("business")
+        .select("*")
+        .eq("owner_id", user.id);
+
+      setBusiness(data || []);
+    };
+
+    loadBookings();
+  }, [user?.id]);
+  console.log(business)
   return (
     <div className="p-5 border border-gray-200 rounded-2xl dark:border-gray-800 lg:p-6">
       <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
@@ -27,7 +47,7 @@ export default function UserInfoCard() {
                 First Name
               </p>
               <p className="text-sm font-medium text-gray-800 dark:text-white/90">
-                Musharof
+                {user?.firstName}
               </p>
             </div>
 
@@ -36,7 +56,7 @@ export default function UserInfoCard() {
                 Last Name
               </p>
               <p className="text-sm font-medium text-gray-800 dark:text-white/90">
-                Chowdhury
+                {user?.lastName}
               </p>
             </div>
 
@@ -45,7 +65,7 @@ export default function UserInfoCard() {
                 Email address
               </p>
               <p className="text-sm font-medium text-gray-800 dark:text-white/90">
-                randomuser@pimjo.com
+                {user?.primaryEmailAddress?.emailAddress}
               </p>
             </div>
 

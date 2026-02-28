@@ -1,3 +1,6 @@
+// MUST be first - initializes React for styled-components SSR
+import '@/lib/styled-components-init';
+
 import { Outfit } from 'next/font/google';
 import './globals.css';
 import "flatpickr/dist/flatpickr.css";

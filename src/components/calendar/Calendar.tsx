@@ -1,11 +1,11 @@
 "use client";
-import React, { useState, useRef, useEffect } from "react";
+
+import React, { useState, useRef } from "react";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import {
-  EventInput,
   DateSelectArg,
   EventClickArg,
   EventContentArg,
@@ -14,21 +14,33 @@ import { useModal } from "@/hooks/useModal";
 import { Modal } from "@/components/ui/modal";
 import Button from "../ui/button/Button";
 
-interface CalendarEvent extends EventInput {
+interface CalendarEvent {
+  id: string;
+  title: string;
+  start: string;
+  end?: string;
+  allDay?: boolean;
   extendedProps: {
     calendar: string;
+    originalStart?: string;
+    originalEnd?: string;
   };
 }
 
-const Calendar: React.FC = () => {
-  const [selectedEvent, setSelectedEvent] = useState<CalendarEvent | null>(
-    null
-  );
+interface CalendarProps {
+  events: CalendarEvent[];
+  onSaveEvent: (eventData: any, id?: string) => Promise<void>;
+}
+
+const Calendar: React.FC<CalendarProps> = ({ events, onSaveEvent }) => {
+  const [selectedEvent, setSelectedEvent] = useState<CalendarEvent | null>(null);
   const [eventTitle, setEventTitle] = useState("");
   const [eventStartDate, setEventStartDate] = useState("");
   const [eventEndDate, setEventEndDate] = useState("");
   const [eventLevel, setEventLevel] = useState("");
-  const [events, setEvents] = useState<CalendarEvent[]>([]);
+  const [isAllDay, setIsAllDay] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  
   const calendarRef = useRef<FullCalendar>(null);
   const { isOpen, openModal, closeModal } = useModal();
 
@@ -39,96 +51,87 @@ const Calendar: React.FC = () => {
     Warning: "warning",
   };
 
-  useEffect(() => {
-    setEvents([
-      {
-        id: "1",
-        title: "Event Conf.",
-        start: new Date().toISOString().split("T")[0],
-        extendedProps: { calendar: "Danger" },
-      },
-      {
-        id: "2",
-        title: "Meeting",
-        start: new Date(Date.now() + 86400000).toISOString().split("T")[0],
-        extendedProps: { calendar: "Success" },
-      },
-      {
-        id: "3",
-        title: "Workshop",
-        start: new Date(Date.now() + 172800000).toISOString().split("T")[0],
-        end: new Date(Date.now() + 259200000).toISOString().split("T")[0],
-        extendedProps: { calendar: "Primary" },
-      },
-    ]);
-  }, []);
+  const formatForInput = (dateStr: string) => {
+    if (!dateStr) return "";
+    const date = new Date(dateStr);
+    if (isNaN(date.getTime())) return "";
+
+    const tzoffset = date.getTimezoneOffset() * 60000; 
+    return new Date(date.getTime() - tzoffset).toISOString().slice(0, 16); 
+  };
 
   const handleDateSelect = (selectInfo: DateSelectArg) => {
     resetModalFields();
+    setIsAllDay(selectInfo.allDay);
 
-    const formatDateTimeLocal = (str: string) => {
-      if (!str) return "";
-      if (str.includes("T")) {
-        return str.substring(0, 16);
-      }
-      return `${str}T00:00`;
-    };
+    let startStr = selectInfo.startStr;
+    let endStr = selectInfo.endStr || selectInfo.startStr;
 
-    setEventStartDate(formatDateTimeLocal(selectInfo.startStr));
-    setEventEndDate(formatDateTimeLocal(selectInfo.endStr || selectInfo.startStr));
+    // Tambahkan jam default jika user klik di blok yang tidak ada jamnya (misal: area bulan / all day)
+    if (!startStr.includes("T")) startStr += "T09:00";
+    if (!endStr.includes("T")) endStr += "T10:00";
+
+    setEventStartDate(formatForInput(startStr));
+    setEventEndDate(formatForInput(endStr));
     openModal();
   };
 
   const handleEventClick = (clickInfo: EventClickArg) => {
     const event = clickInfo.event;
-    setSelectedEvent(event as unknown as CalendarEvent);
+    
+    setSelectedEvent({
+      id: event.id,
+      title: event.title,
+      start: event.startStr,
+      end: event.endStr,
+      allDay: event.allDay,
+      extendedProps: {
+        calendar: event.extendedProps.calendar,
+        originalStart: event.extendedProps.originalStart,
+        originalEnd: event.extendedProps.originalEnd
+      }
+    });
+    
     setEventTitle(event.title);
+    setIsAllDay(event.allDay);
 
-    const getLocalISOString = (date: Date | null) => {
-      if (!date) return "";
-      const tzoffset = date.getTimezoneOffset() * 60000;
-      return new Date(date.getTime() - tzoffset).toISOString().slice(0, 16);
-    };
+    // Prioritaskan mengambil jam ASLI dari database jika tersedia, jika tidak ambil dari UI Fullcalendar
+    let startStr = event.extendedProps.originalStart || event.startStr;
+    let endStr = event.extendedProps.originalEnd || event.endStr || startStr;
 
-    setEventStartDate(getLocalISOString(event.start));
-    setEventEndDate(
-      getLocalISOString(event.end) || getLocalISOString(event.start)
-    );
+    if (!startStr.includes("T")) startStr += "T09:00";
+    if (!endStr.includes("T")) endStr += "T10:00";
+
+    setEventStartDate(formatForInput(startStr));
+    setEventEndDate(formatForInput(endStr));
     setEventLevel(event.extendedProps.calendar);
     openModal();
   };
 
-  const handleAddOrUpdateEvent = () => {
-    console.log(eventTitle)
-    if (selectedEvent) {
-      // Update existing event
-      setEvents((prevEvents) =>
-        prevEvents.map((event) =>
-          event.id === selectedEvent.id
-            ? {
-              ...event,
-              title: eventTitle,
-              start: eventStartDate,
-              end: eventEndDate,
-              extendedProps: { calendar: eventLevel },
-            }
-            : event
-        )
+  const handleAddOrUpdateEvent = async () => {
+    setIsLoading(true);
+    try {
+      // Selalu konversi waktu utuh (Tanggal + Jam) ke UTC ISO String untuk disimpan
+      const payloadStart = new Date(eventStartDate).toISOString();
+      const payloadEnd = eventEndDate ? new Date(eventEndDate).toISOString() : null;
+
+      await onSaveEvent(
+        {
+          title: eventTitle,
+          start: payloadStart, 
+          end: payloadEnd,
+          level: eventLevel,
+          allDay: isAllDay,
+        },
+        selectedEvent?.id
       );
-    } else {
-      // Add new event
-      const newEvent: CalendarEvent = {
-        id: Date.now().toString(),
-        title: eventTitle,
-        start: eventStartDate,
-        end: eventEndDate,
-        allDay: false,
-        extendedProps: { calendar: eventLevel },
-      };
-      setEvents((prevEvents) => [...prevEvents, newEvent]);
+      closeModal();
+      resetModalFields();
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsLoading(false);
     }
-    closeModal();
-    resetModalFields();
   };
 
   const resetModalFields = () => {
@@ -136,17 +139,18 @@ const Calendar: React.FC = () => {
     setEventStartDate("");
     setEventEndDate("");
     setEventLevel("");
+    setIsAllDay(false);
     setSelectedEvent(null);
   };
 
   return (
-    <div className="rounded-2xl border  border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
+    <div className="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
       <div className="custom-calendar">
         <FullCalendar
           ref={calendarRef}
           plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
           initialView="timeGridDay"
-          allDaySlot={false}
+          allDaySlot={true} 
           headerToolbar={{
             left: "prev,next addEventButton",
             center: "title",
@@ -157,6 +161,11 @@ const Calendar: React.FC = () => {
           select={handleDateSelect}
           eventClick={handleEventClick}
           eventContent={renderEventContent}
+          eventTimeFormat={{
+            hour: '2-digit',
+            minute: '2-digit',
+            hour12: false 
+          }}
           customButtons={{
             addEventButton: {
               text: "Add Event +",
@@ -175,26 +184,32 @@ const Calendar: React.FC = () => {
             <h5 className="mb-2 font-semibold text-gray-800 modal-title text-theme-xl dark:text-white/90 lg:text-2xl">
               {selectedEvent ? "Edit Event" : "Add Event"}
             </h5>
-            <p className="text-sm text-gray-500 dark:text-gray-400">
-              Plan your next big moment: schedule or edit an event to stay on
-              track
-            </p>
           </div>
           <div className="mt-8">
             <div>
-              <div>
-                <label className="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
-                  Event Title
-                </label>
-                <input
-                  id="event-title"
-                  type="text"
-                  value={eventTitle}
-                  onChange={(e) => setEventTitle(e.target.value)}
-                  className="dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800"
-                />
-              </div>
+              <label className="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
+                Event Title
+              </label>
+              <input
+                type="text"
+                value={eventTitle}
+                onChange={(e) => setEventTitle(e.target.value)}
+                className="dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800"
+              />
             </div>
+
+            <div className="mt-5 flex items-center">
+              <label className="flex items-center text-sm font-medium text-gray-700 dark:text-gray-400 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={isAllDay}
+                  onChange={() => setIsAllDay(!isAllDay)} 
+                  className="mr-3 h-5 w-5 rounded border-gray-300 text-brand-500 focus:ring-brand-500 dark:border-gray-700 dark:bg-gray-900"
+                />
+                Show as All Day Event
+              </label>
+            </div>
+            
             <div className="mt-6">
               <label className="block mb-4 text-sm font-medium text-gray-700 dark:text-gray-400">
                 Event Color
@@ -202,28 +217,19 @@ const Calendar: React.FC = () => {
               <div className="flex flex-wrap items-center gap-4 sm:gap-5">
                 {Object.entries(calendarsEvents).map(([key, value]) => (
                   <div key={key} className="n-chk">
-                    <div
-                      className={`form-check form-check-${value} form-check-inline`}
-                    >
-                      <label
-                        className="flex items-center text-sm text-gray-700 form-check-label dark:text-gray-400"
-                        htmlFor={`modal${key}`}
-                      >
+                    <div className={`form-check form-check-${value} form-check-inline`}>
+                      <label className="flex items-center text-sm text-gray-700 form-check-label dark:text-gray-400">
                         <span className="relative">
                           <input
                             className="sr-only form-check-input"
                             type="radio"
                             name="event-level"
-                            value={key}
-                            id={`modal${key}`}
-                            checked={eventLevel === key}
-                            onChange={() => setEventLevel(key)}
+                            value={value}
+                            checked={eventLevel === value}
+                            onChange={() => setEventLevel(value)}
                           />
                           <span className="flex items-center justify-center w-5 h-5 mr-2 border border-gray-300 rounded-full box dark:border-gray-700">
-                            <span
-                              className={`h-2 w-2 rounded-full bg-white ${eventLevel === key ? "block" : "hidden"
-                                }`}
-                            ></span>
+                            <span className={`h-2 w-2 rounded-full ${eventLevel === value ? "bg-gray-800 dark:bg-white" : ""}`}></span>
                           </span>
                         </span>
                         {key}
@@ -236,54 +242,39 @@ const Calendar: React.FC = () => {
 
             <div className="mt-6">
               <label className="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
-                Enter Start Date
+                Start Date & Time
               </label>
-              <div className="relative">
-                <input
-                  id="event-start-date"
-                  type="datetime-local"
-                  value={eventStartDate}
-                  onChange={(e) => setEventStartDate(e.target.value)}
-                  className="dark:bg-dark-900 h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-2.5 pl-4 pr-11 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800"
-                />
-              </div>
+              <input
+                type="datetime-local" 
+                value={eventStartDate}
+                onChange={(e) => setEventStartDate(e.target.value)}
+                className="dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs dark:border-gray-700 dark:bg-gray-900 dark:text-white/90"
+              />
             </div>
 
             <div className="mt-6">
               <label className="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
-                Enter End Date
+                End Date & Time
               </label>
-              <div className="relative">
-                <input
-                  id="event-end-date"
-                  type="datetime-local"
-                  value={eventEndDate}
-                  onChange={(e) => setEventEndDate(e.target.value)}
-                  className="dark:bg-dark-900 h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-2.5 pl-4 pr-11 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800"
-                />
-              </div>
+              <input
+                type="datetime-local"
+                value={eventEndDate}
+                onChange={(e) => setEventEndDate(e.target.value)}
+                className="dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs dark:border-gray-700 dark:bg-gray-900 dark:text-white/90"
+              />
             </div>
           </div>
           <div className="flex items-center gap-3 mt-6 modal-footer sm:justify-end">
-            <Button
-              onClick={closeModal}
-              type="button"
-              variant="outline"
-            >
+            <Button onClick={closeModal} type="button" variant="outline">
               Close
             </Button>
             <Button
               onClick={handleAddOrUpdateEvent}
               type="button"
-              disabled={
-                eventTitle == "" ||
-                eventLevel == "" ||
-                eventEndDate == "" ||
-                eventStartDate == ""
-              }
-              className="btn btn-success btn-update-event flex w-full justify-center rounded-lg bg-brand-500 px-4 py-2.5 text-sm font-medium text-white hover:bg-brand-600 sm:w-auto"
+              disabled={!eventTitle || !eventLevel || !eventStartDate || isLoading}
+              className="btn btn-success flex w-full justify-center rounded-lg bg-brand-500 px-4 py-2.5 text-sm font-medium text-white hover:bg-brand-600 sm:w-auto"
             >
-              {selectedEvent ? "Update Changes" : "Add Event"}
+              {isLoading ? "Saving..." : selectedEvent ? "Update Changes" : "Add Event"}
             </Button>
           </div>
         </div>
@@ -293,14 +284,19 @@ const Calendar: React.FC = () => {
 };
 
 const renderEventContent = (eventInfo: EventContentArg) => {
-  const colorClass = `fc-bg-${eventInfo.event.extendedProps.calendar.toLowerCase()}`;
+  const level = eventInfo.event.extendedProps.calendar?.toLowerCase() || "primary";
+  const colorClass = `fc-bg-${level}`;
+
   return (
     <div
-      className={`event-fc-color flex fc-event-main ${colorClass} p-1 rounded-sm`}
+      className={`event-fc-color flex items-center fc-event-main ${colorClass} p-1 rounded-sm`}
     >
       <div className="fc-daygrid-event-dot"></div>
-      <div className="fc-event-time">{eventInfo.timeText}</div>
-      <div className="fc-event-title">{eventInfo.event.title}</div>
+      
+      {!eventInfo.event.allDay && (
+        <div className="fc-event-time font-semibold mr-2">{eventInfo.timeText}</div>
+      )}
+      <div className="fc-event-title truncate ">{eventInfo.event.title}</div>
     </div>
   );
 };

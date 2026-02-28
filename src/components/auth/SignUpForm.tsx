@@ -86,10 +86,10 @@ export default function SignUpForm({ categories }: SignUpFormProps) {
         email,
         userFullName
       );
-
       if (onboardingResult.error) {
         setError("Account created but business setup failed. Please contact support.");
       } else {
+        router.refresh();
         router.push("/dashboard");
       }
     } else {

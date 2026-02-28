@@ -131,6 +131,21 @@ create table business_holidays (
 create index idx_holidays_business on business_holidays(business_id);
 
 ---------------------------------------------------
+-- CALENDAR EVENTS
+---------------------------------------------------
+create table public.calendar_events (
+  id uuid primary key default gen_random_uuid(),
+  title text not null,
+  start_date timestamp with time zone not null,
+  end_date timestamp with time zone,
+  event_level text not null default 'Primary',
+  created_at timestamp with time zone default now()
+);
+
+alter table public.calendar_events enable row level security;
+create policy "Enable full access for all users" on public.calendar_events for all using (true) with check (true);
+
+---------------------------------------------------
 -- SEED DATA
 ---------------------------------------------------
 insert into business_categories_master (name) values
@@ -139,3 +154,9 @@ insert into business_categories_master (name) values
 ('Tattoo'),
 ('Nail Art'),
 ('Massage');
+
+alter table public.calendar_events 
+add column user_id text references public.users(id) on delete cascade;
+
+alter table public.calendar_events 
+add column is_all_day boolean default false;

@@ -13,9 +13,9 @@ export default function NavLinks({ items }: { items: SingleNavItem[] }) {
     <NavList>
       {items.map((item) => (
         <NavItem key={item.href}>
-          <Link href={item.href} passHref legacyBehavior>
+          <Link href={item.href}>
             {item.outlined ? 
-                <Button>{item.title}</Button> : <NavLink>{item.title}</NavLink>}
+                <Button>{item.title}</Button> : <span>{item.title}</span>}
 
           </Link>
         </NavItem>
