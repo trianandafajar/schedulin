@@ -2,6 +2,8 @@
 import React, { useState } from "react";
 import ComponentCard from "@/components/common/ComponentCard";
 import { Table, TableHeader, TableBody, TableRow, TableCell } from "@/components/ui/table";
+import { updateBookingStatus, BookingStatus } from "@/actions/booking";
+import { Check, X, Loader2 } from "lucide-react";
 
 interface Booking {
   id: string;
@@ -9,27 +11,38 @@ interface Booking {
   date: string;
   time: string;
   status: "completed" | "pending" | "cancelled";
+  rawId?: string;
 }
 
-const bookings: Booking[] = [
-  { id: "BK001", customerName: "John Smith", date: "Today", time: "09:00 AM", status: "completed" },
-  { id: "BK002", customerName: "Sarah Johnson", date: "Today", time: "10:30 AM", status: "pending" },
-  { id: "BK003", customerName: "Mike Wilson", date: "Today", time: "11:00 AM", status: "completed" },
-  { id: "BK004", customerName: "Emily Davis", date: "Today", time: "02:00 PM", status: "pending" },
-  { id: "BK005", customerName: "Robert Brown", date: "Today", time: "03:30 PM", status: "cancelled" },
-  { id: "BK006", customerName: "Lisa Anderson", date: "Yesterday", time: "10:00 AM", status: "completed" },
-  { id: "BK007", customerName: "David Lee", date: "Yesterday", time: "11:30 AM", status: "completed" },
-  { id: "BK008", customerName: "Jennifer Taylor", date: "Yesterday", time: "02:00 PM", status: "completed" },
-];
+interface BookingListProps {
+  bookings?: Booking[];
+}
 
-const BookingList: React.FC = () => {
+const BookingList: React.FC<BookingListProps>  = ({ bookings }) => {
+  console.log(bookings)
   const [filter, setFilter] = useState<"all" | "today" | "yesterday">("all");
+  const [updatingId, setUpdatingId] = useState<string | null>(null);
 
-  const filteredBookings = bookings.filter((booking) => {
+  const filteredBookings = bookings!.filter((booking) => {
     if (filter === "today") return booking.date === "Today";
     if (filter === "yesterday") return booking.date === "Yesterday";
     return true;
   });
+
+  const handleStatusChange = async (bookingId: string, rawId: string, status: BookingStatus) => {
+    setUpdatingId(bookingId);
+    try {
+      const result = await updateBookingStatus(rawId, status);
+      if (result.error) {
+        alert(result.error);
+      }
+    } catch (error) {
+      console.error("Error updating status:", error);
+      alert("Failed to update status");
+    } finally {
+      setUpdatingId(null);
+    }
+  };
 
   const getStatusStyles = (status: Booking["status"]) => {
     const styles: Record<string, { bg: string; text: string }> = {
@@ -100,6 +113,9 @@ const BookingList: React.FC = () => {
               <TableCell isHeader className="py-3 font-semibold text-left text-gray-600 dark:text-gray-300">
                 Status
               </TableCell>
+              <TableCell isHeader className="py-3 font-semibold text-left text-gray-600 dark:text-gray-300">
+                Actions
+              </TableCell>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -121,6 +137,64 @@ const BookingList: React.FC = () => {
                   </div>
                 </TableCell>
                 <TableCell className="py-4">{getStatusStyles(booking.status)}</TableCell>
+                <TableCell className="py-4">
+                  {booking.status === "pending" && (
+                    <div className="flex gap-2">
+                      <button
+                        onClick={() => booking.rawId && handleStatusChange(booking.id, booking.rawId, "completed")}
+                        disabled={updatingId === booking.id}
+                        className="p-2 bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 rounded-lg hover:bg-green-200 dark:hover:bg-green-900/50 transition-colors disabled:opacity-50"
+                        title="Mark as Completed"
+                      >
+                        {updatingId === booking.id ? (
+                          <Loader2 className="w-4 h-4 animate-spin" />
+                        ) : (
+                          <Check className="w-4 h-4" />
+                        )}
+                      </button>
+                      <button
+                        onClick={() => booking.rawId && handleStatusChange(booking.id, booking.rawId, "cancelled")}
+                        disabled={updatingId === booking.id}
+                        className="p-2 bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400 rounded-lg hover:bg-red-200 dark:hover:bg-red-900/50 transition-colors disabled:opacity-50"
+                        title="Mark as Cancelled"
+                      >
+                        {updatingId === booking.id ? (
+                          <Loader2 className="w-4 h-4 animate-spin" />
+                        ) : (
+                          <X className="w-4 h-4" />
+                        )}
+                      </button>
+                    </div>
+                  )}
+                  {booking.status === "completed" && (
+                    <button
+                      onClick={() => booking.rawId && handleStatusChange(booking.id, booking.rawId, "cancelled")}
+                      disabled={updatingId === booking.id}
+                      className="p-2 bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400 rounded-lg hover:bg-red-200 dark:hover:bg-red-900/50 transition-colors disabled:opacity-50"
+                      title="Mark as Cancelled"
+                    >
+                      {updatingId === booking.id ? (
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                      ) : (
+                        <X className="w-4 h-4" />
+                      )}
+                    </button>
+                  )}
+                  {booking.status === "cancelled" && (
+                    <button
+                      onClick={() => booking.rawId && handleStatusChange(booking.id, booking.rawId, "pending")}
+                      disabled={updatingId === booking.id}
+                      className="p-2 bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-400 rounded-lg hover:bg-yellow-200 dark:hover:bg-yellow-900/50 transition-colors disabled:opacity-50"
+                      title="Restore to Pending"
+                    >
+                      {updatingId === booking.id ? (
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                      ) : (
+                        <Check className="w-4 h-4" />
+                      )}
+                    </button>
+                  )}
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>

@@ -577,13 +577,13 @@ span.flatpickr-weekday,
   opacity: 1;
 }
 .fc .fc-day-other .fc-daygrid-day-top .fc-daygrid-day-number {
-  @apply text-gray-400 dark:text-white/30;
+  @apply text-black dark:text-white/30;
 }
 .event-fc-color {
   @apply rounded-lg py-2.5 pl-4 pr-3;
 }
 .event-fc-color .fc-event-title {
-  @apply p-0 text-sm font-normal text-gray-700;
+  @apply p-0 text-sm font-normal text-black;
 }
 .fc-daygrid-event-dot {
   @apply w-1 h-5 ml-0 mr-3 border-none rounded-sm;

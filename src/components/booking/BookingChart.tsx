@@ -1,29 +1,63 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import ComponentCard from "@/components/common/ComponentCard";
+import { format, parseISO, getDay, startOfWeek, addDays, isSameWeek, isSameMonth } from "date-fns";
 
-const BookingChart: React.FC = () => {
+interface Booking {
+  id: string;
+  slot?: {
+    date: string;
+  } | null;
+  created_at: string;
+}
+
+interface BookingChartProps {
+  bookings: Booking[];
+}
+
+const BookingChart: React.FC<BookingChartProps> = ({ bookings }) => {
   const [timeRange, setTimeRange] = useState<"week" | "month">("week");
 
-  const weeklyData = [
-    { day: "Mon", bookings: 18 },
-    { day: "Tue", bookings: 24 },
-    { day: "Wed", bookings: 22 },
-    { day: "Thu", bookings: 28 },
-    { day: "Fri", bookings: 32 },
-    { day: "Sat", bookings: 15 },
-    { day: "Sun", bookings: 12 },
-  ];
+  const data = useMemo(() => {
+    if (timeRange === "week") {
+      // Group by day of week (Mon-Sun)
+      const days = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+      const counts = new Array(7).fill(0);
+      
+      bookings.forEach(booking => {
+        if (!booking.slot?.date) return;
+        const date = parseISO(booking.slot.date);
+        const dayIndex = getDay(date); // 0 = Sunday, 1 = Monday
+        const adjustedIndex = dayIndex === 0 ? 6 : dayIndex - 1; // Convert to Mon-Sun
+        counts[adjustedIndex]++;
+      });
 
-  const monthlyData = [
-    { day: "Week 1", bookings: 98 },
-    { day: "Week 2", bookings: 124 },
-    { day: "Week 3", bookings: 142 },
-    { day: "Week 4", bookings: 156 },
-  ];
+      return days.map((day, idx) => ({ day, bookings: counts[idx] }));
+    } else {
+      // Group by week of month (Week 1-4)
+      const weeks = ["Week 1", "Week 2", "Week 3", "Week 4"];
+      const counts = new Array(4).fill(0);
+      const now = new Date();
+      
+      bookings.forEach(booking => {
+        if (!booking.slot?.date) return;
+        const date = parseISO(booking.slot.date);
+        if (!isSameMonth(date, now)) return;
+        
+        const weekStart = startOfWeek(now);
+        const bookingStart = startOfWeek(date);
+        const diffWeeks = Math.floor((bookingStart.getTime() - weekStart.getTime()) / (7 * 24 * 60 * 60 * 1000));
+        
+        if (diffWeeks >= 0 && diffWeeks < 4) {
+          counts[diffWeeks]++;
+        }
+      });
 
-  const data = timeRange === "week" ? weeklyData : monthlyData;
-  const maxBookings = Math.max(...data.map((d) => d.bookings));
+      return weeks.map((day, idx) => ({ day, bookings: counts[idx] }));
+    }
+  }, [bookings, timeRange]);
+
+  const maxBookings = Math.max(...data.map((d) => d.bookings), 1);
 
   return (
     <ComponentCard title="Booking Statistics">
@@ -86,7 +120,7 @@ const BookingChart: React.FC = () => {
         <div className="text-center">
           <p className="text-sm text-gray-500 dark:text-gray-400">Peak Day</p>
           <p className="text-xl font-bold text-gray-900 dark:text-white">
-            {data.find((d) => d.bookings === maxBookings)?.day}
+            {data.find((d) => d.bookings === maxBookings)?.day || "-"}
           </p>
         </div>
       </div>

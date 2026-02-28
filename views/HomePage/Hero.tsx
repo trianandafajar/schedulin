@@ -5,7 +5,7 @@ import Container from '@/components/Container';
 import HeroIllustration from '@/components/HeroIllustation';
 import OverTitle from '@/components/OverTitle';
 import Button from '@/components/ui/button/Button';
-import NextLink from 'next/link';
+import Link from 'next/link';
 import styled from 'styled-components';
 
 
@@ -24,11 +24,11 @@ export default function Hero() {
           <Button onClick={() => setIsModalOpened(true)}>
             Book a Demo <span>&rarr;</span>
           </Button>
-          <NextLink href="/signup" passHref>
+          <Link href="/signup">
             <Button>
               Start Free <span>&rarr;</span>
             </Button>
-          </NextLink>
+          </Link>
         </CustomButtonGroup>
       </Contents>
       <ImageContainer>
