@@ -10,19 +10,22 @@ import Button from "@/components/ui/button/Button";
 import { ChevronLeftIcon, EyeCloseIcon, EyeIcon } from "@/icons";
 import { useAuthService } from "@/service/authService";
 
+type Step = 'signin' | 'verify';
+
 export default function SignInForm() {
   const [showPassword, setShowPassword] = useState(false);
   const [isChecked, setIsChecked] = useState(false);
 
-  const { login, isLoaded } = useAuthService();
+  const { login, isLoaded, verifyEmailLogin } = useAuthService();
   const router = useRouter();
-  
+  const [step, setStep] = useState<Step>('signin');
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-  const [isLoading, setIsLoading] = useState(false); 
+  const [isLoading, setIsLoading] = useState(false);
+  const [code, setCode] = useState("");
 
-const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
     setIsLoading(true);
@@ -34,10 +37,29 @@ const handleSubmit = async (e: React.FormEvent) => {
       router.push('/dashboard');
       setIsLoading(false);
     } else {
-      setError(result?.error || "Gagal Login");
+      setStep('verify');
+      // setError(result?.error || "Gagal Login");
       setIsLoading(false);
     }
   };
+
+  const handleVerification = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!isLoaded) return;
+    setError("");
+    setIsLoading(true);
+
+    const verificationResult = await verifyEmailLogin(code);
+    if (verificationResult?.success) {
+      router.refresh();
+      router.push("/dashboard");
+    } else {
+      setError(verificationResult?.error || "Verification code incorrect");
+    }
+
+    setIsLoading(false);
+  };
+
 
   return (
     <div className="flex flex-col flex-1 lg:w-1/2 w-full">
@@ -51,18 +73,19 @@ const handleSubmit = async (e: React.FormEvent) => {
         </Link> */}
       </div>
       <div className="flex flex-col justify-center flex-1 w-full max-w-md mx-auto">
-        <div>
-          <div className="mb-5 sm:mb-8">
-            <h1 className="mb-2 font-semibold text-gray-800 text-title-sm dark:text-white/90 sm:text-title-md">
-              Sign In
-            </h1>
-            <p className="text-sm text-gray-500 dark:text-gray-400">
-              Enter your email and password to sign in!
-            </p>
-          </div>
+        {step === 'signin' && (
           <div>
-            {/* Social Login Buttons tetap sama */}
-            {/* <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-5">
+            <div className="mb-5 sm:mb-8">
+              <h1 className="mb-2 font-semibold text-gray-800 text-title-sm dark:text-white/90 sm:text-title-md">
+                Sign In
+              </h1>
+              <p className="text-sm text-gray-500 dark:text-gray-400">
+                Enter your email and password to sign in!
+              </p>
+            </div>
+            <div>
+              {/* Social Login Buttons tetap sama */}
+              {/* <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-5">
               <button className="inline-flex items-center justify-center gap-3 py-3 text-sm font-normal text-gray-700 transition-colors bg-gray-100 rounded-lg px-7 hover:bg-gray-200 hover:text-gray-800 dark:bg-white/5 dark:text-white/90 dark:hover:bg-white/10">
                 <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path d="M18.7511 10.1944C18.7511 9.47495 18.6915 8.94995 18.5626 8.40552H10.1797V11.6527H15.1003C15.0011 12.4597 14.4654 13.675 13.2749 14.4916L13.2582 14.6003L15.9087 16.6126L16.0924 16.6305C17.7788 15.1041 18.7511 12.8583 18.7511 10.1944Z" fill="#4285F4" />
@@ -79,7 +102,7 @@ const handleSubmit = async (e: React.FormEvent) => {
                 Sign in with X
               </button>
             </div> */}
-            {/* 
+              {/* 
             <div className="relative py-3 sm:py-5">
               <div className="absolute inset-0 flex items-center">
                 <div className="w-full border-t border-gray-200 dark:border-gray-800"></div>
@@ -90,85 +113,126 @@ const handleSubmit = async (e: React.FormEvent) => {
                 </span>
               </div>
             </div> */}
-            
-            {error && (
-              <div className="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded text-sm">
-                {error}
-              </div>
-            )}
 
-            <form onSubmit={handleSubmit}>
-              <div className="space-y-6">
+              {error && (
+                <div className="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded text-sm">
+                  {error}
+                </div>
+              )}
+
+              <form onSubmit={handleSubmit}>
+                <div className="space-y-6">
+                  <div>
+                    <Label>
+                      Email <span className="text-error-500">*</span>{" "}
+                    </Label>
+                    <Input
+                      placeholder="info@gmail.com"
+                      type="email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                    />
+                  </div>
+                  <div>
+                    <Label>
+                      Password <span className="text-error-500">*</span>{" "}
+                    </Label>
+                    <div className="relative">
+                      <Input
+                        type={showPassword ? "text" : "password"}
+                        placeholder="Enter your password"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                      />
+                      <span
+                        onClick={() => setShowPassword(!showPassword)}
+                        className="absolute z-30 -translate-y-1/2 cursor-pointer right-4 top-1/2"
+                      >
+                        {showPassword ? (
+                          <EyeIcon className="fill-gray-500 dark:fill-gray-400" />
+                        ) : (
+                          <EyeCloseIcon className="fill-gray-500 dark:fill-gray-400" />
+                        )}
+                      </span>
+                    </div>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <Checkbox checked={isChecked} onChange={setIsChecked} />
+                      <span className="block font-normal text-gray-700 text-theme-sm dark:text-gray-400">
+                        Keep me logged in
+                      </span>
+                    </div>
+                    <Link
+                      href="/reset-password"
+                      className="text-sm text-brand-500 hover:text-brand-600 dark:text-brand-400"
+                    >
+                      Forgot password?
+                    </Link>
+                  </div>
+                  <div>
+                    <div id="clerk-captcha"></div>
+                    <Button className="w-full" size="sm" type="submit" disabled={isLoading}>
+                      {isLoading ? "Signing in..." : "Sign in"}
+                    </Button>
+                  </div>
+                </div>
+              </form>
+
+              <div className="mt-5">
+                <p className="text-sm font-normal text-center text-gray-700 dark:text-gray-400 sm:text-start">
+                  Don&apos;t have an account? {""}
+                  <Link
+                    href="/signup"
+                    className="text-brand-500 hover:text-brand-600 dark:text-brand-400"
+                  >
+                    Sign Up
+                  </Link>
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
+        {step === 'verify' && (
+          <div>
+            <div className="mb-5 sm:mb-8">
+              <h1 className="mb-2 font-semibold text-gray-800 text-title-sm dark:text-white/90 sm:text-title-md">Verify Email</h1>
+              <p className="text-sm text-gray-500 dark:text-gray-400">We sent a code to <strong>{email}</strong>.</p>
+            </div>
+            {error && <div className="mb-4 text-sm text-red-500">{error}</div>}
+
+            <form onSubmit={handleVerification}>
+              <div className="space-y-5">
                 <div>
-                  <Label>
-                    Email <span className="text-error-500">*</span>{" "}
-                  </Label>
-                  <Input 
-                    placeholder="info@gmail.com" 
-                    type="email" 
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
+                  <Label>Verification Code</Label>
+                  <Input
+                    type="text"
+                    placeholder="OTP"
+                    value={code}
+                    onChange={(e) => setCode(e.target.value)}
                   />
                 </div>
-                <div>
-                  <Label>
-                    Password <span className="text-error-500">*</span>{" "}
-                  </Label>
-                  <div className="relative">
-                    <Input
-                      type={showPassword ? "text" : "password"}
-                      placeholder="Enter your password"
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
-                    />
-                    <span
-                      onClick={() => setShowPassword(!showPassword)}
-                      className="absolute z-30 -translate-y-1/2 cursor-pointer right-4 top-1/2"
-                    >
-                      {showPassword ? (
-                        <EyeIcon className="fill-gray-500 dark:fill-gray-400" />
-                      ) : (
-                        <EyeCloseIcon className="fill-gray-500 dark:fill-gray-400" />
-                      )}
-                    </span>
-                  </div>
-                </div>
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <Checkbox checked={isChecked} onChange={setIsChecked} />
-                    <span className="block font-normal text-gray-700 text-theme-sm dark:text-gray-400">
-                      Keep me logged in
-                    </span>
-                  </div>
-                  <Link
-                    href="/reset-password"
-                    className="text-sm text-brand-500 hover:text-brand-600 dark:text-brand-400"
+                <Button
+                  className="w-full"
+                  size="sm"
+                  type="submit"
+                  disabled={isLoading}
+                >
+                  {isLoading ? "Setting up..." : "Verify & Complete"}
+                </Button>
+                <div className="text-center mt-4">
+                  <button
+                    className="text-sm text-gray-500"
+                    type="submit"
+                    onClick={() => setStep('signin')}
                   >
-                    Forgot password?
-                  </Link>
-                </div>
-                <div>
-                  <div id="clerk-captcha"></div>
-                  <Button className="w-full" size="sm" type="submit" disabled={isLoading}>
-                    {isLoading ? "Signing in..." : "Sign in"}
-                  </Button>
+                    Back
+                  </button>
                 </div>
               </div>
             </form>
-
-            <div className="mt-5">
-              <p className="text-sm font-normal text-center text-gray-700 dark:text-gray-400 sm:text-start">
-                Don&apos;t have an account? {""}
-                <Link
-                  href="/signup"
-                  className="text-brand-500 hover:text-brand-600 dark:text-brand-400"
-                >
-                  Sign Up
-                </Link>
-              </p>
-            </div>
           </div>
-        </div>
+        )}
       </div>
     </div>
   );

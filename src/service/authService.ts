@@ -16,27 +16,37 @@ export const useAuthService = () => {
         identifier: email,
         password,
       });
+      console.log(result.status)
       if (result.status === "complete") {
         await setActive({ session: result.createdSessionId });
         return { success: true };
-      } else {
-        return { success: false, error: "Login incomplete (MFA required?)" };
       }
+
+      if (result.status === "needs_second_factor") {
+        await signIn.prepareSecondFactor({
+          strategy: "email_code",
+        });
+        return { success: false, needsOtp: true };
+      }
+
+      return { success: false };
+
     } catch (err: any) {
-      console.error("Login Error:", err);
-      return { success: false, error: err.errors?.[0]?.message || err.message };
+      return {
+        success: false,
+        error: err.errors?.[0]?.message || err.message,
+      };
     }
   };
-
-const register = async (email: string, password: string, firstName: string, lastName: string) => {
+  const register = async (email: string, password: string, firstName: string, lastName: string) => {
     if (!isSignUpLoaded) return;
 
     try {
       await signUp.create({
         emailAddress: email,
         password,
-        firstName, 
-        lastName,  
+        firstName,
+        lastName,
       });
 
       await signUp.prepareEmailAddressVerification({ strategy: "email_code" });
@@ -56,18 +66,46 @@ const register = async (email: string, password: string, firstName: string, last
       });
 
       if (result.status === "complete") {
-        await setActive!({ session: result.createdSessionId }) ;
-       
-        return { 
-          success: true, 
-          userId: result.createdUserId, 
-          email: result.emailAddress 
+        await setActive!({ session: result.createdSessionId });
+
+        return {
+          success: true,
+          userId: result.createdUserId,
+          email: result.emailAddress
         };
       } else {
         return { success: false, error: "Verification incomplete" };
       }
     } catch (err: any) {
       return { success: false, error: err.errors?.[0]?.message || err.message };
+    }
+  };
+
+  const verifyEmailLogin = async (code: string) => {
+    if (!isSignInLoaded) return;
+
+    try {
+      const result = await signIn.attemptSecondFactor({
+        strategy: "email_code",
+        code,
+      });
+
+      if (result.status === "complete") {
+        await setActive({ session: result.createdSessionId });
+
+        return {
+          success: true,
+          sessionId: result.createdSessionId,
+        };
+      }
+
+      return { success: false, error: "Verification incomplete" };
+
+    } catch (err: any) {
+      return {
+        success: false,
+        error: err.errors?.[0]?.message || err.message,
+      };
     }
   };
 
@@ -86,6 +124,7 @@ const register = async (email: string, password: string, firstName: string, last
     register,
     verifyEmail,
     logout,
+    verifyEmailLogin,
     isLoaded: isSignInLoaded && isSignUpLoaded,
   };
 };
@@ -106,8 +145,8 @@ export const completeOnboardingClient = async (
       businessName,
       categoryId,
       userId,
-      email: userEmail,       
-      fullName: userFullName, 
+      email: userEmail,
+      fullName: userFullName,
     }),
   });
 

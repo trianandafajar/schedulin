@@ -1,6 +1,7 @@
 "use server";
 
-import supabase from "./supabase";
+import supabase from "@/lib/supabase";
+
 
 // Types
 export interface Service {

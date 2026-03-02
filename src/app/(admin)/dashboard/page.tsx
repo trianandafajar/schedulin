@@ -1,10 +1,8 @@
 import type { Metadata } from "next";
 import BookingMetrics from "@/components/booking/BookingMetrics";
 import BookingChart from "@/components/booking/BookingChart";
-import BookingList from "@/components/booking/BookingList";
-import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
-import supabase from "@/actions/supabase";
+import { getDashboardData } from "@/actions/dashboard-actions";
 
 export const metadata: Metadata = {
   title: "Dashboard | Schedulin - Appointment Scheduling",
@@ -12,37 +10,21 @@ export const metadata: Metadata = {
 };
 
 export default async function Dashboard() {
-  const { userId } = await auth();
-  if (!userId) redirect("/sign-in");
+  const result = await getDashboardData();
 
-  const { data: business } = await supabase
-    .from("business")
-    .select("id")
-    .eq("owner_id", userId)
-    .single();
+  if (result.redirect) {
+    redirect(result.redirect);
+  }
 
-  if (!business) {
+  if (result.error) {
     return (
       <div className="p-8 text-center">
-        <p className="text-gray-600 dark:text-gray-400">No business found. Please create one first.</p>
+        <p className="text-gray-600 dark:text-gray-400">{result.error}</p>
       </div>
     );
   }
 
-  const { data: bookings } = await supabase
-    .from("bookings")
-    .select(`
-      id,
-      status,
-      customer_name,
-      created_at,
-      service:services(name),
-      slot:appointment_slots(date, time)
-    `)
-    .eq("business_id", business.id)
-    .order("created_at", { ascending: false });
-
-  const bookingsData = bookings || [];
+  const bookingsData = result.bookings || [];
 
   return (
     <div className="grid grid-cols-12 gap-4 md:gap-6">
@@ -53,7 +35,6 @@ export default async function Dashboard() {
       <div className="col-span-12">
         <BookingChart bookings={bookingsData} />
       </div>
-
     </div>
   );
 }

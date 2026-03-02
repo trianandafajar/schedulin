@@ -1,6 +1,7 @@
 "use server";
 
-import supabase from "./supabase";
+import supabase from "@/lib/supabase";
+
 
 export interface PublicBookingData {
   businessId: string;
@@ -14,11 +15,19 @@ export interface PublicBookingData {
 
 export async function createPublicBooking(data: PublicBookingData) {
   try {
-    // First, find or create a slot for this booking
-    // Check if slot exists
+    const { data: business, error: businessError } = await supabase
+      .from("business")
+      .select("owner_id")
+      .eq("id", data.businessId)
+      .single();
+
+    if (businessError || !business) {
+      return { error: "Business not found" };
+    }
+
     const { data: existingSlot } = await supabase
       .from("appointment_slots")
-      .select("id, is_booked")
+      .select("id, is_booked, is_disabled")
       .eq("business_id", data.businessId)
       .eq("date", data.date)
       .eq("time", data.time)
@@ -27,12 +36,17 @@ export async function createPublicBooking(data: PublicBookingData) {
     let slotId: string;
 
     if (existingSlot) {
-      if (existingSlot.is_booked) {
-        return { error: "This time slot has already been booked" };
+      if (existingSlot.is_booked || existingSlot.is_disabled) {
+        return { error: "This time slot is not available" };
       }
+
+      await supabase
+        .from("appointment_slots")
+        .update({ is_booked: true })
+        .eq("id", existingSlot.id);
+
       slotId = existingSlot.id;
     } else {
-      // Create new slot
       const { data: newSlot, error: slotError } = await supabase
         .from("appointment_slots")
         .insert({
@@ -45,18 +59,17 @@ export async function createPublicBooking(data: PublicBookingData) {
         .single();
 
       if (slotError || !newSlot) {
-        console.error("Slot creation error:", slotError);
         return { error: slotError?.message || "Failed to create time slot" };
       }
 
       slotId = newSlot.id;
     }
 
-    // Create the booking
     const { data: booking, error: bookingError } = await supabase
       .from("bookings")
       .insert({
         business_id: data.businessId,
+        user_id: business.owner_id,
         service_id: data.serviceId,
         slot_id: slotId,
         customer_name: data.customerName,
@@ -68,19 +81,16 @@ export async function createPublicBooking(data: PublicBookingData) {
       .single();
 
     if (bookingError) {
-      console.error("Booking error:", bookingError);
-      // Rollback: free the slot
       await supabase
         .from("appointment_slots")
         .update({ is_booked: false })
         .eq("id", slotId);
-      
+
       return { error: bookingError.message || "Failed to create booking" };
     }
 
     return { success: true, data: booking };
   } catch (error: any) {
-    console.error("Create public booking error:", error);
     return { error: error.message || "An unexpected error occurred" };
   }
 }

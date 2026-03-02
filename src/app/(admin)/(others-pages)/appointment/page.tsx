@@ -1,16 +1,10 @@
-import supabase from "@/actions/supabase";
-import AppointmentSettings from "@/components/appointment/AppointmentSettings";
-import { auth } from "@clerk/nextjs/server";
 import AppointmentSettingsWrapper from "./AppoimentWraper";
+import { getMyBusinessInfo } from "@/actions/business-actions";
 
 const AppointmentPage: React.FC = async () => {
-  const { userId } = await auth();
+  const result = await getMyBusinessInfo();
+  const business = result.business;
 
-  const { data: business } = await supabase
-    .from("business")
-    .select("id, slug, is_public_enabled")
-    .eq("owner_id", userId)
-    .single();
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       <div className="mx-auto max-w-7xl">

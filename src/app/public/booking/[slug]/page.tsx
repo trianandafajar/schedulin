@@ -16,8 +16,7 @@ export default function PublicBookingPage({ params }: PageProps) {
   const slug = resolvedParams.slug;
 
   const today = new Date();
-  
-  // State
+
   const [businessId, setBusinessId] = useState<string | null>(null);
   const [businessName, setBusinessName] = useState<string>("");
   const [services, setServices] = useState<Service[]>([]);
@@ -37,13 +36,12 @@ export default function PublicBookingPage({ params }: PageProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [bookingSuccess, setBookingSuccess] = useState(false);
   const [bookingError, setBookingError] = useState<string | null>(null);
-
+  const [disabledTimes, setDisabledTimes] = useState<string[]>([]);
   useEffect(() => {
     async function loadData() {
       try {
-        // Get business by slug
         const { data: business, error: businessError } = await getBusinessBySlug(slug);
-        
+
         if (businessError || !business) {
           setError("Business not found or not available for public booking");
           setLoading(false);
@@ -53,18 +51,16 @@ export default function PublicBookingPage({ params }: PageProps) {
         setBusinessId(business.id);
         setBusinessName(business.name);
 
-        // Get services
         const { data: servicesData, error: servicesError } = await getServicesByBusinessId(business.id);
-        
+
         if (servicesError) {
           console.error("Services error:", servicesError);
         } else if (servicesData) {
           setServices(servicesData);
         }
 
-        // Get schedule
         const { data: scheduleData, error: scheduleError } = await getBusinessSchedule(business.id);
-        
+
         if (scheduleError) {
           console.error("Schedule error:", scheduleError);
         } else if (scheduleData) {
@@ -82,34 +78,44 @@ export default function PublicBookingPage({ params }: PageProps) {
     loadData();
   }, [slug]);
 
-  // Load booked slots when date is selected
   useEffect(() => {
-    async function loadBookedSlots() {
+    async function loadSlots() {
       if (!businessId || !selectedDate) {
         setBookedTimes([]);
+        setDisabledTimes([]);
         return;
       }
 
       const dateStr = selectedDate.toISOString().split("T")[0];
       const { data: slots, error } = await getBookedSlots(businessId, dateStr);
-      
-      if (error) {
-        console.error("Error loading booked slots:", error);
+
+      if (error || !slots) {
         setBookedTimes([]);
-      } else if (slots) {
-        // Convert time to string format matching our display format
-        const times = slots.map(slot => {
-          const [hours, minutes] = slot.time.split(':');
-          return `${hours}:${minutes}`;
-        });
-        setBookedTimes(times);
+        setDisabledTimes([]);
+        return;
       }
+
+      const booked: string[] = [];
+      const disabled: string[] = [];
+
+      slots.forEach((slot: any) => {
+        const [hours, minutes] = slot.time.split(":");
+        const formatted = `${hours.padStart(2, "0")}:${minutes.padStart(2, "0")}`;
+
+        if (slot.is_disabled) {
+          disabled.push(formatted);
+        } else {
+          booked.push(formatted);
+        }
+      });
+
+      setBookedTimes(booked);
+      setDisabledTimes(disabled);
     }
 
-    loadBookedSlots();
+    loadSlots();
   }, [businessId, selectedDate]);
 
-  // Get business hours for a specific day
   const getDayName = (date: Date): string => {
     const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
     return days[date.getDay()];
@@ -117,7 +123,6 @@ export default function PublicBookingPage({ params }: PageProps) {
 
   const getBusinessHours = (): { start: number; end: number } | null => {
     if (schedule.length === 0) {
-      // Default hours if no schedule
       return { start: 9, end: 17 };
     }
 
@@ -143,13 +148,13 @@ export default function PublicBookingPage({ params }: PageProps) {
     const slots: string[] = [];
     for (let h = hours.start; h < hours.end; h++) {
       for (let m = 0; m < 60; m += 30) {
-        slots.push(`${h}:${m === 0 ? '00' : m}`);
+        const hourStr = String(h).padStart(2, "0");
+        const minuteStr = String(m).padStart(2, "0");
+        slots.push(`${hourStr}:${minuteStr}`);
       }
     }
     return slots;
   };
-
-  const formatDateKey = (date: Date) => date.toISOString().split("T")[0];
 
   const currentMonth = selectedDate ? selectedDate.getMonth() : today.getMonth();
   const currentYear = selectedDate ? selectedDate.getFullYear() : today.getFullYear();
@@ -177,16 +182,16 @@ export default function PublicBookingPage({ params }: PageProps) {
   const isPastDate = (date: Date) => {
     const dateToCompare = new Date(date);
     dateToCompare.setHours(0, 0, 0, 0);
-    
+
     const todayCompare = new Date(today);
     todayCompare.setHours(0, 0, 0, 0);
-    
+
     return dateToCompare < todayCompare;
   };
 
   const isWeekend = (date: Date) => {
     const day = date.getDay();
-    return day === 0 || day === 6; 
+    return day === 0 || day === 6;
   };
 
   const isDateDisabled = (date: Date) => {
@@ -239,7 +244,7 @@ export default function PublicBookingPage({ params }: PageProps) {
 
     try {
       const dateStr = selectedDate.toISOString().split("T")[0];
-      
+
       const [hours, minutes] = selectedTime.split(':');
       const timeStr = `${hours}:${minutes}:00`;
 
@@ -329,7 +334,7 @@ export default function PublicBookingPage({ params }: PageProps) {
 
         <div className="flex flex-col lg:flex-row gap-10">
           <div className="flex-1">
-            
+
             {/* Service Selection */}
             <div className="mb-10">
               <div className="flex items-center justify-between mb-4">
@@ -338,7 +343,7 @@ export default function PublicBookingPage({ params }: PageProps) {
                   <span className="font-semibold text-lg">Select Service</span>
                 </div>
                 {selectedService && (
-                  <button 
+                  <button
                     onClick={resetService}
                     className="text-sm text-blue-600 hover:underline"
                   >
@@ -393,7 +398,7 @@ export default function PublicBookingPage({ params }: PageProps) {
                   <div className="flex items-center gap-2">
                     <Calendar className="w-4 h-4 text-blue-600" />
                     <span className="font-semibold text-lg">
-                      {selectedDate 
+                      {selectedDate
                         ? selectedDate.toLocaleString("default", { month: "long", year: "numeric" })
                         : "Select Date"
                       }
@@ -438,7 +443,7 @@ export default function PublicBookingPage({ params }: PageProps) {
                       date === selectedDate.getDate() &&
                       fullDate.getMonth() === selectedDate.getMonth() &&
                       fullDate.getFullYear() === selectedDate.getFullYear();
-                    
+
                     const isDisabled = isDateDisabled(fullDate);
 
                     return (
@@ -479,25 +484,26 @@ export default function PublicBookingPage({ params }: PageProps) {
                   <div className="grid grid-cols-4 gap-3">
                     {timeSlots.map((time) => {
                       const isBooked = bookedTimes.includes(time);
-                      
+                      const isManuallyDisabled = disabledTimes.includes(time);
+
                       const isPast = () => {
                         if (!selectedDate) return false;
                         const now = new Date();
-                        const [hour, minute] = time.split(':').map(Number);
+                        const [hour, minute] = time.split(":").map(Number);
                         const slotDate = new Date(selectedDate);
                         slotDate.setHours(hour, minute, 0, 0);
                         const todayCompare = new Date(now);
                         todayCompare.setHours(0, 0, 0, 0);
                         const selectedCompare = new Date(selectedDate);
                         selectedCompare.setHours(0, 0, 0, 0);
-                        
+
                         if (todayCompare.getTime() === selectedCompare.getTime()) {
                           return slotDate < now;
                         }
                         return false;
                       };
 
-                      const disabled = isBooked || isPast();
+                      const disabled = isBooked || isManuallyDisabled || isPast();
 
                       return (
                         <button
@@ -505,15 +511,9 @@ export default function PublicBookingPage({ params }: PageProps) {
                           disabled={disabled}
                           onClick={() => handleTimeSelect(time)}
                           className={`p-3 border rounded-xl text-sm transition
-                          ${selectedTime === time
-                            ? "bg-blue-600 text-white border-blue-600"
-                            : ""
-                          }
-                          ${disabled
-                            ? "bg-gray-200 text-gray-400 cursor-not-allowed line-through"
-                            : "hover:bg-blue-100"
-                          }
-                        `}
+        ${selectedTime === time ? "bg-blue-600 text-white border-blue-600" : ""}
+        ${disabled ? "bg-gray-200 text-gray-400 cursor-not-allowed line-through" : "hover:bg-blue-100"}
+      `}
                         >
                           {time}
                         </button>
@@ -694,9 +694,9 @@ export default function PublicBookingPage({ params }: PageProps) {
             )}
 
             <div className="flex items-center gap-3 mt-6 sm:justify-end">
-              <Button 
-                type="button" 
-                onClick={closeBookingModal} 
+              <Button
+                type="button"
+                onClick={closeBookingModal}
                 variant="outline"
                 disabled={isSubmitting}
               >

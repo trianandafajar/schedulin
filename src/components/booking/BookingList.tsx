@@ -19,7 +19,6 @@ interface BookingListProps {
 }
 
 const BookingList: React.FC<BookingListProps>  = ({ bookings }) => {
-  console.log(bookings)
   const [filter, setFilter] = useState<"all" | "today" | "yesterday">("all");
   const [updatingId, setUpdatingId] = useState<string | null>(null);
 

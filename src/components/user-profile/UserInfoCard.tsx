@@ -6,7 +6,7 @@ import Button from "../ui/button/Button";
 import Input from "../form/input/InputField";
 import Label from "../form/Label";
 import { useUser } from "@clerk/nextjs";
-import supabase from "@/actions/supabase";
+import { getBusinessesByOwner } from "@/service/businessService";
 
 export default function UserInfoCard() {
   const { isOpen, openModal, closeModal } = useModal();
@@ -22,16 +22,17 @@ export default function UserInfoCard() {
     const loadBookings = async () => {
       if (!user?.id) return;
 
-      const { data } = await supabase
-        .from("business")
-        .select("*")
-        .eq("owner_id", user.id);
-
-      setBusiness(data || []);
+      try {
+        const data = await getBusinessesByOwner(user.id);
+        setBusiness(data);
+      } catch (error) {
+        console.error("Error loading business info:", error);
+      }
     };
 
     loadBookings();
   }, [user?.id]);
+
   console.log(business)
   return (
     <div className="p-5 border border-gray-200 rounded-2xl dark:border-gray-800 lg:p-6">

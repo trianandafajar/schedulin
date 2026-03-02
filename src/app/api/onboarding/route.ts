@@ -1,6 +1,7 @@
 import { auth, clerkClient } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
-import supabase from "@/actions/supabase";
+import supabase from "@/lib/supabase";
+
 
 export async function POST(req: Request) {
   const { userId } = await auth();

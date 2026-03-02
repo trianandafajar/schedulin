@@ -1,13 +1,13 @@
-import supabase from "@/actions/supabase";
+import supabase from "@/lib/supabase";
 import axios from "@/app/utils/axios";
 
 export const getBusinessCategories = async () => {
   const { data, error } = await supabase
-      .from('business_categories_master')
-      .select('id, name')
-      .order('name');
-  
-   if (error) {
+    .from('business_categories_master')
+    .select('id, name')
+    .order('name');
+
+  if (error) {
     console.error("Categories error:", error);
     return [];
   }
@@ -23,11 +23,11 @@ export const togglePublicBooking = async (businessId: string, isEnabled: boolean
   });
 
   const result = response.data;
-  
+
   if (response.status != 200) {
     throw new Error(result.error || 'Something went wrong');
   }
-  
+
   return result;
 };
 
@@ -42,4 +42,14 @@ export const getMyBusiness = async () => {
   }
 
   return response.data;
+};
+
+export const getBusinessesByOwner = async (ownerId: string) => {
+  const { data, error } = await supabase
+    .from("business")
+    .select("*")
+    .eq("owner_id", ownerId);
+
+  if (error) throw error;
+  return data || [];
 };

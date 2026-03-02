@@ -2,70 +2,8 @@
 
 import { useState, useEffect } from "react";
 import AppointmentSettings from "@/components/appointment/AppointmentSettings";
-import supabase from "@/actions/supabase";
+import { getAppointmentSettings, saveAppointmentSettings, type DaySchedule, type Holiday } from "@/actions/appointment-actions";
 
-export interface DaySchedule {
-    isOpen: boolean;
-    startTime: string;
-    endTime: string;
-}
-
-export interface Holiday {
-    id: string;
-    date: string;
-    name: string;
-}
-
-export const getAppointmentSettings = async (businessId: string) => {
-    const { data: schedulesData } = await supabase
-        .from("business_schedules")
-        .select("*")
-        .eq("business_id", businessId);
-
-    const { data: holidaysData } = await supabase
-        .from("business_holidays")
-        .select("*")
-        .eq("business_id", businessId);
-
-    return { schedulesData, holidaysData };
-};
-
-export const saveAppointmentSettings = async (
-    businessId: string,
-    schedules: Record<string, DaySchedule>,
-    holidays: Holiday[]
-) => {
-    const schedulePayload = Object.entries(schedules).map(([day, data]) => ({
-        business_id: businessId,
-        day_of_week: day,
-        is_open: data.isOpen,
-        start_time: data.isOpen ? data.startTime : null,
-        end_time: data.isOpen ? data.endTime : null,
-    }));
-
-    const { error: scheduleError } = await supabase
-        .from("business_schedules")
-        .upsert(schedulePayload, { onConflict: "business_id, day_of_week" });
-
-    if (scheduleError) return { error: scheduleError.message };
-
-    await supabase.from("business_holidays").delete().eq("business_id", businessId);
-
-    if (holidays.length > 0) {
-        const holidayPayload = holidays.map((h) => ({
-            business_id: businessId,
-            date: h.date,
-            name: h.name,
-        }));
-        const { error: holidayError } = await supabase
-            .from("business_holidays")
-            .insert(holidayPayload);
-
-        if (holidayError) return { error: holidayError.message };
-    }
-
-    return { success: true };
-};
 interface AppointmentSettingsProps {
     business: {
         id: string;

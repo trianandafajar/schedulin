@@ -1,6 +1,7 @@
 "use server";
 
-import supabase from "./supabase";
+import supabase from "@/lib/supabase";
+
 import { auth } from "@clerk/nextjs/server";
 
 export type ServiceStatus = "active" | "inactive";
@@ -12,7 +13,10 @@ export interface Service {
   price: number;
   is_active: boolean;
   business_id: string;
+  created_at: string;
+  updated_at: string;
 }
+
 
 export async function getServices(): Promise<{ data: Service[] | null; error: string | null }> {
   try {
