@@ -2,9 +2,9 @@ import { media } from '@/app/utils/media';
 import styled from 'styled-components';
 
 const RichText = styled.div`
-  font-size: 1.6rem;
+  font-size: 1rem;
   opacity: 0.8;
-  line-height: 1.5;
+  line-height: 1.6;
 
   ol,
   ul {
@@ -12,7 +12,7 @@ const RichText = styled.div`
     padding: 0rem;
 
     li {
-      padding-left: 2rem;
+      padding-left: 1.5rem;
       position: relative;
 
       & > * {
@@ -56,7 +56,7 @@ const RichText = styled.div`
   }
 
   ${media('<=desktop')} {
-    font-size: 1.4rem;
+    font-size: 0.95rem;
   }
 `;
 

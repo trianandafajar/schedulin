@@ -27,9 +27,9 @@ export default function Cta() {
               </Button>
             </Link>
             <Link href="/signin">
-              <OutlinedButton>
+              <Button>
                 Sign In <span>&rarr;</span>
-              </OutlinedButton>
+              </Button>
             </Link>
           </ButtonGroup>
         </Stack>
@@ -39,7 +39,7 @@ export default function Cta() {
 }
 
 const Description = styled.div`
-  font-size: 1.6rem;
+  font-size: 1rem;
   color: rgba(var(--textSecondary), 0.8);
 `;
 

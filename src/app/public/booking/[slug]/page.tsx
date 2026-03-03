@@ -86,7 +86,11 @@ export default function PublicBookingPage({ params }: PageProps) {
         return;
       }
 
-      const dateStr = selectedDate.toISOString().split("T")[0];
+      const dateStr = [
+        selectedDate.getFullYear(),
+        String(selectedDate.getMonth() + 1).padStart(2, "0"),
+        String(selectedDate.getDate()).padStart(2, "0"),
+      ].join("-");
       const { data: slots, error } = await getBookedSlots(businessId, dateStr);
 
       if (error || !slots) {
@@ -143,16 +147,24 @@ export default function PublicBookingPage({ params }: PageProps) {
 
   const generateTimeSlots = (): string[] => {
     const hours = getBusinessHours();
-    if (!hours) return [];
+    if (!hours || !selectedService?.duration_minutes) return [];
 
     const slots: string[] = [];
-    for (let h = hours.start; h < hours.end; h++) {
-      for (let m = 0; m < 60; m += 30) {
-        const hourStr = String(h).padStart(2, "0");
-        const minuteStr = String(m).padStart(2, "0");
-        slots.push(`${hourStr}:${minuteStr}`);
-      }
+    const duration = selectedService.duration_minutes;
+
+    const startInMinutes = hours.start * 60;
+    const endInMinutes = hours.end * 60;
+
+    for (let time = startInMinutes; time < endInMinutes; time += duration) {
+      const h = Math.floor(time / 60);
+      const m = time % 60;
+
+      const hourStr = String(h).padStart(2, "0");
+      const minuteStr = String(m).padStart(2, "0");
+
+      slots.push(`${hourStr}:${minuteStr}`);
     }
+
     return slots;
   };
 
@@ -243,7 +255,12 @@ export default function PublicBookingPage({ params }: PageProps) {
     setBookingError(null);
 
     try {
-      const dateStr = selectedDate.toISOString().split("T")[0];
+      // Gunakan tanggal lokal browser (bukan UTC) untuk hindari shift timezone WIB
+      const dateStr = [
+        selectedDate.getFullYear(),
+        String(selectedDate.getMonth() + 1).padStart(2, "0"),
+        String(selectedDate.getDate()).padStart(2, "0"),
+      ].join("-");
 
       const [hours, minutes] = selectedTime.split(':');
       const timeStr = `${hours}:${minutes}:00`;

@@ -4,6 +4,35 @@ import { auth } from "@clerk/nextjs/server";
 import { revalidatePath } from "next/cache";
 import supabase from "@/lib/supabase";
 
+function getLocalDateLabel(dateStr: string): string {
+  if (!dateStr) return "N/A";
+
+  const WIB_OFFSET_MS = 7 * 60 * 60 * 1000;
+  const nowWIB = new Date(Date.now() + WIB_OFFSET_MS);
+
+  const toDateStr = (d: Date) => [
+    d.getUTCFullYear(),
+    String(d.getUTCMonth() + 1).padStart(2, "0"),
+    String(d.getUTCDate()).padStart(2, "0"),
+  ].join("-");
+
+  const todayStr = toDateStr(nowWIB);
+
+  const yesterdayWIB = new Date(nowWIB.getTime() - 24 * 60 * 60 * 1000);
+  const yesterdayStr = toDateStr(yesterdayWIB);
+
+  const slotDate = dateStr.slice(0, 10);
+
+  if (slotDate === todayStr) return "Today";
+  if (slotDate === yesterdayStr) return "Yesterday";
+
+  const [year, month, day] = slotDate.split("-").map(Number);
+  return new Date(year, month - 1, day).toLocaleDateString("en-US", {
+    month: "short",
+    day: "numeric",
+  });
+}
+
 
 export type BookingStatus = "pending" | "completed" | "cancelled";
 
@@ -59,6 +88,7 @@ export async function createBooking(data: CreateBookingData) {
       .eq("id", data.slotId);
 
     revalidatePath("/booking");
+    revalidatePath("/calendar");
 
     return { success: true, data: booking };
   } catch (error: any) {
@@ -120,6 +150,7 @@ export async function updateBookingStatus(
     }
 
     revalidatePath("/booking");
+    revalidatePath("/calendar");
 
     return { success: true };
   } catch (error: any) {
@@ -156,16 +187,10 @@ export async function getBookings() {
 
   const formattedBookings = (bookingsData || []).map(booking => {
     const slotData = Array.isArray(booking.slot) ? booking.slot[0] : booking.slot;
-    const dateObj = slotData?.date ? new Date(slotData.date) : null;
-    const today = new Date();
-    const yesterday = new Date(today);
-    yesterday.setDate(yesterday.getDate() - 1);
 
     let dateLabel = "N/A";
-    if (dateObj) {
-      if (dateObj.toDateString() === today.toDateString()) dateLabel = "Today";
-      else if (dateObj.toDateString() === yesterday.toDateString()) dateLabel = "Yesterday";
-      else dateLabel = dateObj.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+    if (slotData?.date) {
+      dateLabel = getLocalDateLabel(slotData.date);
     }
 
     return {

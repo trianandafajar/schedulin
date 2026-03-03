@@ -1,5 +1,6 @@
 "use server";
 
+import { revalidatePath } from "next/cache";
 import supabase from "@/lib/supabase";
 
 
@@ -88,6 +89,9 @@ export async function createPublicBooking(data: PublicBookingData) {
 
       return { error: bookingError.message || "Failed to create booking" };
     }
+
+    revalidatePath("/booking");
+    revalidatePath("/calendar");
 
     return { success: true, data: booking };
   } catch (error: any) {

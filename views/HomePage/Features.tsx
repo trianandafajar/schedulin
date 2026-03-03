@@ -56,24 +56,29 @@ const FEATURES = [
 
 export default function Features() {
   return (
-    <Container>
+    <FeaturesSection>
       <CustomAutofitGrid>
         {FEATURES.map((singleFeature, idx) => (
           <BasicCard key={singleFeature.title + idx} {...singleFeature} />
         ))}
       </CustomAutofitGrid>
-    </Container>
+    </FeaturesSection>
   );
 }
 
+const FeaturesSection = styled(Container)`
+  padding-top: 3rem;
+  padding-bottom: 3rem;
+`;
+
 const CustomAutofitGrid = styled(AutofitGrid)`
-  --autofit-grid-item-size: 40rem;
+  grid-template-columns: repeat(3, 1fr);
 
   ${media('<=tablet')} {
-    --autofit-grid-item-size: 30rem;
+    grid-template-columns: repeat(2, 1fr);
   }
 
   ${media('<=phone')} {
-    --autofit-grid-item-size: 100%;
+    grid-template-columns: 1fr;
   }
 `;

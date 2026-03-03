@@ -5,37 +5,35 @@ import NextImage from 'next/image';
 import React from 'react';
 import styled from 'styled-components';
 
-// import { A11y, Autoplay, Navigation } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
-// import { media } from 'utils/media';
 
 const TESTIMONIALS = [
   {
     companyLogoUrl: '/testimonials/company-logo-1.svg',
-    content: `Really good. I am so pleased with this product. I didn't even need training.`,
+    content: `Schedulin has completely transformed our clinic's booking process. It's intuitive and saved us hours of administrative work.`,
     author: {
-      name: 'Clyde Edwards',
-      title: 'Very Serious Man',
-      avatarUrl: '/testimonials/author-photo-1.jpeg',
+      name: 'Sarah Johnson',
+      title: 'Clinic Manager at HealthFirst',
+      avatarUrl: 'https://i.pravatar.cc/150?u=sarah',
     },
   },
   {
     companyLogoUrl: '/testimonials/company-logo-2.svg',
-    content: `It's really wonderful. I use saas product often. Thank You! Saas product has really helped our business.`,
+    content: `The automated reminders have reduced our no-show rate by 40%. The best investment we've made this year.`,
     author: {
-      name: 'Jimmy Hunter',
-      title: 'Sigma Male University Graduate',
-      avatarUrl: '/testimonials/author-photo-2.jpeg',
+      name: 'Michael Chen',
+      title: 'Owner of Glow Salon',
+      avatarUrl: 'https://i.pravatar.cc/150?u=michael',
     },
   },
   {
     companyLogoUrl: '/testimonials/company-logo-3.svg',
-    content: `Since I invested in saas product I made over 100,000 dollars profits. It really saves me time and effort. saas product is exactly what our business has been lacking.`,
+    content: `Integrating our team calendars was effortless. Now everyone is on the same page and double bookings are a thing of the past.`,
     author: {
-      name: 'Marjorie Morgan',
-      title: 'Chief Chad Officer',
-      avatarUrl: '/testimonials/author-photo-3.jpeg',
+      name: 'Emily Davis',
+      title: 'Operations Lead at TechConsult',
+      avatarUrl: 'https://i.pravatar.cc/150?u=emily',
     },
   },
 ];
@@ -45,7 +43,7 @@ export default function Testimonials() {
     <div>
       <Separator />
       <TestimonialsWrapper>
-        {/* <Swiper modules={[Navigation, Autoplay, A11y]} slidesPerView={1} autoplay={{ delay: 8000 }} centeredSlides navigation loop>
+        <Swiper slidesPerView={1} autoplay={{ delay: 8000 }} centeredSlides loop>
           {TESTIMONIALS.map((singleTestimonial, idx) => (
             <SwiperSlide key={idx}>
               <TestimonialCard>
@@ -68,12 +66,13 @@ export default function Testimonials() {
               </TestimonialCard>
             </SwiperSlide>
           ))}
-        </Swiper> */}
+        </Swiper>
       </TestimonialsWrapper>
       <Separator />
     </div>
   );
 }
+
 
 const TestimonialsWrapper = styled(Container)`
   position: relative;
@@ -110,7 +109,7 @@ const TestimonialCard = styled.div`
 
 const Content = styled.blockquote`
   text-align: center;
-  font-size: 2.2rem;
+  font-size: 1.4rem;
   font-weight: bold;
   font-style: italic;
   max-width: 60%;

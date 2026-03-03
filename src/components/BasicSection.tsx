@@ -29,17 +29,18 @@ export default function BasicSection({ imageUrl, title, overTitle, reversed, chi
 }
 
 const Title = styled.h1`
-  font-size: 3.8rem;
+  font-size: 2rem;
   font-weight: bold;
-  line-height: 1.15;
-  margin-bottom: 2rem;
+  line-height: 1.2;
+  margin-bottom: 1.5rem;
   letter-spacing: -0.03em;
 
   ${media('<=tablet')} {
-    font-size: 3rem;
-    margin-bottom: 1.5rem;
+    font-size: 1.6rem;
+    margin-bottom: 1rem;
   }
 `;
+
 
 const CustomOverTitle = styled(OverTitle)`
   margin-bottom: 2rem;
@@ -77,7 +78,7 @@ type Props = {
   $reversed?: boolean;
 };
 
-const BasicSectionWrapper = styled(Container)<Props>`
+const BasicSectionWrapper = styled(Container) <Props>`
   display: flex;
   align-items: center;
   flex-direction: ${(p) => (p.$reversed ? 'row-reverse' : 'row')};

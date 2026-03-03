@@ -1,5 +1,4 @@
 import Link from 'next/link';
-import { FacebookIcon, LinkedinIcon, TwitterIcon } from 'react-share';
 import styled from 'styled-components';
 import Container from './Container';
 import { media } from '@/app/utils/media';
@@ -11,37 +10,17 @@ type FooterItems = SingleFooterList[];
 
 const footerItems: FooterItems = [
   {
+    title: 'Product',
+    items: [
+      { title: 'Features', href: '/#features' },
+      { title: 'Sign Up', href: '/signup' },
+      { title: 'Sign In', href: '/signin' },
+    ],
+  },
+  {
     title: 'Company',
     items: [
       { title: 'Privacy Policy', href: '/privacy-policy' },
-      { title: 'Cookies Policy', href: '/cookies-policy' },
-    ],
-  },
-  {
-    title: 'Product',
-    items: [
-      { title: 'Features', href: '/features' },
-      { title: 'Something', href: '/something' },
-      { title: 'Something else', href: '/something-else' },
-      { title: 'And something else', href: '/and-something-else' },
-    ],
-  },
-  {
-    title: 'Knowledge',
-    items: [
-      { title: 'Blog', href: '/blog' },
-      { title: 'Contact', href: '/contact' },
-      { title: 'FAQ', href: '/faq' },
-      { title: 'Help Center', href: '/help-center' },
-    ],
-  },
-  {
-    title: 'More',
-    items: [
-      { title: 'Features2', href: '/features2' },
-      { title: 'Something2', href: '/something2' },
-      { title: 'Something else2', href: '/something-else2' },
-      { title: 'And something else2', href: '/and-something-else2' },
     ],
   },
 ];
@@ -49,128 +28,155 @@ const footerItems: FooterItems = [
 export default function Footer() {
   return (
     <FooterWrapper>
-      <Container>
-        <ListContainer>
-          {footerItems.map((singleItem) => (
-            <FooterList key={singleItem.title} {...singleItem} />
-          ))}
-        </ListContainer>
+      <FooterContainer>
+        <TopSection>
+          <BrandArea>
+            <BrandName>Schedulin</BrandName>
+            <Tagline>Smart appointment booking for modern teams.</Tagline>
+          </BrandArea>
+          <LinksArea>
+            {footerItems.map((group) => (
+              <LinkGroup key={group.title}>
+                <GroupTitle>{group.title}</GroupTitle>
+                {group.items.map((item) => (
+                  <LinkItem key={item.href}>
+                    <Link href={item.href}>{item.title}</Link>
+                  </LinkItem>
+                ))}
+              </LinkGroup>
+            ))}
+          </LinksArea>
+        </TopSection>
+        <Divider />
         <BottomBar>
-          <ShareBar>
-            <Link href="https://www.twitter.com/my-saas-startup">
-              <TwitterIcon size={36} round />
-            </Link>
-            <Link href="https://www.facebook.com/my-saas-startup">
-              <FacebookIcon size={36} round />
-            </Link>
-            <Link href="https://www.linkedin.com/my-saas-startup">
-              <LinkedinIcon size={36} round />
-            </Link>
-          </ShareBar>
-          <Copyright>© {new Date().getFullYear()} My SaaS Startup</Copyright>
+          <Copyright>© {new Date().getFullYear()} Schedulin. All rights reserved.</Copyright>
+          <BottomLinks>
+            <Link href="/privacy-policy">Privacy Policy</Link>
+          </BottomLinks>
         </BottomBar>
-      </Container>
+      </FooterContainer>
     </FooterWrapper>
   );
 }
 
-function FooterList({ title, items }: SingleFooterList) {
-  return (
-    <ListWrapper>
-      <ListHeader>{title}</ListHeader>
-      {items.map((singleItem) => (
-        <ListItem key={singleItem.href} {...singleItem} />
-      ))}
-    </ListWrapper>
-  );
-}
-
-function ListItem({ title, href }: SingleFooterListItem) {
-  return (
-    <ListItemWrapper>
-      <Link href={href}>{title}</Link>
-    </ListItemWrapper>
-  );
-}
-
 const FooterWrapper = styled.footer`
-  padding: 8rem 0 3rem;
-  background: #f9fafb;
-  color: #6b7280;
-  border-top: 1px solid #e5e7eb;
+  background: #f8fafc;
+  border-top: 1px solid #e2e8f0;
 `;
 
-const ListContainer = styled.div`
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 4rem;
+const FooterContainer = styled(Container)`
+  padding-top: 3rem;
+  padding-bottom: 1.5rem;
+`;
+
+const TopSection = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 3rem;
 
   ${media('<=tablet')} {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  ${media('<=phone')} {
-    grid-template-columns: 1fr;
+    flex-direction: column;
+    gap: 2rem;
   }
 `;
 
-const ListHeader = styled.h4`
-  font-weight: 600;
-  font-size: 1.6rem;
-  margin-bottom: 1.5rem;
-  color: #111827;
-`;
-
-const ListWrapper = styled.div`
+const BrandArea = styled.div`
   display: flex;
   flex-direction: column;
+  gap: 0.5rem;
+  max-width: 220px;
+`;
 
-  & > *:not(:first-child) {
-    margin-top: 0.8rem;
+const BrandName = styled.span`
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #0f172a;
+  letter-spacing: -0.02em;
+`;
+
+const Tagline = styled.p`
+  font-size: 0.8rem;
+  color: #64748b;
+  line-height: 1.5;
+  margin: 0;
+`;
+
+const LinksArea = styled.div`
+  display: flex;
+  gap: 3rem;
+
+  ${media('<=phone')} {
+    gap: 1.5rem;
+    flex-wrap: wrap;
   }
 `;
 
-const ListItemWrapper = styled.p`
-  font-size: 1.4rem;
-  margin: 0;
+const LinkGroup = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+`;
+
+const GroupTitle = styled.span`
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #0f172a;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 0.25rem;
+`;
+
+const LinkItem = styled.div`
+  font-size: 0.825rem;
 
   a {
     text-decoration: none;
-    color: #6b7280;
-    transition: color 0.2s ease;
-  }
+    color: #64748b;
+    transition: color 0.15s ease;
 
-  a:hover {
-    color: #111827;
+    &:hover {
+      color: #0f172a;
+    }
   }
 `;
 
-const ShareBar = styled.div`
-  display: flex;
-  align-items: center;
-
-  & > *:not(:first-child) {
-    margin-left: 1.2rem;
-  }
+const Divider = styled.hr`
+  border: none;
+  border-top: 1px solid #e2e8f0;
+  margin: 2rem 0 1rem;
 `;
 
 const BottomBar = styled.div`
-  margin-top: 5rem;
-  padding-top: 2rem;
-  border-top: 1px solid #e5e7eb;
   display: flex;
   justify-content: space-between;
   align-items: center;
 
   ${media('<=tablet')} {
     flex-direction: column;
-    gap: 1.5rem;
+    gap: 0.5rem;
     text-align: center;
   }
 `;
 
 const Copyright = styled.p`
-  font-size: 1.3rem;
-  color: #9ca3af;
+  font-size: 0.75rem;
+  color: #94a3b8;
   margin: 0;
+`;
+
+const BottomLinks = styled.div`
+  display: flex;
+  gap: 1rem;
+
+  a {
+    font-size: 0.75rem;
+    color: #94a3b8;
+    text-decoration: none;
+    transition: color 0.15s ease;
+
+    &:hover {
+      color: #0f172a;
+    }
+  }
 `;

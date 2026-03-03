@@ -15,18 +15,20 @@ export default function Hero() {
   return (
     <HeroWrapper>
       <Contents>
-        <CustomOverTitle>appointment booking software for service teams</CustomOverTitle>
+        <CustomOverTitle>appointment booking software</CustomOverTitle>
         <Heading>Run your bookings on autopilot.</Heading>
         <Description>
           Let clients book available slots online, send automatic reminders, and keep your team calendar in sync without manual back-and-forth.
         </Description>
         <CustomButtonGroup>
-          <Button onClick={() => setIsModalOpened(true)}>
-            Book a Demo <span>&rarr;</span>
-          </Button>
           <Link href="/signup">
             <Button>
               Start Free <span>&rarr;</span>
+            </Button>
+          </Link>
+          <Link href="/signin">
+            <Button variant="outline">
+              Sign In <span>&rarr;</span>
             </Button>
           </Link>
         </CustomButtonGroup>
@@ -82,12 +84,12 @@ const ImageContainer = styled.div`
 `;
 
 const Description = styled.p`
-  font-size: 1.5rem;
+  font-size: 1rem;
   opacity: 0.8;
-  line-height: 1.5;
+  line-height: 1.6;
 
   ${media('<=desktop')} {
-    font-size: 1.4rem;
+    font-size: 0.95rem;
   }
 `;
 
@@ -96,14 +98,15 @@ const CustomOverTitle = styled(OverTitle)`
 `;
 
 const Heading = styled.h1`
-  font-size: 4.6rem;
+  font-size: 2.6rem;
   font-weight: bold;
-  line-height: 1.15;
-  margin-bottom: 2rem;
+  line-height: 1.2;
+  margin-bottom: 1.5rem;
   letter-spacing: -0.03em;
 
   ${media('<=tablet')} {
-    font-size: 3.2rem;
-    margin-bottom: 1.5rem;
+    font-size: 1.9rem;
+    margin-bottom: 1rem;
   }
 `;
+
