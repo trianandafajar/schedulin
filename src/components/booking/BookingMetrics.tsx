@@ -41,17 +41,17 @@ const MetricCard: React.FC<MetricCardProps> = ({ title, value, icon, trend }) =>
   const trendDisplay = trend ? `${Math.abs(trend).toFixed(1)}%` : "0%";
   
   return (
-    <div className="rounded-2xl border border-gray-200 bg-white p-6 dark:border-gray-800 dark:bg-white/[0.03]">
+    <div className="rounded-2xl border border-gray-200 bg-white p-6 dark:border-[#313131] dark:bg-[#111111]">
       <div className="flex items-center justify-between">
         <div>
-          <p className="text-sm font-medium text-gray-500 dark:text-gray-400">{title}</p>
+          <p className="text-sm font-medium text-gray-500 dark:text-[#e2e2e2]">{title}</p>
           <h3 className="mt-2 text-3xl font-bold text-gray-900 dark:text-white">{value}</h3>
           {trend !== undefined && (
             <p className={`mt-1 text-sm flex items-center gap-1 ${
               trendUp ? "text-green-500" : trendDown ? "text-red-500" : "text-gray-500"
             }`}>
               {trendUp ? "↑" : trendDown ? "↓" : "→"} {trendDisplay}
-              <span className="text-gray-400 text-xs">vs last period</span>
+              <span className="text-[#e2e2e2] text-xs">vs last period</span>
             </p>
           )}
         </div>
