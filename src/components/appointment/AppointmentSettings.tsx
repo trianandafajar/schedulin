@@ -162,7 +162,7 @@ onSave }) => {
         </h3>
         <div className="flex items-center justify-between">
           <div>
-            <p className="font-medium text-gray-700 dark:text-gray-300">
+            <p className="font-medium text-gray-700 dark:text-[#e2e2e2]">
               Public Booking
             </p>
             <p className="text-sm text-gray-500 dark:text-[#e2e2e2]">
@@ -219,7 +219,7 @@ onSave }) => {
               className="flex flex-wrap items-center gap-4 rounded-lg border border-gray-100 p-3 dark:border-[#313131]"
             >
               <div className="w-28">
-                <span className="font-medium text-gray-700 dark:text-gray-300">
+                <span className="font-medium text-gray-700 dark:text-[#e2e2e2]">
                   {day}
                 </span>
               </div>
@@ -311,10 +311,10 @@ onSave }) => {
                   key={holiday.id}
                   className="border-b border-gray-100 dark:border-[#313131] last:border-0"
                 >
-                  <td className="py-3 text-sm text-gray-700 dark:text-gray-300">
+                  <td className="py-3 text-sm text-gray-700 dark:text-[#e2e2e2]">
                     {holiday.date}
                   </td>
-                  <td className="py-3 text-sm text-gray-700 dark:text-gray-300">
+                  <td className="py-3 text-sm text-gray-700 dark:text-[#e2e2e2]">
                     {holiday.name}
                   </td>
                   <td className="py-3 text-right">
