@@ -156,7 +156,7 @@ onSave }) => {
 
   return (
     <div className="space-y-6">
-      <div className="rounded-xl border border-gray-200 bg-white p-6 dark:border-strokedark dark:bg-boxdark">
+      <div className="rounded-xl border border-gray-200 bg-white p-6 dark:border-[#313131] dark:bg-[#111111]">
         <h3 className="mb-4 text-lg font-semibold text-gray-800 dark:text-white">
           Booking Visibility
         </h3>
@@ -165,7 +165,7 @@ onSave }) => {
             <p className="font-medium text-gray-700 dark:text-gray-300">
               Public Booking
             </p>
-            <p className="text-sm text-gray-500 dark:text-gray-400">
+            <p className="text-sm text-gray-500 dark:text-[#e2e2e2]">
               Allow external users to book appointments
             </p>
           </div>
@@ -208,7 +208,7 @@ onSave }) => {
           )}
         </div>
       </div>
-      <div className="rounded-xl border border-gray-200 bg-white p-6 dark:border-strokedark dark:bg-boxdark">
+      <div className="rounded-xl border border-gray-200 bg-white p-6 dark:border-[#313131] dark:bg-[#111111]">
         <h3 className="mb-4 text-lg font-semibold text-gray-800 dark:text-white">
           Opening Hours
         </h3>
@@ -216,7 +216,7 @@ onSave }) => {
           {daysOfWeek.map((day) => (
             <div
               key={day}
-              className="flex flex-wrap items-center gap-4 rounded-lg border border-gray-100 p-3 dark:border-strokedark"
+              className="flex flex-wrap items-center gap-4 rounded-lg border border-gray-100 p-3 dark:border-[#313131]"
             >
               <div className="w-28">
                 <span className="font-medium text-gray-700 dark:text-gray-300">
@@ -232,7 +232,7 @@ onSave }) => {
                   }
                   className="h-4 w-4 rounded border-gray-300 text-brand-500 focus:ring-brand-500 cursor-pointer"
                 />
-                <span className="text-sm text-gray-600 dark:text-gray-400">
+                <span className="text-sm text-gray-600 dark:text-[e2e2e2]">
                   Open
                 </span>
               </label>
@@ -244,7 +244,7 @@ onSave }) => {
                     onChange={(e) =>
                       handleScheduleChange(day, "startTime", e.target.value)
                     }
-                    className="rounded-lg border border-gray-300 px-3 py-1.5 text-sm dark:border-strokedark dark:bg-gray-800 dark:text-white focus:border-brand-500 outline-none"
+                    className="rounded-lg border border-gray-300 px-3 py-1.5 text-sm dark:border-[#313131] dark:bg-[#111111] dark:text-white focus:border-brand-500 outline-none"
                   />
                   <span className="text-gray-500">to</span>
                   <input
@@ -253,7 +253,7 @@ onSave }) => {
                     onChange={(e) =>
                       handleScheduleChange(day, "endTime", e.target.value)
                     }
-                    className="rounded-lg border border-gray-300 px-3 py-1.5 text-sm dark:border-strokedark dark:bg-gray-800 dark:text-white focus:border-brand-500 outline-none"
+                    className="rounded-lg border border-gray-300 px-3 py-1.5 text-sm dark:border-[#313131] dark:bg-[#111111] dark:text-white focus:border-brand-500 outline-none"
                   />
                 </div>
               )}
@@ -261,7 +261,7 @@ onSave }) => {
           ))}
         </div>
       </div>
-      <div className="rounded-xl border border-gray-200 bg-white p-6 dark:border-strokedark dark:bg-boxdark">
+      <div className="rounded-xl border border-gray-200 bg-white p-6 dark:border-[#313131] dark:bg-[#111111]">
         <h3 className="mb-4 text-lg font-semibold text-gray-800 dark:text-white">
           Holidays / Closed Days
         </h3>
@@ -272,7 +272,7 @@ onSave }) => {
             onChange={(e) =>
               setNewHoliday((prev) => ({ ...prev, date: e.target.value }))
             }
-            className="rounded-lg border border-gray-300 px-3 py-2 text-sm dark:border-strokedark dark:bg-gray-800 dark:text-white outline-none focus:border-brand-500"
+            className="rounded-lg border border-gray-300 px-3 py-2 text-sm dark:border-[#313131] dark:bg-[#111111] dark:text-white outline-none focus:border-brand-500"
           />
           <input
             type="text"
@@ -281,7 +281,7 @@ onSave }) => {
             onChange={(e) =>
               setNewHoliday((prev) => ({ ...prev, name: e.target.value }))
             }
-            className="flex-1 rounded-lg border border-gray-300 px-3 py-2 text-sm dark:border-strokedark dark:bg-gray-800 dark:text-white min-w-[200px] outline-none focus:border-brand-500"
+            className="flex-1 rounded-lg border border-gray-300 px-3 py-2 text-sm dark:border-[#313131] dark:bg-[#111111] dark:text-white min-w-[200px] outline-none focus:border-brand-500"
           />
           <button
             onClick={handleAddHoliday}
@@ -293,14 +293,14 @@ onSave }) => {
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead>
-              <tr className="border-b border-gray-200 dark:border-strokedark">
-                <th className="py-2 text-left text-sm font-medium text-gray-500 dark:text-gray-400">
+              <tr className="border-b border-gray-200 dark:border-[#313131]">
+                <th className="py-2 text-left text-sm font-medium text-gray-500 dark:text-[#e2e2e2]">
                   Date
                 </th>
-                <th className="py-2 text-left text-sm font-medium text-gray-500 dark:text-gray-400">
+                <th className="py-2 text-left text-sm font-medium text-gray-500 dark:text-[#e2e2e2]">
                   Name
                 </th>
-                <th className="py-2 text-right text-sm font-medium text-gray-500 dark:text-gray-400">
+                <th className="py-2 text-right text-sm font-medium text-gray-500 dark:text-[e2e2e2]">
                   Action
                 </th>
               </tr>
@@ -309,7 +309,7 @@ onSave }) => {
               {holidays.map((holiday) => (
                 <tr
                   key={holiday.id}
-                  className="border-b border-gray-100 dark:border-strokedark last:border-0"
+                  className="border-b border-gray-100 dark:border-[#313131] last:border-0"
                 >
                   <td className="py-3 text-sm text-gray-700 dark:text-gray-300">
                     {holiday.date}
