@@ -6,6 +6,12 @@ const RichText = styled.div`
   opacity: 0.8;
   line-height: 1.6;
 
+  p {
+      .dark & {
+        color: #e2e2e2;
+      }
+  }
+
   ol,
   ul {
     list-style: none;
@@ -14,6 +20,10 @@ const RichText = styled.div`
     li {
       padding-left: 1.5rem;
       position: relative;
+
+      .dark & {
+        color: #e2e2e2;
+      }
 
       & > * {
         display: inline-block;

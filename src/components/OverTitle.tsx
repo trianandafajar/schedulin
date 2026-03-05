@@ -14,12 +14,16 @@ const OverTitle = styled.span`
     line-height: 0;
     margin-right: 1em;
   }
-
+  
   font-size: 1.3rem;
   letter-spacing: 0.02em;
   font-weight: bold;
   line-height: 0;
   text-transform: uppercase;
+
+  .dark & {
+    color: white;
+  }
 
   ${media('<=desktop')} {
     line-height: 1.5;

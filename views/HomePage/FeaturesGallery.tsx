@@ -173,6 +173,11 @@ const Tab = styled.div<{ $isActive: boolean }>`
   font-size: 1.6rem;
   font-weight: bold;
 
+  .dark & {
+    background: #111111;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+  }
+
   ${media('<=desktop')} {
     width: 100%;
   }
@@ -181,6 +186,10 @@ const Tab = styled.div<{ $isActive: boolean }>`
 const TabTitleContainer = styled.div`
   display: flex;
   align-items: center;
+
+  .dark & {
+    color: white;
+  }
 
   h4 {
     flex: 1;
@@ -194,6 +203,10 @@ const TabContent = styled.div`
   margin-top: 0.5rem;
   font-size: 1.5rem;
   padding-left: calc(5rem + 1.5rem);
+
+  .dark & {
+    color: #e2e2e2;
+  }
 
   ${media('<=tablet')} {
     padding-left: calc(4rem + 1.25rem);

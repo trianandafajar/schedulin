@@ -12,6 +12,11 @@ export const NavbarContainer = styled.header<{ $hidden: boolean }>`
   background: #ffffff;
   border-bottom: 1px solid rgba(0,0,0,0.06);
 
+  .dark & {
+    background: #111111;
+    border-bottom: 1px solid #313131;
+  }
+
   display: flex;
   align-items: center;
 

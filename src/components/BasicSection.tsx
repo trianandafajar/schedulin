@@ -35,15 +35,22 @@ const Title = styled.h1`
   margin-bottom: 1.5rem;
   letter-spacing: -0.03em;
 
+  .dark & {
+    color: white;
+  }
+
   ${media('<=tablet')} {
     font-size: 1.6rem;
     margin-bottom: 1rem;
   }
 `;
 
-
 const CustomOverTitle = styled(OverTitle)`
   margin-bottom: 2rem;
+
+  .dark & {
+    color: white;
+  }
 `;
 
 const ImageContainer = styled.div`

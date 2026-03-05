@@ -11,12 +11,7 @@ export default function Logo({ ...rest }) {
         height={40}
         style={{ borderRadius: '6px', objectFit: 'cover' }}
       />
-      <span style={{
-        fontSize: '1.15rem',
-        fontWeight: 700,
-        color: '#0f172a',
-        letterSpacing: '-0.02em',
-      }}>
+      <span className="text-slate-900 dark:text-slate-100 font-bold text-[1.15rem] tracking-[-0.02em]">
         Schedullin
       </span>
     </Link>

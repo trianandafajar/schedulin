@@ -31,6 +31,11 @@ const Card = styled.div`
   color: rgb(var(--text));
   font-size: 1rem;
 
+  .dark & {
+    background: #111111;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+  }
+    
   & > *:not(:first-child) {
     margin-top: 1rem;
   }
@@ -38,8 +43,16 @@ const Card = styled.div`
 
 const Title = styled.div`
   font-weight: bold;
+
+  .dark & {
+    color: white;
+  }
 `;
 
 const Description = styled.div`
   opacity: 0.6;
+
+  .dark & {
+    color: #e2e2e2;
+  }
 `;

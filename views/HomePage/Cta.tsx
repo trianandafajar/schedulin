@@ -41,6 +41,10 @@ export default function Cta() {
 const Description = styled.div`
   font-size: 1rem;
   color: rgba(var(--textSecondary), 0.8);
+
+  .dark & {
+    color: #e2e2e2;
+  }
 `;
 
 const Stack = styled.div`

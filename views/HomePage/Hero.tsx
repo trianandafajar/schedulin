@@ -88,6 +88,10 @@ const Description = styled.p`
   opacity: 0.8;
   line-height: 1.6;
 
+  .dark & {
+    color: #e2e2e2;
+  }
+
   ${media('<=desktop')} {
     font-size: 0.95rem;
   }
@@ -95,6 +99,10 @@ const Description = styled.p`
 
 const CustomOverTitle = styled(OverTitle)`
   margin-bottom: 2rem;
+
+  .dark & {
+    color: white;
+  }
 `;
 
 const Heading = styled.h1`
@@ -103,6 +111,10 @@ const Heading = styled.h1`
   line-height: 1.2;
   margin-bottom: 1.5rem;
   letter-spacing: -0.03em;
+  
+  .dark & {
+    color: white;
+  }
 
   ${media('<=tablet')} {
     font-size: 1.9rem;
