@@ -72,6 +72,8 @@ const FooterWrapper = styled.footer`
 const FooterContainer = styled(Container)`
   padding-top: 3rem;
   padding-bottom: 1.5rem;
+  margin: 0 auto;
+  max-width:1280px;
 `;
 
 const TopSection = styled.div`

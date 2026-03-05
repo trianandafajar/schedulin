@@ -27,6 +27,9 @@ export const NavbarContainer = styled.header<{ $hidden: boolean }>`
 export const Content = styled(Container)`
   display: flex;
   align-items: center;
+  margin: 0 auto;
+  max-width:1280px;
+  
   justify-content: space-between;
 `;
 
