@@ -98,7 +98,6 @@ export default function FeaturesGallery() {
 }
 
 const FeaturesGalleryWrapper = styled(Container)`
-  display: flex;
   align-items: center;
   flex-direction: column;
   justify-content: center;
@@ -164,7 +163,7 @@ const Tab = styled.div<{ $isActive: boolean }>`
   display: flex;
   flex-direction: column;
   padding: 2rem 1.5rem;
-  background: rgb(var(--cardBackground));
+  background: white;
   box-shadow: var(--shadow-md);
   opacity: ${(p) => (p.$isActive ? 1 : 0.6)};
   cursor: pointer;
