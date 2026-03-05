@@ -12,7 +12,7 @@ const AppointmentPage: React.FC = async () => {
           <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
             Appointment Settings
           </h1>
-          <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
+          <p className="mt-1 text-sm text-gray-500 dark:text-[#E2E2E2]">
             Manage your appointment booking settings, opening hours, and holidays
           </p>
         </div>
