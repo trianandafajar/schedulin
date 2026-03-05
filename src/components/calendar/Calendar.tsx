@@ -194,7 +194,7 @@ const Calendar: React.FC<CalendarProps> = ({ events, onSaveEvent }) => {
                 type="text"
                 value={eventTitle}
                 onChange={(e) => setEventTitle(e.target.value)}
-                className="dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800"
+                className="dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-[#313131] dark:bg-[#111111] dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800"
               />
             </div>
 
@@ -204,7 +204,7 @@ const Calendar: React.FC<CalendarProps> = ({ events, onSaveEvent }) => {
                   type="checkbox"
                   checked={isAllDay}
                   onChange={() => setIsAllDay(!isAllDay)}
-                  className="mr-3 h-5 w-5 rounded border-gray-300 text-brand-500 focus:ring-brand-500 dark:border-gray-700 dark:bg-gray-900"
+                  className="mr-3 h-5 w-5 rounded border-gray-300 text-brand-500 focus:ring-brand-500 dark:border-[#313131] dark:bg-[#111111]"
                 />
                 Show as All Day Event
               </label>
@@ -228,7 +228,7 @@ const Calendar: React.FC<CalendarProps> = ({ events, onSaveEvent }) => {
                             checked={eventLevel === value}
                             onChange={() => setEventLevel(value)}
                           />
-                          <span className="flex items-center justify-center w-5 h-5 mr-2 border border-gray-300 rounded-full box dark:border-gray-700">
+                          <span className="flex items-center justify-center w-5 h-5 mr-2 border border-gray-300 rounded-full box dark:border-[#313131]">
                             <span className={`h-2 w-2 rounded-full ${eventLevel === value ? "bg-gray-800 dark:bg-white" : ""}`}></span>
                           </span>
                         </span>
@@ -248,7 +248,7 @@ const Calendar: React.FC<CalendarProps> = ({ events, onSaveEvent }) => {
                 type="datetime-local"
                 value={eventStartDate}
                 onChange={(e) => setEventStartDate(e.target.value)}
-                className="dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs dark:border-gray-700 dark:bg-gray-900 dark:text-white/90"
+                className="dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs dark:border-[#313131] dark:bg-[#111111] dark:text-white/90"
               />
             </div>
 
@@ -260,7 +260,7 @@ const Calendar: React.FC<CalendarProps> = ({ events, onSaveEvent }) => {
                 type="datetime-local"
                 value={eventEndDate}
                 onChange={(e) => setEventEndDate(e.target.value)}
-                className="dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs dark:border-gray-700 dark:bg-gray-900 dark:text-white/90"
+                className="dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs dark:border-[#313131] dark:bg-[#111111] dark:text-white/90"
               />
             </div>
           </div>

@@ -308,7 +308,7 @@ const ServiceList: React.FC<ServiceListProps> = ({ services }) => {
                 value={formName}
                 onChange={(e) => setFormName(e.target.value)}
                 required
-                className="dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
+                className="dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-[#313131] dark:bg-[#111111] dark:text-white/90 dark:placeholder:text-white/30"
                 placeholder="e.g., Haircut, Massage, Manicure"
               />
             </div>
@@ -323,7 +323,7 @@ const ServiceList: React.FC<ServiceListProps> = ({ services }) => {
                 onChange={(e) => setFormDuration(parseInt(e.target.value) || 0)}
                 required
                 min="1"
-                className="dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs dark:border-gray-700 dark:bg-gray-900 dark:text-white/90"
+                className="dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs dark:border-[#313131] dark:bg-[#111111] dark:text-white/90"
                 placeholder="30"
               />
             </div>
@@ -338,7 +338,7 @@ const ServiceList: React.FC<ServiceListProps> = ({ services }) => {
                 onChange={(e) => setFormPrice(parseInt(e.target.value) || 0)}
                 required
                 min="0"
-                className="dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs dark:border-gray-700 dark:bg-gray-900 dark:text-white/90"
+                className="dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs dark:border-[#313131] dark:bg-[#111111] dark:text-white/90"
                 placeholder="50000"
               />
             </div>
@@ -350,7 +350,7 @@ const ServiceList: React.FC<ServiceListProps> = ({ services }) => {
                     type="checkbox"
                     checked={formIsActive}
                     onChange={() => setFormIsActive(!formIsActive)}
-                    className="mr-3 h-5 w-5 rounded border-gray-300 text-brand-500 focus:ring-brand-500 dark:border-gray-700 dark:bg-gray-900"
+                    className="mr-3 h-5 w-5 rounded border-gray-300 text-brand-500 focus:ring-brand-500 dark:border-[#313131] dark:bg-[#111111]"
                   />
                   Active
                 </label>

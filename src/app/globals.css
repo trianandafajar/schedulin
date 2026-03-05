@@ -276,7 +276,7 @@
 }
 
 .dark .custom-scrollbar::-webkit-scrollbar-thumb {
-  background-color: #344054;
+  background-color: #0C0C0C;
 }
 
 
@@ -549,7 +549,7 @@ span.flatpickr-weekday,
   @apply text-gray-900 bg-white dark:bg-brand-500 dark:text-white;
 }
 .fc-theme-standard th {
-  @apply !border-x-0 border-t !border-gray-200 bg-gray-50 !text-left dark:!border-[#313131] dark:bg-[#212121];  /* ini dia */
+  @apply !border-x-0 border-t !border-gray-200 bg-gray-50 !text-left dark:!border-[#313131] dark:bg-[#212121];
 }
 .fc-theme-standard td,
 .fc-theme-standard .fc-scrollgrid {
