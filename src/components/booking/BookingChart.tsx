@@ -66,8 +66,8 @@ const BookingChart: React.FC<BookingChartProps> = ({ bookings }) => {
           onClick={() => setTimeRange("week")}
           className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
             timeRange === "week"
-              ? "bg-brand-500 text-white"
-              : "bg-gray-100 text-gray-600 dark:bg-[#212121] dark:text-[#e2e2e2]"
+              ? "bg-brand-500 text-[#e2e2e2]"
+              : "bg-gray-100 text-gray-600 dark:bg-[#212121] dark:text-gray-400"
           }`}
         >
           This Week
@@ -76,8 +76,8 @@ const BookingChart: React.FC<BookingChartProps> = ({ bookings }) => {
           onClick={() => setTimeRange("month")}
           className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
             timeRange === "month"
-              ? "bg-brand-500 text-white"
-              : "bg-gray-100 text-gray-600 dark:bg-[#212121] dark:text-[#e2e2e2]"
+              ? "bg-brand-500 text-[#e2e2e2]"
+              : "bg-gray-100 text-gray-600 dark:bg-[#212121] dark:text-gray-400"
           }`}
         >
           This Month
