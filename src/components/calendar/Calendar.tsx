@@ -40,7 +40,7 @@ const Calendar: React.FC<CalendarProps> = ({ events, onSaveEvent }) => {
   const [eventLevel, setEventLevel] = useState("");
   const [isAllDay, setIsAllDay] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  
+
   const calendarRef = useRef<FullCalendar>(null);
   const { isOpen, openModal, closeModal } = useModal();
 
@@ -56,8 +56,8 @@ const Calendar: React.FC<CalendarProps> = ({ events, onSaveEvent }) => {
     const date = new Date(dateStr);
     if (isNaN(date.getTime())) return "";
 
-    const tzoffset = date.getTimezoneOffset() * 60000; 
-    return new Date(date.getTime() - tzoffset).toISOString().slice(0, 16); 
+    const tzoffset = date.getTimezoneOffset() * 60000;
+    return new Date(date.getTime() - tzoffset).toISOString().slice(0, 16);
   };
 
   const handleDateSelect = (selectInfo: DateSelectArg) => {
@@ -78,7 +78,7 @@ const Calendar: React.FC<CalendarProps> = ({ events, onSaveEvent }) => {
 
   const handleEventClick = (clickInfo: EventClickArg) => {
     const event = clickInfo.event;
-    
+
     setSelectedEvent({
       id: event.id,
       title: event.title,
@@ -91,7 +91,7 @@ const Calendar: React.FC<CalendarProps> = ({ events, onSaveEvent }) => {
         originalEnd: event.extendedProps.originalEnd
       }
     });
-    
+
     setEventTitle(event.title);
     setIsAllDay(event.allDay);
 
@@ -118,7 +118,7 @@ const Calendar: React.FC<CalendarProps> = ({ events, onSaveEvent }) => {
       await onSaveEvent(
         {
           title: eventTitle,
-          start: payloadStart, 
+          start: payloadStart,
           end: payloadEnd,
           level: eventLevel,
           allDay: isAllDay,
@@ -144,13 +144,13 @@ const Calendar: React.FC<CalendarProps> = ({ events, onSaveEvent }) => {
   };
 
   return (
-    <div className="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
+    <div className="rounded-2xl border border-gray-200 bg-white dark:border-[#313131] dark:bg-[#111111]">
       <div className="custom-calendar">
         <FullCalendar
           ref={calendarRef}
           plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
           initialView="timeGridDay"
-          allDaySlot={true} 
+          allDaySlot={true}
           headerToolbar={{
             left: "prev,next addEventButton",
             center: "title",
@@ -164,7 +164,7 @@ const Calendar: React.FC<CalendarProps> = ({ events, onSaveEvent }) => {
           eventTimeFormat={{
             hour: '2-digit',
             minute: '2-digit',
-            hour12: false 
+            hour12: false
           }}
           customButtons={{
             addEventButton: {
@@ -203,13 +203,13 @@ const Calendar: React.FC<CalendarProps> = ({ events, onSaveEvent }) => {
                 <input
                   type="checkbox"
                   checked={isAllDay}
-                  onChange={() => setIsAllDay(!isAllDay)} 
+                  onChange={() => setIsAllDay(!isAllDay)}
                   className="mr-3 h-5 w-5 rounded border-gray-300 text-brand-500 focus:ring-brand-500 dark:border-gray-700 dark:bg-gray-900"
                 />
                 Show as All Day Event
               </label>
             </div>
-            
+
             <div className="mt-6">
               <label className="block mb-4 text-sm font-medium text-gray-700 dark:text-gray-400">
                 Event Color
@@ -245,7 +245,7 @@ const Calendar: React.FC<CalendarProps> = ({ events, onSaveEvent }) => {
                 Start Date & Time
               </label>
               <input
-                type="datetime-local" 
+                type="datetime-local"
                 value={eventStartDate}
                 onChange={(e) => setEventStartDate(e.target.value)}
                 className="dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs dark:border-gray-700 dark:bg-gray-900 dark:text-white/90"
@@ -292,9 +292,9 @@ const renderEventContent = (eventInfo: EventContentArg) => {
       className={`event-fc-color flex items-center fc-event-main ${colorClass} p-1 rounded-sm`}
     >
       <div className="fc-daygrid-event-dot"></div>
-      
+
       {!eventInfo.event.allDay && (
-        <div className="fc-event-time font-semibold mr-2">{eventInfo.timeText}</div>
+        <div className="fc-event-time text-[#e2e2e2] font-semibold mr-2">{eventInfo.timeText}</div>
       )}
       <div className="fc-event-title truncate ">{eventInfo.event.title}</div>
     </div>
