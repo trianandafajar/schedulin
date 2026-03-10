@@ -161,9 +161,9 @@ export default function SignUpForm({ categories }: SignUpFormProps) {
   return (
     <div className="flex flex-col flex-1 lg:w-1/2 w-full overflow-y-auto no-scrollbar">
       <div className="w-full max-w-md sm:pt-10 mx-auto mb-5">
-        {/* <Link href="/" className="inline-flex items-center text-sm text-gray-500 hover:text-gray-700">
-          <ChevronLeftIcon /> Back to dashboard
-        </Link> */}
+        <Link href="/" className="inline-flex items-center text-sm dark:text-[#e2e2e2] dark:hover:text-white">
+          <ChevronLeftIcon /> Back to Landing Page
+        </Link>
       </div>
 
       <div className="flex flex-col justify-center flex-1 w-full max-w-md mx-auto">
@@ -171,7 +171,7 @@ export default function SignUpForm({ categories }: SignUpFormProps) {
         {step === 'onboarding' && (
           <div>
             <div className="mb-5 sm:mb-8">
-              <h1 className="mb-2 font-semibold text-gray-800 text-title-sm dark:text-white/90 sm:text-title-md">
+              <h1 className="mb-2 font-semibold text-gray-800 text-title-sm dark:text-white sm:text-title-md">
                 Setup Business
               </h1>
               <p className="text-sm text-gray-500 dark:text-gray-400">
@@ -199,7 +199,7 @@ export default function SignUpForm({ categories }: SignUpFormProps) {
                     <select
                       value={categoryId}
                       onChange={(e) => setCategoryId(e.target.value)}
-                      className="relative z-20 w-full appearance-none rounded-lg border border-gray-300 bg-transparent px-5 py-3 outline-none transition focus:border-brand-500 dark:border-gray-700 dark:bg-gray-800 text-gray-800 dark:text-white/90"
+                      className="relative z-20 w-full appearance-none rounded-lg border border-gray-300 bg-transparent px-5 py-3 outline-none transition focus:border-brand-500 dark:border-gray-700 dark:bg-gray-800 text-gray-800 dark:text-white"
                     >
                       <option value="" disabled>Select Category</option>
                       {categories.map((cat) => (
@@ -222,7 +222,7 @@ export default function SignUpForm({ categories }: SignUpFormProps) {
         {step === 'verify' && (
           <div>
             <div className="mb-5 sm:mb-8">
-              <h1 className="mb-2 font-semibold text-gray-800 text-title-sm dark:text-white/90 sm:text-title-md">Verify Email</h1>
+              <h1 className="mb-2 font-semibold text-gray-800 text-title-sm dark:text-white sm:text-title-md">Verify Email</h1>
               <p className="text-sm text-gray-500 dark:text-gray-400">We sent a code to <strong>{email}</strong>.</p>
             </div>
             {error && <div className="mb-4 text-sm text-red-500">{error}</div>}
@@ -263,12 +263,12 @@ export default function SignUpForm({ categories }: SignUpFormProps) {
         {step === 'signup' && (
           <div>
             <div className="mb-5 sm:mb-8">
-              <h1 className="mb-2 font-semibold text-gray-800 sm:text-title-md">Sign Up</h1>
+              <h1 className="mb-2 font-semibold text-gray-800 sm:text-title-md dark:text-white">Sign Up</h1>
             </div>
             {error && <div className="mb-4 text-sm text-red-500">{error}</div>}
             <form onSubmit={handleSubmit}>
               <div className="space-y-5">
-                <div className="grid grid-cols-2 gap-5">
+                <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
                   <div>
                     <Label>First Name</Label>
                     <Input
@@ -303,7 +303,7 @@ export default function SignUpForm({ categories }: SignUpFormProps) {
                 </div>
                 <div className="flex items-center gap-3">
                   <Checkbox checked={isChecked} onChange={setIsChecked} />
-                  <p className="text-sm text-gray-500">I agree to Terms & Conditions</p>
+                  <p className="text-sm text-gray-500 dark:text-[#e2e2e2]">I agree to Terms & Conditions</p>
                 </div>
                 <div id="clerk-captcha"></div>
                 <Button className="w-full" size="sm" type="submit" disabled={isLoading} >
@@ -312,7 +312,7 @@ export default function SignUpForm({ categories }: SignUpFormProps) {
               </div>
             </form>
             <div className="mt-5 text-center">
-              <p className="text-sm">Already have an account? <Link href="/signin" className="text-brand-500">Sign In</Link></p>
+              <p className="text-sm dark:text-[#e2e2e2]">Already have an account? <Link href="/signin" className="text-brand-500">Sign In</Link></p>
             </div>
           </div>
         )}
