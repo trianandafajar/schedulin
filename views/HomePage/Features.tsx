@@ -69,6 +69,8 @@ export default function Features() {
 const FeaturesSection = styled(Container)`
   padding-top: 3rem;
   padding-bottom: 3rem;
+  display: grid;
+  gap: 2rem;
 `;
 
 const CustomAutofitGrid = styled(AutofitGrid)`
