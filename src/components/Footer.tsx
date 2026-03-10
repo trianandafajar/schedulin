@@ -123,7 +123,8 @@ const LinksArea = styled.div`
 
   ${media('<=phone')} {
     gap: 1.5rem;
-    flex-wrap: wrap;
+    display: flex;
+    flex-direction: column;
   }
 `;
 
