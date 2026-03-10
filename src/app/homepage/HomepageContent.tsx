@@ -66,15 +66,15 @@ const HomepageWrapper = styled.div`
       padding-top: 2rem;
 
   & > :last-child {
-        margin - bottom: 5rem;
+        margin-bottom: 5rem;
   }
       `;
 
 const DarkerBackgroundContainer = styled.div`
-      background: rgb(var(--background));
+      background: rgb(var(--background)); 
 
   & > *:not(:first-child) {
-        margin - top: 5rem;
+        margin-top: 5rem;
   }
       `;
 
@@ -82,10 +82,10 @@ const WhiteBackgroundContainer = styled.div`
       background: rgb(var(--secondBackground));
 
   & > :last-child {
-        padding - bottom: 5rem;
+        padding-bottom: 5rem;
   }
 
   & > *:not(:first-child) {
-        margin - top: 5rem;
+        margin-top: 5rem;
   }
       `;
