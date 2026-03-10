@@ -11,7 +11,8 @@ import Testimonials from '../../../views/HomePage/Testimonials';
 import Footer from '@/components/Footer';
 import Navbar from '@/components/landing/Navbar/Navbar';
 import { SingleNavItem } from '@/components/landing/Navbar/NavbarLinks';
-
+import ThemeTogglerTwo from '@/components/common/ThemeTogglerTwo';
+import { ThemeProvider } from "@/context/ThemeContext";
 export default function HomepageContent() {
   const navItems: SingleNavItem[] = [
     { title: 'Signup', href: '/signup', outlined: true },
@@ -19,68 +20,72 @@ export default function HomepageContent() {
 
   return (
     <>
-      <Navbar items={navItems} />
-      <HomepageWrapper>
-        <WhiteBackgroundContainer>
-          <Hero />
-          {/* <Partners /> */}
-          <BasicSection imageUrl="/demo-illustration-1.svg" title="Appointment booking on autopilot." overTitle="SaaS Appointment Booking">
-            <p>
-              Accept bookings 24/7 with an online page that syncs instantly with your team calendar. Clients choose open slots and get automatic
-              confirmation.
-            </p>
-            <p>
-              Fast setup for clinics, salons, consultants, and other service businesses.
-            </p>
-          </BasicSection>
-          <BasicSection imageUrl="/demo-illustration-2.svg" title="Fewer no-shows, cleaner schedules." overTitle="Operational Efficiency" reversed>
-            <p>
-              Reduce manual admin work with automated reminders, booking deposits, and real-time updates for every team member.
-            </p>
-            <ul>
-              <li>Automatic reminders by email or WhatsApp</li>
-              <li>Two-way Google Calendar sync</li>
-              <li>Booking analytics for service performance</li>
-            </ul>
-          </BasicSection>
-        </WhiteBackgroundContainer>
+      <ThemeProvider>
+        <Navbar items={navItems} />
+        <HomepageWrapper>
+          <WhiteBackgroundContainer>
+            <Hero />
+            {/* <Partners /> */}
+            <BasicSection imageUrl="/demo-illustration-1.svg" title="Appointment booking on autopilot." overTitle="SaaS Appointment Booking">
+              <p>
+                Accept bookings 24/7 with an online page that syncs instantly with your team calendar. Clients choose open slots and get automatic
+                confirmation.
+              </p>
+              <p>
+                Fast setup for clinics, salons, consultants, and other service businesses.
+              </p>
+            </BasicSection>
+            <BasicSection imageUrl="/demo-illustration-2.svg" title="Fewer no-shows, cleaner schedules." overTitle="Operational Efficiency" reversed>
+              <p>
+                Reduce manual admin work with automated reminders, booking deposits, and real-time updates for every team member.
+              </p>
+              <ul>
+                <li>Automatic reminders by email or WhatsApp</li>
+                <li>Two-way Google Calendar sync</li>
+                <li>Booking analytics for service performance</li>
+              </ul>
+            </BasicSection>
+          </WhiteBackgroundContainer>
           <Cta />
           <FeaturesGallery />
           <Features />
-      </HomepageWrapper>
-      <Footer />
-
+        </HomepageWrapper>
+        <Footer />
+        <div className="fixed bottom-6 right-6 z-50 hidden sm:block">
+          <ThemeTogglerTwo />
+        </div>
+      </ThemeProvider>
     </>
   );
 }
 
 const HomepageWrapper = styled.div`
 
-  margin: 0 auto;
-  max-width:1280px;
-  padding-top: 2rem;
+      margin: 0 auto;
+      max-width:1280px;
+      padding-top: 2rem;
 
   & > :last-child {
-    margin-bottom: 5rem;
+        margin - bottom: 5rem;
   }
-`;
+      `;
 
 const DarkerBackgroundContainer = styled.div`
-  background: rgb(var(--background));
+      background: rgb(var(--background));
 
   & > *:not(:first-child) {
-    margin-top: 5rem;
+        margin - top: 5rem;
   }
-`;
+      `;
 
 const WhiteBackgroundContainer = styled.div`
-  background: rgb(var(--secondBackground));
+      background: rgb(var(--secondBackground));
 
   & > :last-child {
-    padding-bottom: 5rem;
+        padding - bottom: 5rem;
   }
 
   & > *:not(:first-child) {
-    margin-top: 5rem;
+        margin - top: 5rem;
   }
-`;
+      `;
