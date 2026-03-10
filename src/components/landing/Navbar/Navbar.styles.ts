@@ -7,7 +7,7 @@ export const NavbarContainer = styled.header<{ $hidden: boolean }>`
   top: 0;
   width: 100%;
   z-index: 999;
-  padding: 0 2rem;
+  padding: 0;
   height: 72px;               /* dari 8rem -> 72px */
   background: #ffffff;
   border-bottom: 1px solid rgba(0,0,0,0.06);
