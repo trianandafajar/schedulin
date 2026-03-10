@@ -10,25 +10,25 @@ import { ChevronLeftIcon, EyeCloseIcon, EyeIcon } from "@/icons";
 import Button from "../ui/button/Button";
 import { completeOnboardingClient, useAuthService } from "@/service/authService";
 
-type Step = 'signup' | 'onboarding' | 'verify';
+type Step = 'signup' | 'onboarding';
 
 interface SignUpFormProps {
   categories: { id: string; name: string }[];
 }
 
 export default function SignUpForm({ categories }: SignUpFormProps) {
-  const { register, verifyEmail, isLoaded } = useAuthService();
+  const { register, isLoaded } = useAuthService();
   const router = useRouter();
   const [step, setStep] = useState<Step>('signup');
 
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
+  const [email, setEmail] = useState("accountdemo@gmail.com");
+  const [password, setPassword] = useState("accountDemo123");
+  const [firstName, setFirstName] = useState("Demo");
+  const [lastName, setLastName] = useState("Account");
   const [showPassword, setShowPassword] = useState(false);
   const [isChecked, setIsChecked] = useState(false);
 
-  const [code, setCode] = useState("");
+  // const [code, setCode] = useState("");
   const [businessName, setBusinessName] = useState("");
   const [categoryId, setCategoryId] = useState("");
 
@@ -58,46 +58,86 @@ export default function SignUpForm({ categories }: SignUpFormProps) {
     setIsLoading(false);
   };
 
-  const handleOnboardingNext = (e: React.FormEvent) => {
-    e.preventDefault();
-    setError("");
+  // const handleOnboardingNext = async (e: React.FormEvent) => {
+  //   e.preventDefault();
+  //   setError("");
 
-    if (!businessName || !categoryId) {
-      setError("Please fill in all business details.");
-      return;
-    }
-    setStep('verify');
-  };
+  //   if (!businessName || !categoryId) {
+  //     setError("Please fill in all business details.");
+  //     return;
+  //   }
 
-  const handleVerification = async (e: React.FormEvent) => {
+  //    const userFullName = `${firstName} ${lastName}`.trim();
+  //     const onboardingResult = await completeOnboardingClient(
+  //       businessName,
+  //       categoryId,
+  //       email,
+  //       userFullName
+  //     );
+  //   setStep('verify');
+  // };
+
+  const handleOnboardingNext = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!isLoaded) return;
     setError("");
     setIsLoading(true);
 
-    const verificationResult = await verifyEmail(code);
+    if (!businessName || !categoryId) {
+      setError("Please fill in all business details.");
+      setIsLoading(false);
+      return;
+    }
 
-    if (verificationResult?.success && verificationResult.userId) {
+    try {
       const userFullName = `${firstName} ${lastName}`.trim();
-      const onboardingResult = await completeOnboardingClient(
+
+      const result = await completeOnboardingClient(
         businessName,
         categoryId,
-        verificationResult.userId,
         email,
         userFullName
+        
       );
-      if (onboardingResult.error) {
-        setError("Account created but business setup failed. Please contact support.");
+
+      console.log("ONBOARD RESULT:", result);
+
+      if (result.error) {
+        // setError("Business setup failed");
+          setError(result.error);
       } else {
-        router.refresh();
         router.push("/dashboard");
       }
-    } else {
-      setError(verificationResult?.error || "Verification code incorrect");
+
+    } catch (err) {
+      setError("Business setup failed");
+      console.error("Onboarding error:", err);
     }
 
     setIsLoading(false);
   };
+
+  // const handleVerification = async (e: React.FormEvent) => {
+  //   e.preventDefault();
+  //   if (!isLoaded) return;
+  //   setError("");
+  //   setIsLoading(true);
+
+  //   const verificationResult = await verifyEmail(code);
+
+  //   if (verificationResult?.success && verificationResult.userId) {
+
+  //     if (onboardingResult.error) {
+  //       setError("Account created but business setup failed. Please contact support.");
+  //     } else {
+  //       router.refresh();
+  //       router.push("/dashboard");
+  //     }
+  //   } else {
+  //     setError(verificationResult?.error || "Verification code incorrect");
+  //   }
+
+  //   setIsLoading(false);
+  // };
 
   // const handleOnboardingNext = (e: React.FormEvent) => {
   //   e.preventDefault();
@@ -161,8 +201,8 @@ export default function SignUpForm({ categories }: SignUpFormProps) {
   return (
     <div className="flex flex-col flex-1 lg:w-1/2 w-full overflow-y-auto no-scrollbar">
       <div className="w-full max-w-md sm:pt-10 mx-auto mb-5">
-        <Link href="/" className="inline-flex items-center text-sm dark:text-[#e2e2e2] dark:hover:text-white">
-          <ChevronLeftIcon /> Back to Landing Page
+        <Link href="/" className="inline-flex items-center text-sm text-gray-500 dark:text-white hover:text-gray-700">
+          <ChevronLeftIcon /> Back to dashboard
         </Link>
       </div>
 
@@ -171,7 +211,7 @@ export default function SignUpForm({ categories }: SignUpFormProps) {
         {step === 'onboarding' && (
           <div>
             <div className="mb-5 sm:mb-8">
-              <h1 className="mb-2 font-semibold text-gray-800 text-title-sm dark:text-white sm:text-title-md">
+              <h1 className="mb-2 font-semibold text-gray-800 text-title-sm dark:text-white/90 sm:text-title-md">
                 Setup Business
               </h1>
               <p className="text-sm text-gray-500 dark:text-gray-400">
@@ -199,7 +239,7 @@ export default function SignUpForm({ categories }: SignUpFormProps) {
                     <select
                       value={categoryId}
                       onChange={(e) => setCategoryId(e.target.value)}
-                      className="relative z-20 w-full appearance-none rounded-lg border border-gray-300 bg-transparent px-5 py-3 outline-none transition focus:border-brand-500 dark:border-gray-700 dark:bg-gray-800 text-gray-800 dark:text-white"
+                      className="relative z-20 w-full appearance-none rounded-lg border border-gray-300 bg-transparent px-5 py-3 outline-none transition focus:border-brand-500 dark:border-gray-700 dark:bg-gray-800 text-gray-800 dark:text-white/90"
                     >
                       <option value="" disabled>Select Category</option>
                       {categories.map((cat) => (
@@ -212,17 +252,17 @@ export default function SignUpForm({ categories }: SignUpFormProps) {
                 </div>
 
                 <button type="submit" className="flex items-center justify-center w-full px-4 py-3 text-sm font-medium text-white transition rounded-lg bg-brand-500 hover:bg-brand-600">
-                  Next: Verify Email
+                  Create Business
                 </button>
               </div>
             </form>
           </div>
         )}
 
-        {step === 'verify' && (
+        {/* {step === 'verify' && (
           <div>
             <div className="mb-5 sm:mb-8">
-              <h1 className="mb-2 font-semibold text-gray-800 text-title-sm dark:text-white sm:text-title-md">Verify Email</h1>
+              <h1 className="mb-2 font-semibold text-gray-800 text-title-sm dark:text-white/90 sm:text-title-md">Verify Email</h1>
               <p className="text-sm text-gray-500 dark:text-gray-400">We sent a code to <strong>{email}</strong>.</p>
             </div>
             {error && <div className="mb-4 text-sm text-red-500">{error}</div>}
@@ -258,7 +298,7 @@ export default function SignUpForm({ categories }: SignUpFormProps) {
               </div>
             </form>
           </div>
-        )}
+        )} */}
 
         {step === 'signup' && (
           <div>
@@ -268,7 +308,7 @@ export default function SignUpForm({ categories }: SignUpFormProps) {
             {error && <div className="mb-4 text-sm text-red-500">{error}</div>}
             <form onSubmit={handleSubmit}>
               <div className="space-y-5">
-                <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
+                <div className="grid grid-cols-2 gap-5">
                   <div>
                     <Label>First Name</Label>
                     <Input
@@ -312,7 +352,7 @@ export default function SignUpForm({ categories }: SignUpFormProps) {
               </div>
             </form>
             <div className="mt-5 text-center">
-              <p className="text-sm dark:text-[#e2e2e2]">Already have an account? <Link href="/signin" className="text-brand-500">Sign In</Link></p>
+              <p className="text-sm text-[#e2e2e2]">Already have an account? <Link href="/signin" className="text-brand-500">Sign In</Link></p>
             </div>
           </div>
         )}

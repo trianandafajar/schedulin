@@ -10,17 +10,17 @@ import Button from "@/components/ui/button/Button";
 import { ChevronLeftIcon, EyeCloseIcon, EyeIcon } from "@/icons";
 import { useAuthService } from "@/service/authService";
 
-type Step = 'signin' | 'verify';
+type Step = 'signin';
 
 export default function SignInForm() {
   const [showPassword, setShowPassword] = useState(false);
   const [isChecked, setIsChecked] = useState(false);
 
-  const { login, isLoaded, verifyEmailLogin } = useAuthService();
+  const { login, isLoaded } = useAuthService();
   const router = useRouter();
   const [step, setStep] = useState<Step>('signin');
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("accountdemo@gmail.com");
+  const [password, setPassword] = useState("accountDemo123");
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [code, setCode] = useState("");
@@ -37,28 +37,27 @@ export default function SignInForm() {
       router.push('/dashboard');
       setIsLoading(false);
     } else {
-      setStep('verify');
-      // setError(result?.error || "Gagal Login");
+      setError(result?.error || "Gagal Login");
       setIsLoading(false);
     }
   };
 
-  const handleVerification = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!isLoaded) return;
-    setError("");
-    setIsLoading(true);
+  // const handleVerification = async (e: React.FormEvent) => {
+  //   e.preventDefault();
+  //   if (!isLoaded) return;
+  //   setError("");
+  //   setIsLoading(true);
 
-    const verificationResult = await verifyEmailLogin(code);
-    if (verificationResult?.success) {
-      router.refresh();
-      router.push("/dashboard");
-    } else {
-      setError(verificationResult?.error || "Verification code incorrect");
-    }
+  //   const verificationResult = await verifyEmailLogin(code);
+  //   if (verificationResult?.success) {
+  //     router.refresh();
+  //     router.push("/dashboard");
+  //   } else {
+  //     setError(verificationResult?.error || "Verification code incorrect");
+  //   }
 
-    setIsLoading(false);
-  };
+  //   setIsLoading(false);
+  // };
 
 
   return (
@@ -193,7 +192,7 @@ export default function SignInForm() {
             </div>
           </div>
         )}
-        {step === 'verify' && (
+        {/* {step === 'verify' && (
           <div>
             <div className="mb-5 sm:mb-8">
               <h1 className="mb-2 font-semibold text-gray-800 text-title-sm dark:text-white/90 sm:text-title-md">Verify Email</h1>
@@ -232,7 +231,7 @@ export default function SignInForm() {
               </div>
             </form>
           </div>
-        )}
+        )} */}
       </div>
     </div>
   );
