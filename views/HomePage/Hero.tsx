@@ -42,11 +42,11 @@ export default function Hero() {
 
 const HeroWrapper = styled(Container)`
   display: flex;
-  padding-top: 3rem;
+  padding-top: rem;
 
   ${media('<=desktop')} {
     padding-top: 1rem;
-    flex-direction: column;
+    flex-direction: column-reverse;
     align-items: center;
   }
 `;
@@ -75,10 +75,18 @@ const ImageContainer = styled.div`
   }
 
   ${media('<=desktop')} {
-    margin-top: 2rem;
+   
     justify-content: center;
     svg {
-      max-width: 80%;
+      max-width: 100%;
+    }
+  }
+
+  ${media('<= phone')}{
+    svg {
+      margin-top: -7rem;
+      margin-bottom: -4rem;
+      max-width: 100%;
     }
   }
 `;
