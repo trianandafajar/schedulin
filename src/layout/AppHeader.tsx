@@ -66,22 +66,22 @@ const AppHeader: React.FC = () => {
             )}
           </button>
 
-          <Link href="/" className="lg:hidden">
+          {/* <Link href="/" className="lg:hidden">
             <Image
               width={154}
               height={32}
               className="dark:hidden"
-              src="./images/logo/logo.svg"
+              src="./images/auth.svg"
               alt="Logo"
             />
             <Image
               width={154}
               height={32}
               className="hidden dark:block"
-              src="./images/logo/logo-dark.svg"
+              src="./images/auth.svg"
               alt="Logo"
             />
-          </Link>
+          </Link> */}
 
           <button
             onClick={toggleApplicationMenu}

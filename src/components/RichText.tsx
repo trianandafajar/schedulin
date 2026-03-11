@@ -5,7 +5,7 @@ const RichText = styled.div`
   font-size: 1rem;
   opacity: 0.8;
   line-height: 1.6;
-
+  text-align: center;
   p {
       .dark & {
         color: #e2e2e2;
@@ -68,6 +68,7 @@ const RichText = styled.div`
   ${media('<=desktop')} {
     font-size: 0.95rem;
   }
+    
 `;
 
 export default RichText;

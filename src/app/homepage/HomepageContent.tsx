@@ -9,6 +9,7 @@ import FeaturesGallery from '../../../views/HomePage/FeaturesGallery';
 import Features from '../../../views/HomePage/Features';
 import Testimonials from '../../../views/HomePage/Testimonials';
 import Footer from '@/components/Footer';
+import RichText from '@/components/RichText';
 import Navbar from '@/components/landing/Navbar/Navbar';
 import { SingleNavItem } from '@/components/landing/Navbar/NavbarLinks';
 import ThemeTogglerTwo from '@/components/common/ThemeTogglerTwo';
@@ -16,12 +17,12 @@ import { ThemeProvider } from "@/context/ThemeContext";
 import { useUser } from "@clerk/nextjs";
 
 export default function HomepageContent() {
-  const { isSignedIn } = useUser();
-  const { user } = useUser();
-  const userName = user?.firstName|| "Guest";
+  const { isSignedIn,user } = useUser();
+
+  const userName = user?.firstName || "Guest";
   const startLink = isSignedIn ? "/dashboard" : "/signin";
 
-  
+
 
   const navItems: SingleNavItem[] = [
     { title: isSignedIn ? userName : "Sign In", href: startLink, outlined: true },
@@ -48,11 +49,13 @@ export default function HomepageContent() {
               <p>
                 Reduce manual admin work with automated reminders, booking deposits, and real-time updates for every team member.
               </p>
-              <ul>
-                <li>Automatic reminders by email or WhatsApp</li>
-                <li>Two-way Google Calendar sync</li>
-                <li>Booking analytics for service performance</li>
-              </ul>
+              <CustomRichText>
+                <ul>
+                  <li>Automatic reminders by email or WhatsApp</li>
+                  <li>Two-way Google Calendar sync</li>
+                  <li>Booking analytics for service performance</li>
+                </ul>
+              </CustomRichText>
             </BasicSection>
           </WhiteBackgroundContainer>
           <Cta />
@@ -98,3 +101,8 @@ const WhiteBackgroundContainer = styled.div`
         margin-top: 5rem;
   }
       `;
+
+const CustomRichText = styled(RichText)`
+
+text-align: justify
+`;

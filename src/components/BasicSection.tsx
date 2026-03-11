@@ -44,6 +44,10 @@ const Title = styled.h1`
     margin-bottom: 1rem;
 
   }
+
+  ${media('<=phone')} {
+      text-align: center;
+  }
 `;
 
 const CustomOverTitle = styled(OverTitle)`
