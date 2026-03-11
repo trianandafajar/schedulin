@@ -5,11 +5,21 @@ import Container from '@/components/Container';
 import HeroIllustration from '@/components/HeroIllustation';
 import OverTitle from '@/components/OverTitle';
 import Button from '@/components/ui/button/Button';
+import { useUser } from "@clerk/nextjs";
 import Link from 'next/link';
 import styled from 'styled-components';
 
-
 export default function Hero() {
+  const { isSignedIn } = useUser();
+
+  const handleGetStartedClick = () => {
+    if (isSignedIn) {
+      window.location.href = '/dashboard';
+    } else {
+      window.location.href = '/signup';
+    }
+  };
+
   const { setIsModalOpened } = useNewsletterModalContext();
 
   return (
@@ -21,16 +31,14 @@ export default function Hero() {
           Let clients book available slots online, send automatic reminders, and keep your team calendar in sync without manual back-and-forth.
         </Description>
         <CustomButtonGroup>
-          <Link href="/signup">
-            <Button>
-              Start Free <span>&rarr;</span>
-            </Button>
-          </Link>
-          <Link href="/signin">
+          <Button onClick={handleGetStartedClick}>
+            Start Free <span>&rarr;</span>
+          </Button>
+          {/* <Link href="/signin">
             <Button variant="outline">
               Sign In <span>&rarr;</span>
             </Button>
-          </Link>
+          </Link> */}
         </CustomButtonGroup>
       </Contents>
       <ImageContainer>
@@ -103,6 +111,10 @@ const Description = styled.p`
   ${media('<=desktop')} {
     font-size: 0.95rem;
   }
+
+  ${media('<=phone')} {
+    text-align: center;
+  }
 `;
 
 const CustomOverTitle = styled(OverTitle)`
@@ -127,6 +139,10 @@ const Heading = styled.h1`
   ${media('<=tablet')} {
     font-size: 1.9rem;
     margin-bottom: 1rem;
+  }
+
+  ${media('<=phone')} {
+    text-align: center;
   }
 `;
 
