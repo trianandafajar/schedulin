@@ -13,9 +13,18 @@ import Navbar from '@/components/landing/Navbar/Navbar';
 import { SingleNavItem } from '@/components/landing/Navbar/NavbarLinks';
 import ThemeTogglerTwo from '@/components/common/ThemeTogglerTwo';
 import { ThemeProvider } from "@/context/ThemeContext";
+import { useUser } from "@clerk/nextjs";
+
 export default function HomepageContent() {
+  const { isSignedIn } = useUser();
+  const { user } = useUser();
+  const userName = user?.firstName|| "Guest";
+  const startLink = isSignedIn ? "/dashboard" : "/signin";
+
+  
+
   const navItems: SingleNavItem[] = [
-    { title: 'Signup', href: '/signup', outlined: true },
+    { title: isSignedIn ? userName : "Sign In", href: startLink, outlined: true },
   ];
 
   return (
