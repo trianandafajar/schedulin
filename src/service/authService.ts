@@ -8,6 +8,57 @@ export const useAuthService = () => {
   const { isLoaded: isSignUpLoaded, signUp } = useSignUp();
   const { signOut } = useClerk();
 
+  // const login = async (email: string, password: string) => {
+  //   if (!isSignInLoaded) return;
+
+  //   try {
+  //     const result = await signIn.create({
+  //       identifier: email,
+  //       password,
+  //     });
+  //     console.log(result.status)
+  //     if (result.status === "complete") {
+  //       await setActive({ session: result.createdSessionId });
+  //       return { success: true };
+  //     }
+
+  //     if (result.status === "needs_second_factor") {
+  //       await signIn.prepareSecondFactor({
+  //         strategy: "email_code",
+  //       });
+  //       return { success: false, needsOtp: true };
+  //     }
+
+  //     return { success: false };
+
+  //   } catch (err: any) {
+  //     return {
+  //       success: false,
+  //       error: err.errors?.[0]?.message || err.message,
+  //     };
+  //   }
+  // };
+
+
+  // const register = async (email: string, password: string, firstName: string, lastName: string) => {
+  //   if (!isSignUpLoaded) return;
+
+  //   try {
+  //     await signUp.create({
+  //       emailAddress: email,
+  //       password,
+  //       firstName,
+  //       lastName,
+  //     });
+
+  //     await signUp.prepareEmailAddressVerification({ strategy: "email_code" });
+
+  //     return { success: true };
+  //   } catch (err: any) {
+  //     return { success: false, error: err.errors?.[0]?.message || err.message };
+  //   }
+  // };
+
   const login = async (email: string, password: string) => {
     if (!isSignInLoaded) return;
 
@@ -16,17 +67,10 @@ export const useAuthService = () => {
         identifier: email,
         password,
       });
-      console.log(result.status)
+
       if (result.status === "complete") {
         await setActive({ session: result.createdSessionId });
         return { success: true };
-      }
-
-      if (result.status === "needs_second_factor") {
-        await signIn.prepareSecondFactor({
-          strategy: "email_code",
-        });
-        return { success: false, needsOtp: true };
       }
 
       return { success: false };
@@ -38,31 +82,21 @@ export const useAuthService = () => {
       };
     }
   };
-  const register = async (email: string, password: string, firstName: string, lastName: string) => {
+
+  const register = async (
+    email: string,
+    password: string,
+    firstName: string,
+    lastName: string
+  ) => {
     if (!isSignUpLoaded) return;
 
     try {
-      await signUp.create({
+      const result = await signUp.create({
         emailAddress: email,
         password,
         firstName,
         lastName,
-      });
-
-      await signUp.prepareEmailAddressVerification({ strategy: "email_code" });
-
-      return { success: true };
-    } catch (err: any) {
-      return { success: false, error: err.errors?.[0]?.message || err.message };
-    }
-  };
-
-  const verifyEmail = async (code: string) => {
-    if (!isSignUpLoaded) return;
-
-    try {
-      const result = await signUp.attemptEmailAddressVerification({
-        code,
       });
 
       if (result.status === "complete") {
@@ -71,35 +105,11 @@ export const useAuthService = () => {
         return {
           success: true,
           userId: result.createdUserId,
-          email: result.emailAddress
-        };
-      } else {
-        return { success: false, error: "Verification incomplete" };
-      }
-    } catch (err: any) {
-      return { success: false, error: err.errors?.[0]?.message || err.message };
-    }
-  };
-
-  const verifyEmailLogin = async (code: string) => {
-    if (!isSignInLoaded) return;
-
-    try {
-      const result = await signIn.attemptSecondFactor({
-        strategy: "email_code",
-        code,
-      });
-
-      if (result.status === "complete") {
-        await setActive({ session: result.createdSessionId });
-
-        return {
-          success: true,
-          sessionId: result.createdSessionId,
+          email,
         };
       }
 
-      return { success: false, error: "Verification incomplete" };
+      return { success: false };
 
     } catch (err: any) {
       return {
@@ -108,6 +118,58 @@ export const useAuthService = () => {
       };
     }
   };
+
+  // const verifyEmail = async (code: string) => {
+  //   if (!isSignUpLoaded) return;
+
+  //   try {
+  //     const result = await signUp.attemptEmailAddressVerification({
+  //       code,
+  //     });
+
+  //     if (result.status === "complete") {
+  //       await setActive!({ session: result.createdSessionId });
+
+  //       return {
+  //         success: true,
+  //         userId: result.createdUserId,
+  //         email: result.emailAddress
+  //       };
+  //     } else {
+  //       return { success: false, error: "Verification incomplete" };
+  //     }
+  //   } catch (err: any) {
+  //     return { success: false, error: err.errors?.[0]?.message || err.message };
+  //   }
+  // };
+
+  // const verifyEmailLogin = async (code: string) => {
+  //   if (!isSignInLoaded) return;
+
+  //   try {
+  //     const result = await signIn.attemptSecondFactor({
+  //       strategy: "email_code",
+  //       code,
+  //     });
+
+  //     if (result.status === "complete") {
+  //       await setActive({ session: result.createdSessionId });
+
+  //       return {
+  //         success: true,
+  //         sessionId: result.createdSessionId,
+  //       };
+  //     }
+
+  //     return { success: false, error: "Verification incomplete" };
+
+  //   } catch (err: any) {
+  //     return {
+  //       success: false,
+  //       error: err.errors?.[0]?.message || err.message,
+  //     };
+  //   }
+  // };
 
   const logout = async () => {
     try {
@@ -122,9 +184,9 @@ export const useAuthService = () => {
   return {
     login,
     register,
-    verifyEmail,
+    // verifyEmail,
     logout,
-    verifyEmailLogin,
+    // verifyEmailLogin,
     isLoaded: isSignInLoaded && isSignUpLoaded,
   };
 };
@@ -132,7 +194,7 @@ export const useAuthService = () => {
 export const completeOnboardingClient = async (
   businessName: string,
   categoryId: string,
-  userId: string,
+  // userId: string,
   userEmail: string,
   userFullName: string
 ) => {
@@ -144,7 +206,7 @@ export const completeOnboardingClient = async (
     data: JSON.stringify({
       businessName,
       categoryId,
-      userId,
+      // userId,
       email: userEmail,
       fullName: userFullName,
     }),

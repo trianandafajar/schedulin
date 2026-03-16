@@ -766,4 +766,4 @@ export default function HeroIllustration() {
       <circle cx="990.55" cy="768.57" r="36.25" fill="#1473fa" opacity="0.1" />
     </svg>
   )
-}
+} 

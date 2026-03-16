@@ -62,11 +62,18 @@ export default function Footer() {
 const FooterWrapper = styled.footer`
   background: #f8fafc;
   border-top: 1px solid #e2e8f0;
+
+  .dark & {
+    background: #111111;
+    border-top: 1px solid #313131;
+  }
 `;
 
 const FooterContainer = styled(Container)`
   padding-top: 3rem;
   padding-bottom: 1.5rem;
+  margin: 0 auto;
+  max-width:1280px;
 `;
 
 const TopSection = styled.div`
@@ -93,6 +100,10 @@ const BrandName = styled.span`
   font-weight: 700;
   color: #0f172a;
   letter-spacing: -0.02em;
+
+  .dark & {
+    color: white;
+  }
 `;
 
 const Tagline = styled.p`
@@ -100,6 +111,10 @@ const Tagline = styled.p`
   color: #64748b;
   line-height: 1.5;
   margin: 0;
+
+  .dark & {
+    color: #e2e2e2;
+  }
 `;
 
 const LinksArea = styled.div`
@@ -108,7 +123,8 @@ const LinksArea = styled.div`
 
   ${media('<=phone')} {
     gap: 1.5rem;
-    flex-wrap: wrap;
+    display: flex;
+    flex-direction: column;
   }
 `;
 
@@ -125,6 +141,10 @@ const GroupTitle = styled.span`
   text-transform: uppercase;
   letter-spacing: 0.06em;
   margin-bottom: 0.25rem;
+
+  .dark & {
+    color: white;
+  }
 `;
 
 const LinkItem = styled.div`
@@ -135,8 +155,16 @@ const LinkItem = styled.div`
     color: #64748b;
     transition: color 0.15s ease;
 
+    .dark & {
+      color: #e2e2e2;
+    }
+
     &:hover {
       color: #0f172a;
+
+      .dark & {
+        color: white;
+      }
     }
   }
 `;
@@ -145,6 +173,10 @@ const Divider = styled.hr`
   border: none;
   border-top: 1px solid #e2e8f0;
   margin: 2rem 0 1rem;
+
+  .dark & {
+    border-top: 1px solid #313131;
+  }
 `;
 
 const BottomBar = styled.div`
@@ -163,6 +195,10 @@ const Copyright = styled.p`
   font-size: 0.75rem;
   color: #94a3b8;
   margin: 0;
+
+  .dark & {
+    color: #e2e2e2;
+  }
 `;
 
 const BottomLinks = styled.div`
@@ -175,7 +211,14 @@ const BottomLinks = styled.div`
     text-decoration: none;
     transition: color 0.15s ease;
 
+    .dark & {
+      color: #e2e2e2;
+    }
+
     &:hover {
+      .dark & {
+        color: white;
+      }
       color: #0f172a;
     }
   }

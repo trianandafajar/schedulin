@@ -35,15 +35,27 @@ const Title = styled.h1`
   margin-bottom: 1.5rem;
   letter-spacing: -0.03em;
 
+  .dark & {
+    color: white;
+  }
+
   ${media('<=tablet')} {
     font-size: 1.6rem;
     margin-bottom: 1rem;
+
+  }
+
+  ${media('<=phone')} {
+      text-align: center;
   }
 `;
 
-
 const CustomOverTitle = styled(OverTitle)`
   margin-bottom: 2rem;
+
+  .dark & {
+    color: white;
+  }
 `;
 
 const ImageContainer = styled.div`
@@ -83,7 +95,15 @@ const BasicSectionWrapper = styled(Container) <Props>`
   align-items: center;
   flex-direction: ${(p) => (p.$reversed ? 'row-reverse' : 'row')};
 
-  ${ImageContainer} {
-    margin: ${(p) => (p.$reversed ? '0 0 0 3rem' : '0 3rem 0 0')};
+  ${media('>= tablet')} {
+    ${ImageContainer} {
+      margin: ${(p) => (p.$reversed ? '0 0 0 3rem' : '0 3rem 0 0')};
+    }
+  }
+
+
+  ${media('<=phone')} {
+   flex-direction: column;
+   gap:1rem;
   }
 `;

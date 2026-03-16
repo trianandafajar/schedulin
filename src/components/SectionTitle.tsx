@@ -8,6 +8,10 @@ const SectionTitle = styled.div`
   letter-spacing: -0.03em;
   text-align: center;
 
+  .dark &{
+    color: white;
+  }
+
   ${media('<=tablet')} {
     font-size: 1.8rem;
   }

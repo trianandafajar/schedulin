@@ -7,10 +7,15 @@ export const NavbarContainer = styled.header<{ $hidden: boolean }>`
   top: 0;
   width: 100%;
   z-index: 999;
-  padding: 0 2rem;
+  padding: 0;
   height: 72px;               /* dari 8rem -> 72px */
   background: #ffffff;
   border-bottom: 1px solid rgba(0,0,0,0.06);
+
+  .dark & {
+    background: #111111;
+    border-bottom: 1px solid #313131;
+  }
 
   display: flex;
   align-items: center;
@@ -22,6 +27,9 @@ export const NavbarContainer = styled.header<{ $hidden: boolean }>`
 export const Content = styled(Container)`
   display: flex;
   align-items: center;
+  margin: 0 auto;
+  max-width:1280px;
+  
   justify-content: space-between;
 `;
 

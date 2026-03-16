@@ -5,6 +5,12 @@ const RichText = styled.div`
   font-size: 1rem;
   opacity: 0.8;
   line-height: 1.6;
+  text-align: center;
+  p {
+      .dark & {
+        color: #e2e2e2;
+      }
+  }
 
   ol,
   ul {
@@ -14,6 +20,10 @@ const RichText = styled.div`
     li {
       padding-left: 1.5rem;
       position: relative;
+
+      .dark & {
+        color: #e2e2e2;
+      }
 
       & > * {
         display: inline-block;
@@ -58,6 +68,7 @@ const RichText = styled.div`
   ${media('<=desktop')} {
     font-size: 0.95rem;
   }
+    
 `;
 
 export default RichText;

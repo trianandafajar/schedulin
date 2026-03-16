@@ -69,7 +69,7 @@ const BookingList: React.FC<BookingListProps>  = ({ bookings }) => {
           className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
             filter === "all"
               ? "bg-brand-500 text-white"
-              : "bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-400"
+              : "bg-gray-100 text-gray-600 dark:bg-[#212121] dark:text-gray-400"
           }`}
         >
           All
@@ -79,7 +79,7 @@ const BookingList: React.FC<BookingListProps>  = ({ bookings }) => {
           className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
             filter === "today"
               ? "bg-brand-500 text-white"
-              : "bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-400"
+              : "bg-gray-100 text-gray-600 dark:bg-[#212121] dark:text-gray-400"
           }`}
         >
           Today
@@ -89,7 +89,7 @@ const BookingList: React.FC<BookingListProps>  = ({ bookings }) => {
           className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
             filter === "yesterday"
               ? "bg-brand-500 text-white"
-              : "bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-400"
+              : "bg-gray-100 text-gray-600 dark:bg-[#212121] dark:text-gray-400"
           }`}
         >
           Yesterday
@@ -98,21 +98,21 @@ const BookingList: React.FC<BookingListProps>  = ({ bookings }) => {
 
       <div className="overflow-x-auto">
         <Table>
-          <TableHeader className="border-b border-gray-200 dark:border-gray-700">
+          <TableHeader className="border-b border-gray-200 dark:border-[#313131]">
             <TableRow>
-              <TableCell isHeader className="py-3 font-semibold text-left text-gray-600 dark:text-gray-300">
+              <TableCell isHeader className="py-3 font-semibold text-left text-gray-600 dark:text-[#e2e2e2]">
                 Booking ID
               </TableCell>
-              <TableCell isHeader className="py-3 font-semibold text-left text-gray-600 dark:text-gray-300">
+              <TableCell isHeader className="py-3 font-semibold text-left text-gray-600 dark:text-[#e2e2e2]">
                 Customer
               </TableCell>
-              <TableCell isHeader className="py-3 font-semibold text-left text-gray-600 dark:text-gray-300">
+              <TableCell isHeader className="py-3 font-semibold text-left text-gray-600 dark:text-[#e2e2e2]">
                 Date & Time
               </TableCell>
-              <TableCell isHeader className="py-3 font-semibold text-left text-gray-600 dark:text-gray-300">
+              <TableCell isHeader className="py-3 font-semibold text-left text-gray-600 dark:text-[#e2e2e2]">
                 Status
               </TableCell>
-              <TableCell isHeader className="py-3 font-semibold text-left text-gray-600 dark:text-gray-300">
+              <TableCell isHeader className="py-3 font-semibold text-left text-gray-600 dark:text-[#e2e2e2]">
                 Actions
               </TableCell>
             </TableRow>

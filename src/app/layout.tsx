@@ -22,7 +22,7 @@ export default function RootLayout({
   return (
     <ClerkProvider>
       <html lang="en">
-        <body className={`${outfit.className} dark:bg-gray-900`}>
+        <body className={`${outfit.className} dark:bg-[#0c0c0c]`}>
           <StyledComponentsRegistry>
 
             <NewsletterModalContextProvider>

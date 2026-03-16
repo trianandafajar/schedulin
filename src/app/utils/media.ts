@@ -1,3 +1,11 @@
-import originalMedia from 'css-in-js-media';
+import media, { setBreakPoints } from "css-in-js-media";
 
-export const media = originalMedia;
+setBreakPoints({
+  smallPhone: 320,
+  phone: 480,
+  tablet: 768,
+  desktop: 1024,
+  largeDesktop: 1280,
+});
+
+export { media };

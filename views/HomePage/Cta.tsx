@@ -5,12 +5,16 @@ import Container from '@/components/Container';
 import OverTitle from '@/components/OverTitle';
 import SectionTitle from '@/components/SectionTitle';
 import Button from '@/components/ui/button/Button';
+import { useUser } from '@clerk/nextjs';
 import Link from 'next/link';
 import React from 'react';
 import styled from 'styled-components';
 
 
 export default function Cta() {
+  const { isSignedIn } = useUser();
+  const startLink = isSignedIn ? "/dashboard" : "/signup";
+
   return (
     <CtaWrapper>
       <Container>
@@ -21,16 +25,16 @@ export default function Cta() {
             Accept appointments 24/7, reduce no-shows, and keep your calendar clean with automated workflows.
           </Description>
           <ButtonGroup>
-            <Link href="/signup">
+            <Link href={startLink}>
               <Button>
                 Start Free <span>&rarr;</span>
               </Button>
             </Link>
-            <Link href="/signin">
+            {/* <Link href="/signin">
               <Button>
                 Sign In <span>&rarr;</span>
               </Button>
-            </Link>
+            </Link> */}
           </ButtonGroup>
         </Stack>
       </Container>
@@ -41,6 +45,10 @@ export default function Cta() {
 const Description = styled.div`
   font-size: 1rem;
   color: rgba(var(--textSecondary), 0.8);
+
+  .dark & {
+    color: #e2e2e2;
+  }
 `;
 
 const Stack = styled.div`

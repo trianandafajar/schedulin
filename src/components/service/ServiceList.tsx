@@ -161,7 +161,7 @@ const ServiceList: React.FC<ServiceListProps> = ({ services }) => {
             className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
               filter === "all"
                 ? "bg-brand-500 text-white"
-                : "bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-400"
+                : "bg-gray-100 text-gray-600 dark:bg-[#212121] dark:text-gray-400"
             }`}
           >
             All
@@ -171,7 +171,7 @@ const ServiceList: React.FC<ServiceListProps> = ({ services }) => {
             className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
               filter === "active"
                 ? "bg-brand-500 text-white"
-                : "bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-400"
+                : "bg-gray-100 text-gray-600 dark:bg-[#212121] dark:text-gray-400"
             }`}
           >
             Active
@@ -181,7 +181,7 @@ const ServiceList: React.FC<ServiceListProps> = ({ services }) => {
             className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
               filter === "inactive"
                 ? "bg-brand-500 text-white"
-                : "bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-400"
+                : "bg-gray-100 text-gray-600 dark:bg-[#212121] dark:text-gray-400"
             }`}
           >
             Inactive
@@ -195,21 +195,21 @@ const ServiceList: React.FC<ServiceListProps> = ({ services }) => {
 
       <div className="overflow-x-auto">
         <Table>
-          <TableHeader className="border-b border-gray-200 dark:border-gray-700">
+          <TableHeader className="border-b border-gray-200 dark:border-[#313131]">
             <TableRow>
-              <TableCell isHeader className="py-3 font-semibold text-left text-gray-600 dark:text-gray-300">
+              <TableCell isHeader className="py-3 font-semibold text-left text-gray-600 dark:text-[#e2e2e2]">
                 Service Name
               </TableCell>
-              <TableCell isHeader className="py-3 font-semibold text-left text-gray-600 dark:text-gray-300">
+              <TableCell isHeader className="py-3 font-semibold text-left text-gray-600 dark:text-[#e2e2e2]">
                 Duration
               </TableCell>
-              <TableCell isHeader className="py-3 font-semibold text-left text-gray-600 dark:text-gray-300">
+              <TableCell isHeader className="py-3 font-semibold text-left text-gray-600 dark:text-[#e2e2e2]">
                 Price
               </TableCell>
-              <TableCell isHeader className="py-3 font-semibold text-left text-gray-600 dark:text-gray-300">
+              <TableCell isHeader className="py-3 font-semibold text-left text-gray-600 dark:text-[#e2e2e2]">
                 Status
               </TableCell>
-              <TableCell isHeader className="py-3 font-semibold text-left text-gray-600 dark:text-gray-300">
+              <TableCell isHeader className="py-3 font-semibold text-left text-gray-600 dark:text-[#e2e2e2]">
                 Actions
               </TableCell>
             </TableRow>
@@ -308,7 +308,7 @@ const ServiceList: React.FC<ServiceListProps> = ({ services }) => {
                 value={formName}
                 onChange={(e) => setFormName(e.target.value)}
                 required
-                className="dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
+                className="dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-[#313131] dark:bg-[#111111] dark:text-white/90 dark:placeholder:text-white/30"
                 placeholder="e.g., Haircut, Massage, Manicure"
               />
             </div>
@@ -323,7 +323,7 @@ const ServiceList: React.FC<ServiceListProps> = ({ services }) => {
                 onChange={(e) => setFormDuration(parseInt(e.target.value) || 0)}
                 required
                 min="1"
-                className="dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs dark:border-gray-700 dark:bg-gray-900 dark:text-white/90"
+                className="dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs dark:border-[#313131] dark:bg-[#111111] dark:text-white/90"
                 placeholder="30"
               />
             </div>
@@ -338,7 +338,7 @@ const ServiceList: React.FC<ServiceListProps> = ({ services }) => {
                 onChange={(e) => setFormPrice(parseInt(e.target.value) || 0)}
                 required
                 min="0"
-                className="dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs dark:border-gray-700 dark:bg-gray-900 dark:text-white/90"
+                className="dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs dark:border-[#313131] dark:bg-[#111111] dark:text-white/90"
                 placeholder="50000"
               />
             </div>
@@ -350,7 +350,7 @@ const ServiceList: React.FC<ServiceListProps> = ({ services }) => {
                     type="checkbox"
                     checked={formIsActive}
                     onChange={() => setFormIsActive(!formIsActive)}
-                    className="mr-3 h-5 w-5 rounded border-gray-300 text-brand-500 focus:ring-brand-500 dark:border-gray-700 dark:bg-gray-900"
+                    className="mr-3 h-5 w-5 rounded border-gray-300 text-brand-500 focus:ring-brand-500 dark:border-[#313131] dark:bg-[#111111]"
                   />
                   Active
                 </label>

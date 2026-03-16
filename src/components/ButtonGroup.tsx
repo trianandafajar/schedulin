@@ -5,19 +5,17 @@ const ButtonGroup = styled.div`
   display: flex;
   flex-wrap: wrap;
 
-  & > *:not(:last-child) {
-    margin-right: 2rem;
+  ${media('>tablet')} {
+    & > *:not(:last-child) {
+      margin-right: 2rem;
+    }
   }
 
   ${media('<=tablet')} {
-    & > * {
-      width: 100%;
-    }
-
-    & > *:not(:last-child) {
-      margin-bottom: 2rem;
-      margin-right: 0rem;
-    }
+    flex-direction: row;
+    align-items: center;
+    gap: 1rem;
+    justify-content: center;
   }
 `;
 

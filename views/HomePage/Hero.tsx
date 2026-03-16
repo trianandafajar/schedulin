@@ -5,11 +5,21 @@ import Container from '@/components/Container';
 import HeroIllustration from '@/components/HeroIllustation';
 import OverTitle from '@/components/OverTitle';
 import Button from '@/components/ui/button/Button';
+import { useUser } from "@clerk/nextjs";
 import Link from 'next/link';
 import styled from 'styled-components';
 
-
 export default function Hero() {
+  const { isSignedIn } = useUser();
+
+  const handleGetStartedClick = () => {
+    if (isSignedIn) {
+      window.location.href = '/dashboard';
+    } else {
+      window.location.href = '/signup';
+    }
+  };
+
   const { setIsModalOpened } = useNewsletterModalContext();
 
   return (
@@ -21,16 +31,14 @@ export default function Hero() {
           Let clients book available slots online, send automatic reminders, and keep your team calendar in sync without manual back-and-forth.
         </Description>
         <CustomButtonGroup>
-          <Link href="/signup">
-            <Button>
-              Start Free <span>&rarr;</span>
-            </Button>
-          </Link>
-          <Link href="/signin">
+          <Button onClick={handleGetStartedClick}>
+            Start Free <span>&rarr;</span>
+          </Button>
+          {/* <Link href="/signin">
             <Button variant="outline">
               Sign In <span>&rarr;</span>
             </Button>
-          </Link>
+          </Link> */}
         </CustomButtonGroup>
       </Contents>
       <ImageContainer>
@@ -42,11 +50,11 @@ export default function Hero() {
 
 const HeroWrapper = styled(Container)`
   display: flex;
-  padding-top: 3rem;
+  padding-top: rem;
 
   ${media('<=desktop')} {
     padding-top: 1rem;
-    flex-direction: column;
+    flex-direction: column-reverse;
     align-items: center;
   }
 `;
@@ -75,10 +83,18 @@ const ImageContainer = styled.div`
   }
 
   ${media('<=desktop')} {
-    margin-top: 2rem;
+   
     justify-content: center;
     svg {
-      max-width: 80%;
+      max-width: 100%;
+    }
+  }
+
+  ${media('<= phone')}{
+    svg {
+      margin-top: -7rem;
+      margin-bottom: -4rem;
+      max-width: 100%;
     }
   }
 `;
@@ -88,13 +104,25 @@ const Description = styled.p`
   opacity: 0.8;
   line-height: 1.6;
 
+  .dark & {
+    color: #e2e2e2;
+  }
+
   ${media('<=desktop')} {
     font-size: 0.95rem;
+  }
+
+  ${media('<=phone')} {
+    text-align: center;
   }
 `;
 
 const CustomOverTitle = styled(OverTitle)`
   margin-bottom: 2rem;
+
+  .dark & {
+    color: white;
+  }
 `;
 
 const Heading = styled.h1`
@@ -103,10 +131,18 @@ const Heading = styled.h1`
   line-height: 1.2;
   margin-bottom: 1.5rem;
   letter-spacing: -0.03em;
+  
+  .dark & {
+    color: white;
+  }
 
   ${media('<=tablet')} {
     font-size: 1.9rem;
     margin-bottom: 1rem;
+  }
+
+  ${media('<=phone')} {
+    text-align: center;
   }
 `;
 
