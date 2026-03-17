@@ -10,7 +10,7 @@ interface Booking {
   customerName: string;
   date: string;
   time: string;
-  status: "completed" | "pending" | "cancelled";
+  status: "completed" | "pending" | "cancelled" | "confirmed";
   rawId?: string;
 }
 
@@ -46,17 +46,25 @@ const BookingList: React.FC<BookingListProps>  = ({ bookings }) => {
   const getStatusStyles = (status: Booking["status"]) => {
     const styles: Record<string, { bg: string; text: string }> = {
       completed: { bg: "bg-green-100 dark:bg-green-900/30", text: "text-green-700 dark:text-green-400" },
+      confirmed: { bg: "bg-blue-100 dark:bg-blue-900/30", text: "text-blue-700 dark:text-blue-400" },
       pending: { bg: "bg-yellow-100 dark:bg-yellow-900/30", text: "text-yellow-700 dark:text-yellow-400" },
       cancelled: { bg: "bg-red-100 dark:bg-red-900/30", text: "text-red-700 dark:text-red-400" },
     };
     const labels: Record<string, string> = {
       completed: "Completed",
+      confirmed: "Confirmed",
       pending: "Pending",
       cancelled: "Cancelled",
     };
+
+    // Fallback logic for undefined or unexpected status
+    const currentStatus = status && styles[status] ? status : 'pending';
+    const style = styles[currentStatus];
+    const label = labels[currentStatus];
+
     return (
-      <span className={`inline-flex px-3 py-1 text-xs font-medium rounded-full ${styles[status].bg} ${styles[status].text}`}>
-        {labels[status]}
+      <span className={`inline-flex px-3 py-1 text-xs font-medium rounded-full ${style.bg} ${style.text}`}>
+        {label}
       </span>
     );
   };
@@ -120,7 +128,7 @@ const BookingList: React.FC<BookingListProps>  = ({ bookings }) => {
           <TableBody>
             {filteredBookings.map((booking) => (
               <TableRow
-                key={booking.id}
+                key={booking.rawId || booking.id}
                 className="border-b border-gray-100 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors"
               >
                 <TableCell className="py-4 text-gray-900 dark:text-white font-medium">
@@ -137,7 +145,7 @@ const BookingList: React.FC<BookingListProps>  = ({ bookings }) => {
                 </TableCell>
                 <TableCell className="py-4">{getStatusStyles(booking.status)}</TableCell>
                 <TableCell className="py-4">
-                  {booking.status === "pending" && (
+                  {(booking.status === "pending" || booking.status === "confirmed") && (
                     <div className="flex gap-2">
                       <button
                         onClick={() => booking.rawId && handleStatusChange(booking.id, booking.rawId, "completed")}

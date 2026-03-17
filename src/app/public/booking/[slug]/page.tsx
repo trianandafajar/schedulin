@@ -4,7 +4,7 @@ import { useState, useEffect, use } from "react";
 import { Calendar, Clock, ChevronLeft, ChevronRight, Scissors, Check, Loader2, User, Phone } from "lucide-react";
 import Button from "@/components/ui/button/Button";
 import { Modal } from "@/components/ui/modal";
-import { getBusinessBySlug, getServicesByBusinessId, getBusinessSchedule, getBookedSlots, Service, BusinessSchedule } from "@/actions/public";
+import { getBusinessBySlug, getServicesByBusinessId, getBusinessSchedule, getBookedSlots, getBusinessHolidays, Service, BusinessSchedule, BusinessHoliday } from "@/actions/public";
 import { createPublicBooking } from "@/actions/public-booking";
 
 interface PageProps {
@@ -21,6 +21,7 @@ export default function PublicBookingPage({ params }: PageProps) {
   const [businessName, setBusinessName] = useState<string>("");
   const [services, setServices] = useState<Service[]>([]);
   const [schedule, setSchedule] = useState<BusinessSchedule[]>([]);
+  const [holidays, setHolidays] = useState<BusinessHoliday[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -65,6 +66,14 @@ export default function PublicBookingPage({ params }: PageProps) {
           console.error("Schedule error:", scheduleError);
         } else if (scheduleData) {
           setSchedule(scheduleData);
+        }
+
+        const { data: holidaysData, error: holidaysError } = await getBusinessHolidays(business.id);
+
+        if (holidaysError) {
+          console.error("Holidays error:", holidaysError);
+        } else if (holidaysData) {
+          setHolidays(holidaysData);
         }
 
       } catch (err) {
@@ -201,13 +210,29 @@ export default function PublicBookingPage({ params }: PageProps) {
     return dateToCompare < todayCompare;
   };
 
-  const isWeekend = (date: Date) => {
-    const day = date.getDay();
-    return day === 0 || day === 6;
-  };
-
   const isDateDisabled = (date: Date) => {
-    return isPastDate(date) || isWeekend(date);
+    if (isPastDate(date)) return true;
+
+    // Check if it's a holiday
+    const dateStr = [
+      date.getFullYear(),
+      String(date.getMonth() + 1).padStart(2, "0"),
+      String(date.getDate()).padStart(2, "0"),
+    ].join("-");
+    
+    const isHoliday = holidays.some(h => h.date === dateStr);
+    if (isHoliday) return true;
+
+    // Check if closed according to schedule
+    const dayName = getDayName(date);
+    const daySchedule = schedule.find(s => s.day_of_week === dayName);
+    if (daySchedule && !daySchedule.is_open) return true;
+    
+    // If no schedule found, default to open (or closed if you prefer)
+    // Here we check if schedule exists at all, if it does and we didn't find the day, maybe default to closed for safety?
+    // But usually we have all 7 days in seed.
+    
+    return false;
   };
 
   const handleDateSelect = (date: Date) => {
@@ -483,7 +508,7 @@ export default function PublicBookingPage({ params }: PageProps) {
                 </div>
 
                 <p className="text-xs text-gray-500 mt-2">
-                  * Saturday and Sunday are unavailable
+                  * Dates highlighted in gray are unavailable (holidays or closed days)
                 </p>
               </div>
             )}

@@ -31,6 +31,13 @@ export interface BusinessSchedule {
   end_time: string | null;
 }
 
+export interface BusinessHoliday {
+  id: string;
+  business_id: string;
+  date: string;
+  name: string | null;
+}
+
 export interface BookedSlot {
   id: string;
   date: string;
@@ -142,3 +149,22 @@ export async function getBookedSlotsForMonth(businessId: string, year: number, m
     return { data: null, error: error.message || "An unexpected error occurred" };
   }
 }
+
+// Get business holidays
+export async function getBusinessHolidays(businessId: string): Promise<{ data: BusinessHoliday[] | null; error: string | null }> {
+  try {
+    const { data: holidays, error } = await supabase
+      .from("business_holidays")
+      .select("id, business_id, date, name")
+      .eq("business_id", businessId);
+
+    if (error) {
+      return { data: null, error: error.message };
+    }
+
+    return { data: holidays as BusinessHoliday[], error: null };
+  } catch (error: any) {
+    return { data: null, error: error.message || "An unexpected error occurred" };
+  }
+}
+

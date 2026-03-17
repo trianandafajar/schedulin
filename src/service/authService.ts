@@ -98,7 +98,6 @@ export const useAuthService = () => {
         firstName,
         lastName,
       });
-
       if (result.status === "complete") {
         await setActive!({ session: result.createdSessionId });
 
@@ -109,14 +108,16 @@ export const useAuthService = () => {
         };
       }
 
-      return { success: false };
 
     } catch (err: any) {
+      console.log(err)
       return {
         success: false,
         error: err.errors?.[0]?.message || err.message,
       };
     }
+    return { success: false };
+
   };
 
   // const verifyEmail = async (code: string) => {

@@ -41,7 +41,7 @@
     "react-dropzone": "^14.3.8",
     "react-share": "^5.2.2",
     "styled-components": "^6.3.10",
-    "supabase": "^2.76.6",
+    "supabase": "^2.79.0",
     "svix": "^1.85.0",
     "swiper": "^11.2.10",
     "tailwind-merge": "^2.6.0",

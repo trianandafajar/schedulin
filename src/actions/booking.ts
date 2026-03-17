@@ -34,7 +34,7 @@ function getLocalDateLabel(dateStr: string): string {
 }
 
 
-export type BookingStatus = "pending" | "completed" | "cancelled";
+export type BookingStatus = "pending" | "completed" | "cancelled" | "confirmed";
 
 export interface CreateBookingData {
   businessId: string;

@@ -48,10 +48,10 @@ export default function SignUpForm({ categories }: SignUpFormProps) {
     }
 
     const result = await register(email, password, firstName, lastName);
-
     if (result?.success) {
       setStep('onboarding');
     } else {
+      console.log(result?.error)
       setError(result?.error || "Registration failed");
     }
 
@@ -96,18 +96,14 @@ export default function SignUpForm({ categories }: SignUpFormProps) {
         categoryId,
         email,
         userFullName
-        
       );
-
-      console.log("ONBOARD RESULT:", result);
 
       if (result.error) {
         // setError("Business setup failed");
-          setError(result.error);
+        setError(result.error);
       } else {
         router.push("/dashboard");
       }
-
     } catch (err) {
       setError("Business setup failed");
       console.error("Onboarding error:", err);
