@@ -30,8 +30,8 @@ const ServiceList: React.FC<ServiceListProps> = ({ services }) => {
 
   // Form state
   const [formName, setFormName] = useState("");
-  const [formDuration, setFormDuration] = useState(30);
-  const [formPrice, setFormPrice] = useState(0);
+  const [formDuration, setFormDuration] = useState("");
+  const [formPrice, setFormPrice] = useState("");
   const [formIsActive, setFormIsActive] = useState(true);
 
   const filteredServices = services?.filter((service) => {
@@ -43,8 +43,8 @@ const ServiceList: React.FC<ServiceListProps> = ({ services }) => {
   const openAddModal = () => {
     setEditingService(null);
     setFormName("");
-    setFormDuration(30);
-    setFormPrice(0);
+    setFormDuration("");
+    setFormPrice("");
     setFormIsActive(true);
     setIsModalOpen(true);
   };
@@ -52,8 +52,8 @@ const ServiceList: React.FC<ServiceListProps> = ({ services }) => {
   const openEditModal = (service: Service) => {
     setEditingService(service);
     setFormName(service.name);
-    setFormDuration(service.duration_minutes);
-    setFormPrice(service.price);
+    setFormDuration(service.duration_minutes.toString());
+    setFormPrice(service.price.toString());
     setFormIsActive(service.is_active);
     setIsModalOpen(true);
   };
@@ -71,8 +71,8 @@ const ServiceList: React.FC<ServiceListProps> = ({ services }) => {
       if (editingService) {
         const result = await updateService(editingService.id, {
           name: formName,
-          duration_minutes: formDuration,
-          price: formPrice,
+          duration_minutes: Number(formDuration),
+          price: Number(formPrice),
           is_active: formIsActive,
         });
         if (result.error) {
@@ -81,14 +81,14 @@ const ServiceList: React.FC<ServiceListProps> = ({ services }) => {
       } else {
         const result = await createService({
           name: formName,
-          duration_minutes: formDuration,
-          price: formPrice,
+          duration_minutes: Number(formDuration),
+          price: Number(formPrice),
         });
         if (result.error) {
           alert(result.error);
         }
       }
-      
+
       // Reload the page to fetch updated data
       window.location.reload();
     } catch (error) {
@@ -118,7 +118,7 @@ const ServiceList: React.FC<ServiceListProps> = ({ services }) => {
 
   const handleDelete = async (serviceId: string) => {
     if (!confirm("Are you sure you want to delete this service?")) return;
-    
+
     setDeletingId(serviceId);
     try {
       const result = await deleteService(serviceId);
@@ -158,31 +158,28 @@ const ServiceList: React.FC<ServiceListProps> = ({ services }) => {
         <div className="flex gap-2">
           <button
             onClick={() => setFilter("all")}
-            className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-              filter === "all"
+            className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${filter === "all"
                 ? "bg-brand-500 text-white"
                 : "bg-gray-100 text-gray-600 dark:bg-[#212121] dark:text-gray-400"
-            }`}
+              }`}
           >
             All
           </button>
           <button
             onClick={() => setFilter("active")}
-            className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-              filter === "active"
+            className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${filter === "active"
                 ? "bg-brand-500 text-white"
                 : "bg-gray-100 text-gray-600 dark:bg-[#212121] dark:text-gray-400"
-            }`}
+              }`}
           >
             Active
           </button>
           <button
             onClick={() => setFilter("inactive")}
-            className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-              filter === "inactive"
+            className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${filter === "inactive"
                 ? "bg-brand-500 text-white"
                 : "bg-gray-100 text-gray-600 dark:bg-[#212121] dark:text-gray-400"
-            }`}
+              }`}
           >
             Inactive
           </button>
@@ -230,11 +227,10 @@ const ServiceList: React.FC<ServiceListProps> = ({ services }) => {
                   {formatPrice(service.price)}
                 </TableCell>
                 <TableCell className="py-4">
-                  <span className={`inline-flex px-3 py-1 text-xs font-medium rounded-full ${
-                    service.is_active 
-                      ? "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400" 
+                  <span className={`inline-flex px-3 py-1 text-xs font-medium rounded-full ${service.is_active
+                      ? "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400"
                       : "bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-400"
-                  }`}>
+                    }`}>
                     {service.is_active ? "Active" : "Inactive"}
                   </span>
                 </TableCell>
@@ -250,11 +246,10 @@ const ServiceList: React.FC<ServiceListProps> = ({ services }) => {
                     <button
                       onClick={() => handleToggleStatus(service.id, service.is_active)}
                       disabled={loading}
-                      className={`p-2 rounded-lg transition-colors ${
-                        service.is_active
+                      className={`p-2 rounded-lg transition-colors ${service.is_active
                           ? "bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-400 hover:bg-yellow-200 dark:hover:bg-yellow-900/50"
                           : "bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 hover:bg-green-200 dark:hover:bg-green-900/50"
-                      }`}
+                        }`}
                       title={service.is_active ? "Deactivate" : "Activate"}
                     >
                       {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : (
@@ -297,7 +292,7 @@ const ServiceList: React.FC<ServiceListProps> = ({ services }) => {
           <h5 className="mb-4 font-semibold text-gray-800 dark:text-white text-xl">
             {editingService ? "Edit Service" : "Add New Service"}
           </h5>
-          
+
           <form onSubmit={handleSubmit}>
             <div className="mt-4">
               <label className="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
@@ -318,11 +313,17 @@ const ServiceList: React.FC<ServiceListProps> = ({ services }) => {
                 Duration (minutes)
               </label>
               <input
-                type="number"
+                type="text"
                 value={formDuration}
-                onChange={(e) => setFormDuration(parseInt(e.target.value) || 0)}
+                onChange={(e) => {
+                  const value = e.target.value;
+                  if (/^\d*$/.test(value)) {
+                    setFormDuration(value);
+                  }
+                }}
                 required
-                min="1"
+                inputMode="numeric"
+                pattern="[0-9]*"
                 className="dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs dark:border-[#313131] dark:bg-[#111111] dark:text-white/90"
                 placeholder="30"
               />
@@ -333,11 +334,17 @@ const ServiceList: React.FC<ServiceListProps> = ({ services }) => {
                 Price (IDR)
               </label>
               <input
-                type="number"
+                type="text"
                 value={formPrice}
-                onChange={(e) => setFormPrice(parseInt(e.target.value) || 0)}
+                onChange={(e) => {
+                  const value = e.target.value;
+                  if (/^\d*$/.test(value)) {
+                    setFormPrice(value);
+                  }
+                }}
                 required
-                min="0"
+                inputMode="numeric"
+                pattern="[0-9]*"
                 className="dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs dark:border-[#313131] dark:bg-[#111111] dark:text-white/90"
                 placeholder="50000"
               />
@@ -363,7 +370,7 @@ const ServiceList: React.FC<ServiceListProps> = ({ services }) => {
               </Button>
               <Button
                 type="submit"
-                disabled={!formName || !formDuration || formPrice < 0 || loading}
+                disabled={!formName || !formDuration || !formPrice || loading}
                 className="btn btn-success"
               >
                 {loading ? "Saving..." : editingService ? "Update Service" : "Add Service"}
