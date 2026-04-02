@@ -117,19 +117,25 @@ const ServiceList: React.FC<ServiceListProps> = ({ services }) => {
   };
 
   const handleDelete = async (serviceId: string) => {
-    if (!confirm("Are you sure you want to delete this service?")) return;
+    const confirmed = confirm("⚠️ Warning: This action cannot be undone. Are you sure you want to delete this service?");
+    if (!confirmed) return;
 
     setDeletingId(serviceId);
     try {
       const result = await deleteService(serviceId);
       if (result.error) {
-        alert(result.error);
+        // More specific error handling for common cases
+        if (result.error.includes("Cannot delete service")) {
+          alert(result.error);
+        } else {
+          alert(`Failed to delete service: ${result.error}`);
+        }
       } else {
         window.location.reload();
       }
     } catch (error) {
       console.error("Error deleting service:", error);
-      alert("Failed to delete service");
+      alert("Failed to delete service. Please try again.");
     } finally {
       setDeletingId(null);
     }

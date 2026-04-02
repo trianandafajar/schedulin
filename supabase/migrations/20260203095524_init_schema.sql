@@ -86,7 +86,7 @@ create table bookings (
   id uuid primary key default gen_random_uuid(),
   user_id text references users(id) on delete set null,
   business_id uuid references business(id) on delete cascade,
-  service_id uuid references services(id),
+  service_id uuid references services(id) on delete cascade,
   slot_id uuid references appointment_slots(id),
   status text default 'pending', -- pending | confirmed | cancelled
   customer_name text not null,

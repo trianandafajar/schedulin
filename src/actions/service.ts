@@ -141,6 +141,8 @@ export async function deleteService(
       return { data: null, error: "Unauthorized" };
     }
 
+// Direct delete now safe with CASCADE FK
+
     const { error } = await supabase
       .from("services")
       .delete()
