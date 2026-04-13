@@ -248,7 +248,7 @@ const Calendar: React.FC<CalendarProps> = ({ events, onSaveEvent }) => {
                 type="datetime-local"
                 value={eventStartDate}
                 onChange={(e) => setEventStartDate(e.target.value)}
-                className="dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs dark:border-[#313131] dark:bg-[#111111] dark:text-white/90"
+                className="dark:[&::-webkit-calendar-picker-indicator]:invert dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs dark:border-[#313131] dark:bg-[#111111] dark:text-white/90"
               />
             </div>
 
@@ -257,10 +257,11 @@ const Calendar: React.FC<CalendarProps> = ({ events, onSaveEvent }) => {
                 End Date & Time
               </label>
               <input
+                min={eventStartDate}
                 type="datetime-local"
                 value={eventEndDate}
                 onChange={(e) => setEventEndDate(e.target.value)}
-                className="dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs dark:border-[#313131] dark:bg-[#111111] dark:text-white/90"
+                className="dark:[&::-webkit-calendar-picker-indicator]:invert dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs dark:border-[#313131] dark:bg-[#111111] dark:text-white/90"
               />
             </div>
           </div>
