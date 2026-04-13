@@ -8,6 +8,7 @@ export default function ThemeTogglerTwo() {
     <button
       onClick={toggleTheme}
       className="inline-flex size-14 items-center justify-center rounded-full bg-brand-500 text-white transition-colors hover:bg-brand-600"
+      aria-label="dark-mode"
     >
       <svg
         className="hidden dark:block"

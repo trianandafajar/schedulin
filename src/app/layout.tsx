@@ -28,7 +28,9 @@ export default function RootLayout({
             <NewsletterModalContextProvider>
             <ThemeProvider>
               <SidebarProvider>
+                <main>
                 {children}
+                </main>
               </SidebarProvider>
             </ThemeProvider>
             </NewsletterModalContextProvider>

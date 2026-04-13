@@ -7,7 +7,6 @@ import BasicSection from '@/components/BasicSection';
 import Cta from '../../../views/HomePage/Cta';
 import FeaturesGallery from '../../../views/HomePage/FeaturesGallery';
 import Features from '../../../views/HomePage/Features';
-import Testimonials from '../../../views/HomePage/Testimonials';
 import Footer from '@/components/Footer';
 import RichText from '@/components/RichText';
 import Navbar from '@/components/landing/Navbar/Navbar';
