@@ -1,148 +1,157 @@
-import { useNewsletterModalContext } from '@/app/contexts/newsletter-modal.context';
-import { media } from '@/app/utils/media';
-import ButtonGroup from '@/components/ButtonGroup';
+'use client';
+
+import { media } from '@/utils/media';
 import Container from '@/components/Container';
 import HeroIllustration from '@/components/HeroIllustation';
-import OverTitle from '@/components/OverTitle';
 import Button from '@/components/ui/button/Button';
-import { useUser } from "@clerk/nextjs";
+import { useUser } from '@clerk/nextjs';
 import Link from 'next/link';
 import styled from 'styled-components';
 
 export default function Hero() {
   const { isSignedIn } = useUser();
-
-  const handleGetStartedClick = () => {
-    if (isSignedIn) {
-      window.location.href = '/dashboard';
-    } else {
-      window.location.href = '/signup';
-    }
-  };
-
-  const { setIsModalOpened } = useNewsletterModalContext();
+  const primaryHref = isSignedIn ? '/dashboard' : '/signup';
 
   return (
-    <HeroWrapper>
-      <Contents>
-        <CustomOverTitle>appointment booking software</CustomOverTitle>
-        <Heading>Run your bookings on autopilot.</Heading>
+    <HeroWrapper aria-label="maketime hero section">
+      <TextColumn>
+        <Eyebrow>maketime for appointment teams</Eyebrow>
+        <Heading>
+          Make every booking feel
+          <span> intentional, fast, and clear.</span>
+        </Heading>
         <Description>
-          Let clients book available slots online, send automatic reminders, and keep your team calendar in sync without manual back-and-forth.
+          maketime helps service businesses run clean schedules with automated booking, reminders, and team-wide availability control.
         </Description>
-        <CustomButtonGroup>
-          <Button onClick={handleGetStartedClick}>
-            Start Free <span>&rarr;</span>
-          </Button>
-          {/* <Link href="/signin">
-            <Button variant="outline">
-              Sign In <span>&rarr;</span>
+        <ActionRow>
+          <Link href={primaryHref}>
+            <Button className="!rounded-full !bg-[#1f4fbf] !px-6 !py-3 !text-xs !font-semibold !tracking-[0.01em] hover:!bg-[#16388a]" type="button">
+              Start with maketime
             </Button>
-          </Link> */}
-        </CustomButtonGroup>
-      </Contents>
-      <ImageContainer>
-        <HeroIllustration />
-      </ImageContainer>
+          </Link>
+          <Link href="#features">
+            <Button className="!rounded-full !bg-white !px-6 !py-3 !text-xs !font-semibold !tracking-[0.01em] !text-[#1f3154] ring-1 ring-[#cad3e7] hover:!bg-[#f5f8ff]" type="button">
+              Explore features
+            </Button>
+          </Link>
+        </ActionRow>
+        <Microcopy>No credit card required. Launch-ready in minutes.</Microcopy>
+      </TextColumn>
+      <VisualColumn aria-hidden="true">
+        <VisualFrame>
+          <HeroIllustration />
+        </VisualFrame>
+      </VisualColumn>
     </HeroWrapper>
   );
 }
 
 const HeroWrapper = styled(Container)`
-  display: flex;
-  padding-top: rem;
+  display: grid;
+  grid-template-columns: minmax(0, 1.06fr) minmax(0, 1fr);
+  gap: 1.5rem;
+  align-items: center;
+  padding-top: 1.4rem;
+  animation: mkHeroFade 0.58s ease-out both;
+
+  @keyframes mkHeroFade {
+    from {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
 
   ${media('<=desktop')} {
-    padding-top: 1rem;
-    flex-direction: column-reverse;
-    align-items: center;
+    grid-template-columns: 1fr;
+    gap: 0.2rem;
   }
 `;
 
-const Contents = styled.div`
-  flex: 1;
-  max-width: 60rem;
+const TextColumn = styled.div`
+  max-width: 38rem;
+
+  ${media('<=desktop')} {
+    max-width: 100%;
+    text-align: center;
+  }
+`;
+
+const Eyebrow = styled.p`
+  margin: 0;
+  color: var(--mk-accent, #1f4fbf);
+  letter-spacing: 0.14em;
+  font-size: 0.76rem;
+  text-transform: uppercase;
+  font-weight: 600;
+`;
+
+const Heading = styled.h1`
+  margin: 0.85rem 0 0;
+  font-size: clamp(2rem, 4.4vw, 3.9rem);
+  letter-spacing: -0.03em;
+  line-height: 1.02;
+  color: var(--mk-text, #152038);
+
+  span {
+    color: #2a63ca;
+  }
+`;
+
+const Description = styled.p`
+  margin: 1rem 0 0;
+  color: var(--mk-text-muted, #52607e);
+  line-height: 1.72;
+  font-size: 1.01rem;
+  max-width: 34rem;
 
   ${media('<=desktop')} {
     max-width: 100%;
   }
 `;
 
-const CustomButtonGroup = styled(ButtonGroup)`
-  margin-top: 2.5rem;
+const ActionRow = styled.div`
+  margin-top: 1.55rem;
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+
+  ${media('<=desktop')} {
+    justify-content: center;
+    flex-wrap: wrap;
+  }
 `;
 
-const ImageContainer = styled.div`
+const Microcopy = styled.p`
+  margin: 0.85rem 0 0;
+  color: #667693;
+  font-size: 0.84rem;
+  letter-spacing: 0.01em;
+`;
+
+const VisualColumn = styled.div`
   display: flex;
-  flex: 1;
   justify-content: flex-end;
-  align-items: flex-start;
+
+  ${media('<=desktop')} {
+    justify-content: center;
+  }
+`;
+
+const VisualFrame = styled.div`
+  width: min(100%, 42rem);
+  border-radius: 1.15rem;
+  border: 1px solid rgba(27, 44, 79, 0.1);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.7) 0%, rgba(249, 252, 255, 0.9) 100%);
+  box-shadow: var(--mk-shadow-soft, 0 28px 50px rgba(28, 40, 71, 0.1));
+  padding: 1rem 1rem 0.4rem;
 
   svg {
-    max-width: 45rem;
-  }
-
-  ${media('<=desktop')} {
-   
-    justify-content: center;
-    svg {
-      max-width: 100%;
-    }
-  }
-
-  ${media('<= phone')}{
-    svg {
-      margin-top: -7rem;
-      margin-bottom: -4rem;
-      max-width: 100%;
-    }
+    width: 100%;
+    height: auto;
+    display: block;
   }
 `;
-
-const Description = styled.p`
-  font-size: 1rem;
-  opacity: 0.8;
-  line-height: 1.6;
-
-  .dark & {
-    color: #e2e2e2;
-  }
-
-  ${media('<=desktop')} {
-    font-size: 0.95rem;
-  }
-
-  ${media('<=phone')} {
-    text-align: center;
-  }
-`;
-
-const CustomOverTitle = styled(OverTitle)`
-  margin-bottom: 2rem;
-
-  .dark & {
-    color: white;
-  }
-`;
-
-const Heading = styled.h1`
-  font-size: 2.6rem;
-  font-weight: bold;
-  line-height: 1.2;
-  margin-bottom: 1.5rem;
-  letter-spacing: -0.03em;
-  
-  .dark & {
-    color: white;
-  }
-
-  ${media('<=tablet')} {
-    font-size: 1.9rem;
-    margin-bottom: 1rem;
-  }
-
-  ${media('<=phone')} {
-    text-align: center;
-  }
-`;
-

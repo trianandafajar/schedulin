@@ -1,4 +1,4 @@
-import { media } from '@/app/utils/media';
+import { media } from '@/utils/media';
 import Container from '@/components/Container';
 import NextImage from 'next/image';
 import styled from 'styled-components';

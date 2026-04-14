@@ -1,5 +1,5 @@
 import { createClient } from "@/lib/supabase/client";
-import axios from "@/app/utils/axios";
+import axios from "@/utils/axios";
 
 export const getBusinessCategories = async () => {
   const supabase = createClient();

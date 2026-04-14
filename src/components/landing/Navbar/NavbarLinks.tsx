@@ -14,9 +14,16 @@ export default function NavLinks({ items }: { items: SingleNavItem[] }) {
       {items.map((item) => (
         <NavItem key={item.href}>
           <Link href={item.href}>
-            {item.outlined ? 
-                <Button>{item.title}</Button> : <span>{item.title}</span>}
-
+            {item.outlined ? (
+              <Button
+                className="!rounded-full !bg-[#1f4fbf] !px-5 !py-2.5 !text-xs !font-semibold !tracking-[0.01em] hover:!bg-[#173a8f]"
+                type="button"
+              >
+                {item.title}
+              </Button>
+            ) : (
+              <NavLink>{item.title}</NavLink>
+            )}
           </Link>
         </NavItem>
       ))}

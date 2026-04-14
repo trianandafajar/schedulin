@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import styled from 'styled-components';
 import Container from './Container';
-import { media } from '@/app/utils/media';
+import { media } from '@/utils/media';
 
 type SingleFooterListItem = { title: string; href: string };
 type FooterListItems = SingleFooterListItem[];
@@ -19,9 +19,7 @@ const footerItems: FooterItems = [
   },
   {
     title: 'Company',
-    items: [
-      { title: 'Privacy Policy', href: '/privacy-policy' },
-    ],
+    items: [{ title: 'Privacy Policy', href: '/privacy-policy' }],
   },
 ];
 
@@ -31,8 +29,8 @@ export default function Footer() {
       <FooterContainer>
         <TopSection>
           <BrandArea>
-            <BrandName>Schedulin</BrandName>
-            <Tagline>Smart appointment booking for modern teams.</Tagline>
+            <BrandName>maketime</BrandName>
+            <Tagline>Elegant appointment operations for modern service teams.</Tagline>
           </BrandArea>
           <LinksArea>
             {footerItems.map((group) => (
@@ -49,7 +47,7 @@ export default function Footer() {
         </TopSection>
         <Divider />
         <BottomBar>
-          <Copyright>© {new Date().getFullYear()} Schedulin. All rights reserved.</Copyright>
+          <Copyright>© {new Date().getFullYear()} maketime. All rights reserved.</Copyright>
           <BottomLinks>
             <Link href="/privacy-policy">Privacy Policy</Link>
           </BottomLinks>
@@ -60,60 +58,61 @@ export default function Footer() {
 }
 
 const FooterWrapper = styled.footer`
-  background: #f8fafc;
-  border-top: 1px solid #e2e8f0;
+  margin-top: 3.5rem;
+  border-top: 1px solid var(--mk-border, #d7dce7);
+  background: linear-gradient(180deg, rgba(250, 252, 255, 0.5) 0%, rgba(245, 248, 255, 0.94) 100%);
 
   .dark & {
-    background: #111111;
-    border-top: 1px solid #313131;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    background: linear-gradient(180deg, rgba(22, 24, 34, 0.65) 0%, rgba(18, 20, 30, 0.9) 100%);
   }
 `;
 
 const FooterContainer = styled(Container)`
-  padding-top: 3rem;
-  padding-bottom: 1.5rem;
+  padding-top: 2.3rem;
+  padding-bottom: 1.3rem;
   margin: 0 auto;
-  max-width:1280px;
+  max-width: 1280px;
 `;
 
 const TopSection = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  gap: 3rem;
+  gap: 2.5rem;
 
   ${media('<=tablet')} {
     flex-direction: column;
-    gap: 2rem;
+    gap: 1.8rem;
   }
 `;
 
 const BrandArea = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
-  max-width: 220px;
+  gap: 0.45rem;
+  max-width: 19rem;
 `;
 
 const BrandName = styled.span`
-  font-size: 1.1rem;
-  font-weight: 700;
-  color: #0f172a;
-  letter-spacing: -0.02em;
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: #172442;
+  letter-spacing: -0.015em;
 
   .dark & {
-    color: white;
+    color: #f2f5ff;
   }
 `;
 
 const Tagline = styled.p`
-  font-size: 0.8rem;
-  color: #64748b;
-  line-height: 1.5;
   margin: 0;
+  font-size: 0.86rem;
+  line-height: 1.6;
+  color: #586888;
 
   .dark & {
-    color: #e2e2e2;
+    color: #a8b4cf;
   }
 `;
 
@@ -122,8 +121,7 @@ const LinksArea = styled.div`
   gap: 3rem;
 
   ${media('<=phone')} {
-    gap: 1.5rem;
-    display: flex;
+    gap: 1.4rem;
     flex-direction: column;
   }
 `;
@@ -135,47 +133,47 @@ const LinkGroup = styled.div`
 `;
 
 const GroupTitle = styled.span`
-  font-size: 0.75rem;
+  font-size: 0.72rem;
   font-weight: 700;
-  color: #0f172a;
+  color: #1b2a4b;
   text-transform: uppercase;
-  letter-spacing: 0.06em;
-  margin-bottom: 0.25rem;
+  letter-spacing: 0.07em;
+  margin-bottom: 0.2rem;
 
   .dark & {
-    color: white;
+    color: #dce6ff;
   }
 `;
 
 const LinkItem = styled.div`
-  font-size: 0.825rem;
+  font-size: 0.84rem;
 
   a {
     text-decoration: none;
-    color: #64748b;
-    transition: color 0.15s ease;
-
-    .dark & {
-      color: #e2e2e2;
-    }
+    color: #5a6d90;
+    transition: color 0.16s ease;
 
     &:hover {
-      color: #0f172a;
+      color: #193e90;
+    }
 
-      .dark & {
-        color: white;
-      }
+    .dark & {
+      color: #a5b3d0;
+    }
+
+    .dark &:hover {
+      color: #dbe7ff;
     }
   }
 `;
 
 const Divider = styled.hr`
   border: none;
-  border-top: 1px solid #e2e8f0;
-  margin: 2rem 0 1rem;
+  border-top: 1px solid #dce3f0;
+  margin: 1.6rem 0 1rem;
 
   .dark & {
-    border-top: 1px solid #313131;
+    border-top: 1px solid rgba(255, 255, 255, 0.12);
   }
 `;
 
@@ -183,21 +181,21 @@ const BottomBar = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 0.8rem;
 
   ${media('<=tablet')} {
     flex-direction: column;
-    gap: 0.5rem;
     text-align: center;
   }
 `;
 
 const Copyright = styled.p`
-  font-size: 0.75rem;
-  color: #94a3b8;
+  font-size: 0.78rem;
+  color: #6f7f9d;
   margin: 0;
 
   .dark & {
-    color: #e2e2e2;
+    color: #9ca9c6;
   }
 `;
 
@@ -206,20 +204,21 @@ const BottomLinks = styled.div`
   gap: 1rem;
 
   a {
-    font-size: 0.75rem;
-    color: #94a3b8;
+    font-size: 0.78rem;
+    color: #6f7f9d;
     text-decoration: none;
-    transition: color 0.15s ease;
-
-    .dark & {
-      color: #e2e2e2;
-    }
+    transition: color 0.16s ease;
 
     &:hover {
-      .dark & {
-        color: white;
-      }
-      color: #0f172a;
+      color: #193e90;
+    }
+
+    .dark & {
+      color: #9ca9c6;
+    }
+
+    .dark &:hover {
+      color: #dbe7ff;
     }
   }
 `;

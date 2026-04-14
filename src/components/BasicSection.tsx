@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import Container from './Container';
 import OverTitle from './OverTitle';
 import RichText from './RichText';
-import { media } from '@/app/utils/media';
+import { media } from '@/utils/media';
 
 export interface BasicSectionProps {
   imageUrl: string;

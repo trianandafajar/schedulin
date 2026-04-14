@@ -2,8 +2,8 @@ import SignInForm from "@/components/auth/SignInForm";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Next.js SignIn Page | Schedullin - Next.js Dashboard Template",
-  description: "This is Next.js Signin Page Schedullin Dashboard Template",
+  title: "Sign In | maketime",
+  description: "Sign in to maketime and manage bookings, calendars, and appointment operations.",
 };
 
 export default function SignIn() {

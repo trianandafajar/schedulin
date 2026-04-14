@@ -2,8 +2,8 @@ import SignUpForm from "@/components/auth/SignUpForm";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Next.js SignUp Page | Schedullin - Next.js Dashboard Template",
-  description: "This is Next.js SignUp Page Schedullin Dashboard Template",
+  title: "Sign Up | maketime",
+  description: "Create your maketime account to launch your booking page and automate scheduling.",
 };
 
 export default async function SignUp() {

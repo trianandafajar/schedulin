@@ -1,108 +1,185 @@
 'use client';
 
-import styled from 'styled-components';
 import React from 'react';
-import Hero from '../../../views/HomePage/Hero';
-import BasicSection from '@/components/BasicSection';
-import Cta from '../../../views/HomePage/Cta';
-import FeaturesGallery from '../../../views/HomePage/FeaturesGallery';
-import Features from '../../../views/HomePage/Features';
-import Testimonials from '../../../views/HomePage/Testimonials';
-import Footer from '@/components/Footer';
-import RichText from '@/components/RichText';
+import styled from 'styled-components';
 import Navbar from '@/components/landing/Navbar/Navbar';
 import { SingleNavItem } from '@/components/landing/Navbar/NavbarLinks';
+import Hero from '../../../views/HomePage/Hero';
+import FeaturesGallery from '../../../views/HomePage/FeaturesGallery';
+import Features from '../../../views/HomePage/Features';
+import Cta from '../../../views/HomePage/Cta';
+import Footer from '@/components/Footer';
 import ThemeTogglerTwo from '@/components/common/ThemeTogglerTwo';
-import { ThemeProvider } from "@/context/ThemeContext";
-import { useUser } from "@clerk/nextjs";
+import { ThemeProvider } from '@/context/ThemeContext';
+import { useUser } from '@clerk/nextjs';
+import Container from '@/components/Container';
+
+const VALUE_POINTS = [
+  {
+    title: 'Faster booking decisions',
+    body: 'Clients see only truly available time blocks, so they book quickly without extra chat or admin follow-up.',
+  },
+  {
+    title: 'Fewer no-shows',
+    body: 'Automated confirmations and reminders keep attendance high while your team spends less time chasing updates.',
+  },
+  {
+    title: 'One clear calendar view',
+    body: 'Service, staff, and appointment data stay in sync so every day feels predictable and easier to run.',
+  },
+];
 
 export default function HomepageContent() {
-  const { isSignedIn,user } = useUser();
-
-  const userName = user?.firstName || "Guest";
-  const startLink = isSignedIn ? "/dashboard" : "/signin";
-
-
+  const { isSignedIn } = useUser();
+  const startLink = isSignedIn ? '/dashboard' : '/signin';
 
   const navItems: SingleNavItem[] = [
-    { title: isSignedIn ? userName : "Sign In", href: startLink, outlined: true },
+    { title: 'Why maketime', href: '#value' },
+    { title: 'Features', href: '#features' },
+    { title: isSignedIn ? 'Dashboard' : 'Sign In', href: startLink, outlined: true },
   ];
 
   return (
-    <>
-      <ThemeProvider>
+    <ThemeProvider>
+      <LandingRoot>
         <Navbar items={navItems} />
-        <HomepageWrapper>
-          <WhiteBackgroundContainer>
-            <Hero />
-            {/* <Partners /> */}
-            <BasicSection imageUrl="/demo-illustration-1.svg" title="Appointment booking on autopilot." overTitle="SaaS Appointment Booking">
-              <p>
-                Accept bookings 24/7 with an online page that syncs instantly with your team calendar. Clients choose open slots and get automatic
-                confirmation.
-              </p>
-              <p>
-                Fast setup for clinics, salons, consultants, and other service businesses.
-              </p>
-            </BasicSection>
-            <BasicSection imageUrl="/demo-illustration-2.svg" title="Fewer no-shows, cleaner schedules." overTitle="Operational Efficiency" reversed>
-              <p>
-                Reduce manual admin work with automated reminders, booking deposits, and real-time updates for every team member.
-              </p>
-              <CustomRichText>
-                <ul>
-                  <li>Automatic reminders by email or WhatsApp</li>
-                  <li>Two-way Google Calendar sync</li>
-                  <li>Booking analytics for service performance</li>
-                </ul>
-              </CustomRichText>
-            </BasicSection>
-          </WhiteBackgroundContainer>
-          <Cta />
+        <MainArea>
+          <Hero />
+          <ValueSection id="value" aria-label="maketime value proposition">
+            <SectionEyebrow>Editorial workflow for service teams</SectionEyebrow>
+            <SectionTitle>Built to make your calendar feel calm and controllable.</SectionTitle>
+            <ValueGrid>
+              {VALUE_POINTS.map((point) => (
+                <ValueCard key={point.title}>
+                  <ValueTitle>{point.title}</ValueTitle>
+                  <ValueBody>{point.body}</ValueBody>
+                </ValueCard>
+              ))}
+            </ValueGrid>
+          </ValueSection>
           <FeaturesGallery />
           <Features />
-        </HomepageWrapper>
+          <Cta />
+        </MainArea>
         <Footer />
-        <div className="fixed bottom-6 right-6 z-50 hidden sm:block">
+        <ThemeToggleWrap>
           <ThemeTogglerTwo />
-        </div>
-      </ThemeProvider>
-    </>
+        </ThemeToggleWrap>
+      </LandingRoot>
+    </ThemeProvider>
   );
 }
 
-const HomepageWrapper = styled.div`
+const LandingRoot = styled.div`
+  --mk-bg: #eef1f8;
+  --mk-surface: #f7f8fb;
+  --mk-surface-elevated: #ffffff;
+  --mk-text: #152038;
+  --mk-text-muted: #52607e;
+  --mk-border: #d7dce7;
+  --mk-accent: #1f4fbf;
+  --mk-shadow-soft: 0 28px 50px rgba(28, 40, 71, 0.1);
+  --mk-shadow-card: 0 12px 30px rgba(25, 42, 79, 0.08);
 
-      margin: 0 auto;
-      max-width:1280px;
-      padding-top: 2rem;
+  background:
+    radial-gradient(circle at 8% 7%, rgba(31, 79, 191, 0.1), transparent 34%),
+    radial-gradient(circle at 90% 0%, rgba(30, 106, 146, 0.12), transparent 28%),
+    linear-gradient(180deg, #f9faff 0%, var(--mk-bg) 45%, #f4f7ff 100%);
+  color: var(--mk-text);
 
-  & > :last-child {
-        margin-bottom: 5rem;
+  @keyframes mkFadeUp {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
-      `;
+`;
 
-const DarkerBackgroundContainer = styled.div`
-      background: rgb(var(--background)); 
+const MainArea = styled.main`
+  margin: 0 auto;
+  max-width: 1280px;
+  padding: 1.1rem 0 4.5rem;
+`;
 
-  & > *:not(:first-child) {
-        margin-top: 5rem;
+const ValueSection = styled(Container)`
+  margin-top: 2.8rem;
+  animation: mkFadeUp 0.58s ease-out both;
+`;
+
+const SectionEyebrow = styled.p`
+  font-size: 0.76rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--mk-accent);
+  margin: 0;
+`;
+
+const SectionTitle = styled.h2`
+  margin: 0.7rem 0 0;
+  max-width: 52rem;
+  font-size: clamp(1.7rem, 2.8vw, 2.6rem);
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  color: var(--mk-text);
+`;
+
+const ValueGrid = styled.div`
+  margin-top: 1.65rem;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+
+  @media (max-width: 980px) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
-      `;
 
-const WhiteBackgroundContainer = styled.div`
-      background: rgb(var(--secondBackground));
+  @media (max-width: 680px) {
+    grid-template-columns: 1fr;
+  }
+`;
 
-  & > :last-child {
-        padding-bottom: 5rem;
+const ValueCard = styled.article`
+  border-radius: 1rem;
+  border: 1px solid var(--mk-border);
+  background: color-mix(in srgb, var(--mk-surface-elevated) 88%, #ffffff 12%);
+  box-shadow: var(--mk-shadow-card);
+  padding: 1.1rem 1rem 1.2rem;
+  animation: mkFadeUp 0.58s ease-out both;
+
+  &:nth-child(2) {
+    animation-delay: 0.05s;
   }
 
-  & > *:not(:first-child) {
-        margin-top: 5rem;
+  &:nth-child(3) {
+    animation-delay: 0.1s;
   }
-      `;
+`;
 
-const CustomRichText = styled(RichText)`
+const ValueTitle = styled.h3`
+  margin: 0;
+  font-size: 1.03rem;
+  letter-spacing: -0.01em;
+`;
 
-text-align: justify
+const ValueBody = styled.p`
+  margin: 0.62rem 0 0;
+  line-height: 1.6;
+  font-size: 0.93rem;
+  color: var(--mk-text-muted);
+`;
+
+const ThemeToggleWrap = styled.div`
+  position: fixed;
+  right: 1.5rem;
+  bottom: 1.5rem;
+  z-index: 50;
+
+  @media (max-width: 639px) {
+    display: none;
+  }
 `;

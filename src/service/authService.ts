@@ -1,6 +1,6 @@
 "use client";
 
-import axios from "@/app/utils/axios";
+import axios from "@/utils/axios";
 import { useClerk, useSignIn, useSignUp } from "@clerk/nextjs";
 
 export const useAuthService = () => {

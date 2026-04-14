@@ -2,8 +2,8 @@ import { Metadata } from 'next';
 import HomepageContent from './HomepageContent';
 
 export const metadata: Metadata = {
-  title: 'Schedulin Homepage',
-  description: 'SaaS aplikasi untuk booking appointment otomatis, reminder, dan manajemen jadwal layanan.',
+  title: 'maketime | Appointment Booking Platform',
+  description: 'Modern appointment booking software with automated reminders and clean team scheduling workflows.',
 };
 
 export default function Homepage() {

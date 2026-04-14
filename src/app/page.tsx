@@ -2,8 +2,8 @@ import { Metadata } from 'next';
 import HomepageContent from './homepage/HomepageContent';
 
 export const metadata: Metadata = {
-  title: 'Schedullin',
-  description: 'A Scheduling Application.',
+  title: 'maketime',
+  description: 'maketime is an elegant scheduling platform for modern appointment businesses.',
 };
 
 export default function Homepage() {

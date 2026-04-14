@@ -1,4 +1,4 @@
-import { media } from '@/app/utils/media';
+import { media } from '@/utils/media';
 import styled from 'styled-components';
 
 const ButtonGroup = styled.div`

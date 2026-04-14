@@ -8,7 +8,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import Container from '@/components/Container';
 import OverTitle from '@/components/OverTitle';
 import SectionTitle from '@/components/SectionTitle';
-import { media } from '@/app/utils/media';
+import { media } from '@/utils/media';
 // import { useResizeObserver } from '@/hooks/useResizeObsever';
 
 export default function ScrollableBlogPosts() {
