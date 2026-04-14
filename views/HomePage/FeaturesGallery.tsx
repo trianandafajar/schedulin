@@ -11,19 +11,19 @@ const TABS = [
     title: 'Live booking surface',
     description:
       'Publish one link and let customers choose only true availability from your service calendar.',
-    imageUrl: '/demo-illustration-3.png',
+    imageUrl: '/demo-illustration-1.svg',
   },
   {
     title: 'Reminder automation',
     description:
       'Reduce no-shows with timed confirmations and reminders that run without manual follow-up.',
-    imageUrl: '/demo-illustration-4.png',
+    imageUrl: '/demo-illustration-2.svg',
   },
   {
     title: 'Team-wide clarity',
     description:
       'Keep each staff calendar aligned to avoid conflicts and protect your day from overbooking.',
-    imageUrl: '/demo-illustration-5.png',
+    imageUrl: '/demo-illustration-3.svg',
   },
 ];
 

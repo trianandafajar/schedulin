@@ -2,8 +2,8 @@ import SignUpForm from "@/components/auth/SignUpForm";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Sign Up | maketime",
-  description: "Create your maketime account to launch your booking page and automate scheduling.",
+  title: "Sign Up | Maketime",
+  description: "Create your Maketime account to launch your booking page and automate Maketimeg.",
 };
 
 export default async function SignUp() {

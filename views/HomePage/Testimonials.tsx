@@ -11,7 +11,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 const TESTIMONIALS = [
   {
     companyLogoUrl: '/testimonials/company-logo-1.svg',
-    content: `Schedulin has completely transformed our clinic's booking process. It's intuitive and saved us hours of administrative work.`,
+    content: `Maketime has completely transformed our clinic's booking process. It's intuitive and saved us hours of administrative work.`,
     author: {
       name: 'Sarah Johnson',
       title: 'Clinic Manager at HealthFirst',

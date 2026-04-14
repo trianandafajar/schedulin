@@ -34,7 +34,7 @@ export default function HomepageContent() {
   const startLink = isSignedIn ? '/dashboard' : '/signin';
 
   const navItems: SingleNavItem[] = [
-    { title: 'Why maketime', href: '#value' },
+    { title: 'Why Maketime', href: '#value' },
     { title: 'Features', href: '#features' },
     { title: isSignedIn ? 'Dashboard' : 'Sign In', href: startLink, outlined: true },
   ];
@@ -45,7 +45,7 @@ export default function HomepageContent() {
         <Navbar items={navItems} />
         <MainArea>
           <Hero />
-          <ValueSection id="value" aria-label="maketime value proposition">
+          <ValueSection id="value" aria-label="Maketime value proposition">
             <SectionEyebrow>Editorial workflow for service teams</SectionEyebrow>
             <SectionTitle>Built to make your calendar feel calm and controllable.</SectionTitle>
             <ValueGrid>

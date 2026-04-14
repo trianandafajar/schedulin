@@ -16,7 +16,7 @@ export default function Cta() {
     <CtaSection>
       <CtaPanel>
         <Eyebrow>Final call</Eyebrow>
-        <Title>Bring structure to every booking with maketime.</Title>
+        <Title>Bring structure to every booking with Maketime.</Title>
         <Description>
           Launch your public booking flow, automate reminders, and keep your team calendar coherent from day one.
         </Description>

@@ -6,7 +6,7 @@ import styled from 'styled-components';
 
 const FEATURES = [
   {
-    imageUrl: '/grid-icons/asset-1.svg',
+    imageUrl: '/grid-icons/asset-4.svg',
     title: 'Availability logic',
     description: 'Set hours, breaks, and blocked dates with precise controls that match your daily operations.',
   },
@@ -21,7 +21,7 @@ const FEATURES = [
     description: 'Keep clients informed with timed confirmation and reminder messages before each appointment.',
   },
   {
-    imageUrl: '/grid-icons/asset-4.svg',
+    imageUrl: '/grid-icons/asset-7.svg',
     title: 'Calendar sync',
     description: 'Connect existing calendars to keep conflicts low and team schedules aligned.',
   },
@@ -31,7 +31,7 @@ const FEATURES = [
     description: 'Offer flexible rebooking while keeping your schedule rules and team capacity protected.',
   },
   {
-    imageUrl: '/grid-icons/asset-9.svg',
+    imageUrl: '/grid-icons/asset-1.svg',
     title: 'Performance analytics',
     description: 'Track attendance trends and service demand to make better planning decisions every week.',
   },

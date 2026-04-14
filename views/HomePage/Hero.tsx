@@ -13,20 +13,20 @@ export default function Hero() {
   const primaryHref = isSignedIn ? '/dashboard' : '/signup';
 
   return (
-    <HeroWrapper aria-label="maketime hero section">
+    <HeroWrapper aria-label="Maketime hero section">
       <TextColumn>
-        <Eyebrow>maketime for appointment teams</Eyebrow>
+        <Eyebrow>Maketime for appointment teams</Eyebrow>
         <Heading>
           Make every booking feel
           <span> intentional, fast, and clear.</span>
         </Heading>
         <Description>
-          maketime helps service businesses run clean schedules with automated booking, reminders, and team-wide availability control.
+          Maketime helps service businesses run clean schedules with automated booking, reminders, and team-wide availability control.
         </Description>
         <ActionRow>
           <Link href={primaryHref}>
             <Button className="!rounded-full !bg-[#1f4fbf] !px-6 !py-3 !text-xs !font-semibold !tracking-[0.01em] hover:!bg-[#16388a]" type="button">
-              Start with maketime
+              Start with Maketime
             </Button>
           </Link>
           <Link href="#features">

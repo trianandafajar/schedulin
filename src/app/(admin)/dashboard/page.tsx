@@ -5,8 +5,8 @@ import { redirect } from "next/navigation";
 import { getDashboardData } from "@/actions/dashboard-actions";
 
 export const metadata: Metadata = {
-  title: "Dashboard | Schedulin - Appointment Scheduling",
-  description: "Schedulin Dashboard - Manage your appointments and bookings",
+  title: "Dashboard | Maketime - Appointment Maketimeg",
+  description: "Maketime Dashboard - Manage your appointments and bookings",
 };
 
 export default async function Dashboard() {

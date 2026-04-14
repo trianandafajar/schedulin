@@ -29,7 +29,7 @@ export default function Footer() {
       <FooterContainer>
         <TopSection>
           <BrandArea>
-            <BrandName>maketime</BrandName>
+            <BrandName>Maketime</BrandName>
             <Tagline>Elegant appointment operations for modern service teams.</Tagline>
           </BrandArea>
           <LinksArea>
@@ -47,7 +47,7 @@ export default function Footer() {
         </TopSection>
         <Divider />
         <BottomBar>
-          <Copyright>© {new Date().getFullYear()} maketime. All rights reserved.</Copyright>
+          <Copyright>© {new Date().getFullYear()} Maketime. All rights reserved.</Copyright>
           <BottomLinks>
             <Link href="/privacy-policy">Privacy Policy</Link>
           </BottomLinks>

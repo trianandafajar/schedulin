@@ -5,9 +5,9 @@ import { Metadata } from "next";
 import React from "react";
 
 export const metadata: Metadata = {
-  title: "Next.js Badge | Schedulin - Next.js Dashboard Template",
+  title: "Next.js Badge | Maketime - Next.js Dashboard Template",
   description:
-    "This is Next.js Badge page for Schedulin - Next.js Tailwind CSS Admin Dashboard Template",
+    "This is Next.js Badge page for Maketime - Next.js Tailwind CSS Admin Dashboard Template",
   // other metadata
 };
 
