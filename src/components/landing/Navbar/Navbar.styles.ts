@@ -18,7 +18,7 @@ export const NavbarContainer = styled.header<{ $hidden: boolean }>`
   transition: transform 0.25s ease;
 
   .dark & {
-    background: color-mix(in srgb, #12131a 85%, #0f0f14 15%);
+    background: #000000;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   }
 `;
@@ -69,8 +69,8 @@ export const NavLink = styled.span`
   transition: color 0.22s ease, background-color 0.22s ease;
 
   &:hover {
-    color: var(--mk-accent, #1f4fbf);
-    background: rgba(31, 79, 191, 0.08);
+    color: var(--color-brand-600);
+    background: var(--color-brand-50);
   }
 
   .dark & {

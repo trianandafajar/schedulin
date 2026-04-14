@@ -16,7 +16,7 @@ export default function NavLinks({ items }: { items: SingleNavItem[] }) {
           <Link href={item.href}>
             {item.outlined ? (
               <Button
-                className="!rounded-full !bg-[#1f4fbf] !px-5 !py-2.5 !text-xs !font-semibold !tracking-[0.01em] hover:!bg-[#173a8f]"
+                className="!rounded-full !bg-brand-500 !px-5 !py-2.5 !text-xs !font-semibold !tracking-[0.01em] hover:!bg-brand-600 transition-colors"
                 type="button"
               >
                 {item.title}

@@ -59,12 +59,12 @@ export default function Footer() {
 
 const FooterWrapper = styled.footer`
   margin-top: 3.5rem;
-  border-top: 1px solid var(--mk-border, #d7dce7);
-  background: linear-gradient(180deg, rgba(250, 252, 255, 0.5) 0%, rgba(245, 248, 255, 0.94) 100%);
+  border-top: 1px solid var(--color-gray-200);
+  background: var(--color-white);
 
   .dark & {
     border-top: 1px solid rgba(255, 255, 255, 0.1);
-    background: linear-gradient(180deg, rgba(22, 24, 34, 0.65) 0%, rgba(18, 20, 30, 0.9) 100%);
+    background: #000000;
   }
 `;
 
@@ -101,7 +101,7 @@ const BrandName = styled.span`
   letter-spacing: -0.015em;
 
   .dark & {
-    color: #f2f5ff;
+    color: var(--color-white);
   }
 `;
 
@@ -112,7 +112,7 @@ const Tagline = styled.p`
   color: #586888;
 
   .dark & {
-    color: #a8b4cf;
+    color: var(--color-gray-400);
   }
 `;
 
@@ -141,7 +141,7 @@ const GroupTitle = styled.span`
   margin-bottom: 0.2rem;
 
   .dark & {
-    color: #dce6ff;
+    color: var(--color-white);
   }
 `;
 
@@ -154,22 +154,22 @@ const LinkItem = styled.div`
     transition: color 0.16s ease;
 
     &:hover {
-      color: #193e90;
+      color: var(--color-brand-600);
     }
 
     .dark & {
-      color: #a5b3d0;
+      color: var(--color-gray-400);
     }
 
     .dark &:hover {
-      color: #dbe7ff;
+      color: var(--color-white);
     }
   }
 `;
 
 const Divider = styled.hr`
   border: none;
-  border-top: 1px solid #dce3f0;
+  border-top: 1px solid var(--color-brand-100);
   margin: 1.6rem 0 1rem;
 
   .dark & {
@@ -210,7 +210,7 @@ const BottomLinks = styled.div`
     transition: color 0.16s ease;
 
     &:hover {
-      color: #193e90;
+      color: var(--color-brand-600);
     }
 
     .dark & {

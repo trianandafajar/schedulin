@@ -57,7 +57,13 @@ export default function FeaturesGallery() {
           })}
         </Tabs>
         <VisualPane>
-          <NextImage src={currentTab.imageUrl} alt={currentTab.title} fill style={{ objectFit: 'cover' }} priority />
+          <NextImage 
+            src={currentTab.imageUrl} 
+            alt={currentTab.title} 
+            fill 
+            style={{ objectFit: 'contain', padding: '2rem' }} 
+            priority 
+          />
         </VisualPane>
       </Body>
     </Wrap>
@@ -86,11 +92,11 @@ const Head = styled.div`
 
 const Eyebrow = styled.p`
   margin: 0;
-  font-size: 0.76rem;
+  font-size: 0.85rem;
   text-transform: uppercase;
   letter-spacing: 0.12em;
-  color: var(--mk-accent, #1f4fbf);
-  font-weight: 600;
+  color: var(--color-brand-600);
+  font-weight: 700;
 `;
 
 const Title = styled.h2`
@@ -99,6 +105,10 @@ const Title = styled.h2`
   font-size: clamp(1.7rem, 2.8vw, 2.4rem);
   line-height: 1.15;
   letter-spacing: -0.02em;
+
+  .dark & {
+    color: var(--color-white);
+  }
 `;
 
 const Body = styled.div`
@@ -120,16 +130,26 @@ const Tabs = styled.div`
 
 const TabButton = styled.button<{ $active: boolean }>`
   text-align: left;
-  border-radius: 1rem;
-  border: 1px solid ${(p) => (p.$active ? '#a7bde9' : 'var(--mk-border, #d7dce7)')};
-  background: ${(p) => (p.$active ? '#f5f8ff' : 'rgba(255, 255, 255, 0.84)')};
-  padding: 1rem 1rem 1.05rem;
-  transition: transform 0.2s ease, border-color 0.2s ease, background-color 0.2s ease;
+  border-radius: 1.25rem;
+  border: 1px solid ${(p) => (p.$active ? 'var(--color-brand-300)' : 'var(--color-brand-100)')};
+  background: ${(p) => (p.$active ? 'var(--color-brand-50)' : 'var(--color-white)')};
+  padding: 1.25rem;
+  transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
   cursor: pointer;
+  box-shadow: ${(p) => (p.$active ? '0 8px 20px rgba(255, 122, 49, 0.08)' : '0 1px 3px rgba(0,0,0,0.02)')};
+
+  .dark & {
+    background: ${(p) => (p.$active ? '#0a0a0a' : '#000000')};
+    border-color: ${(p) => (p.$active ? 'var(--color-brand-500)' : 'rgba(255, 255, 255, 0.1)')};
+    
+    &:hover {
+      border-color: var(--color-brand-400);
+    }
+  }
 
   &:hover {
-    transform: translateY(-2px);
-    border-color: #a7bde9;
+    transform: translateY(-3px);
+    border-color: var(--color-brand-300);
   }
 `;
 
@@ -138,6 +158,10 @@ const TabTitle = styled.h3`
   font-size: 1.02rem;
   letter-spacing: -0.01em;
   color: #132344;
+
+  .dark & {
+    color: var(--color-white);
+  }
 `;
 
 const TabDescription = styled.p`
@@ -145,18 +169,28 @@ const TabDescription = styled.p`
   line-height: 1.6;
   color: #516280;
   font-size: 0.9rem;
+
+  .dark & {
+    color: var(--color-gray-400);
+  }
 `;
 
 const VisualPane = styled.div`
   position: relative;
   overflow: hidden;
-  min-height: 24rem;
-  border-radius: 1.1rem;
-  border: 1px solid var(--mk-border, #d7dce7);
-  background: #ffffff;
-  box-shadow: var(--mk-shadow-card, 0 12px 30px rgba(25, 42, 79, 0.08));
+  min-height: 28rem;
+  border-radius: 1.5rem;
+  border: 1px solid var(--color-gray-200);
+  background: var(--mk-surface, #ffffff);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
+  .dark & {
+    border-color: rgba(255, 255, 255, 0.1);
+  }
 
   ${media('<=desktop')} {
-    min-height: 20rem;
+    min-height: 22rem;
   }
 `;

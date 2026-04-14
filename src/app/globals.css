@@ -38,18 +38,18 @@
   --color-white: #ffffff;
   --color-black: #101828;
 
-  --color-brand-25: #f2f7ff;
-  --color-brand-50: #ecf3ff;
-  --color-brand-100: #dde9ff;
-  --color-brand-200: #c2d6ff;
-  --color-brand-300: #9cb9ff;
-  --color-brand-400: #7592ff;
-  --color-brand-500: #465fff;
-  --color-brand-600: #3641f5;
-  --color-brand-700: #2a31d8;
-  --color-brand-800: #252dae;
-  --color-brand-900: #262e89;
-  --color-brand-950: #161950;
+  --color-brand-25: #fffaf5;
+  --color-brand-50: #fff6ed;
+  --color-brand-100: #ffead5;
+  --color-brand-200: #fddcab;
+  --color-brand-300: #feb273;
+  --color-brand-400: #fd853a;
+  --color-brand-500: #FF7A31;
+  --color-brand-600: #DE4E00;
+  --color-brand-700: #c4320a;
+  --color-brand-800: #9c2a10;
+  --color-brand-900: #7e2410;
+  --color-brand-950: #511c10;
 
   --color-blue-light-25: #f5fbff;
   --color-blue-light-50: #f0f9ff;
@@ -104,31 +104,31 @@
   --color-success-900: #054f31;
   --color-success-950: #053321;
 
-  --color-error-25: #fffbfa;
-  --color-error-50: #fef3f2;
-  --color-error-100: #fee4e2;
-  --color-error-200: #fecdca;
-  --color-error-300: #fda29b;
-  --color-error-400: #f97066;
-  --color-error-500: #f04438;
-  --color-error-600: #d92d20;
-  --color-error-700: #b42318;
-  --color-error-800: #912018;
-  --color-error-900: #7a271a;
-  --color-error-950: #55160c;
+  --color-error-25: #fff5f5;
+  --color-error-50: #ffebeb;
+  --color-error-100: #ffd6d6;
+  --color-error-200: #ffb3b3;
+  --color-error-300: #ff8a8a;
+  --color-error-400: #ff5c5c;
+  --color-error-500: #DE4E00;
+  --color-error-600: #c13d00;
+  --color-error-700: #a33200;
+  --color-error-800: #852800;
+  --color-error-900: #6b2100;
+  --color-error-950: #4a1600;
 
-  --color-warning-25: #fffcf5;
-  --color-warning-50: #fffaeb;
-  --color-warning-100: #fef0c7;
-  --color-warning-200: #fedf89;
-  --color-warning-300: #fec84b;
-  --color-warning-400: #fdb022;
-  --color-warning-500: #f79009;
-  --color-warning-600: #dc6803;
-  --color-warning-700: #b54708;
-  --color-warning-800: #93370d;
-  --color-warning-900: #7a2e0e;
-  --color-warning-950: #4e1d09;
+  --color-warning-25: #fffcf0;
+  --color-warning-50: #fff9db;
+  --color-warning-100: #fff2b3;
+  --color-warning-200: #ffe680;
+  --color-warning-300: #ffd84d;
+  --color-warning-400: #ffca1a;
+  --color-warning-500: #FDB105;
+  --color-warning-600: #e69d00;
+  --color-warning-700: #cc8a00;
+  --color-warning-800: #b37800;
+  --color-warning-900: #996800;
+  --color-warning-950: #664500;
 
   --color-theme-pink-500: #ee46bc;
 
@@ -167,6 +167,15 @@
   --z-index-999999: 999999;
 }
 
+.dark {
+  --color-brand-50: rgba(255, 122, 49, 0.1);
+  --color-brand-100: rgba(255, 122, 49, 0.2);
+  --mk-text: #ffffff;
+  --mk-text-muted: #98a2b3;
+  --mk-border: rgba(255, 255, 255, 0.1);
+  --mk-surface: #000000;
+}
+
 /*
   The default border color has changed to `currentColor` in Tailwind CSS v4,
   so we've added these compatibility styles to make sure everything still
@@ -176,6 +185,9 @@
   color utility to any element that depends on these defaults.
 */
 @layer base {
+  html {
+    scroll-behavior: smooth;
+  }
   *,
   ::after,
   ::before,
@@ -188,7 +200,7 @@
     cursor: pointer;
   }
   body {
-    @apply relative font-normal font-outfit z-1 bg-gray-50;
+    @apply relative font-normal font-outfit z-1;
   }
 }
 

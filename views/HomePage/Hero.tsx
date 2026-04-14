@@ -25,12 +25,12 @@ export default function Hero() {
         </Description>
         <ActionRow>
           <Link href={primaryHref}>
-            <Button className="!rounded-full !bg-[#1f4fbf] !px-6 !py-3 !text-xs !font-semibold !tracking-[0.01em] hover:!bg-[#16388a]" type="button">
+            <Button className="!rounded-full !bg-brand-500 !px-8 !py-4 !text-sm !font-bold !tracking-wide hover:!bg-brand-600 hover:!scale-105 transition-all duration-300 shadow-lg shadow-brand-500/20" type="button">
               Start with Maketime
             </Button>
           </Link>
           <Link href="#features">
-            <Button className="!rounded-full !bg-white !px-6 !py-3 !text-xs !font-semibold !tracking-[0.01em] !text-[#1f3154] ring-1 ring-[#cad3e7] hover:!bg-[#f5f8ff]" type="button">
+            <Button className="!rounded-full !bg-white dark:!bg-black !px-8 !py-4 !text-sm !font-bold !tracking-wide !text-gray-900 dark:!text-white ring-1 ring-gray-200 dark:ring-white/20 hover:!bg-gray-50 dark:hover:!bg-gray-900 transition-all duration-300" type="button">
               Explore features
             </Button>
           </Link>
@@ -82,11 +82,11 @@ const TextColumn = styled.div`
 
 const Eyebrow = styled.p`
   margin: 0;
-  color: var(--mk-accent, #1f4fbf);
+  color: var(--color-brand-600);
   letter-spacing: 0.14em;
-  font-size: 0.76rem;
+  font-size: 0.85rem;
   text-transform: uppercase;
-  font-weight: 600;
+  font-weight: 700;
 `;
 
 const Heading = styled.h1`
@@ -96,8 +96,14 @@ const Heading = styled.h1`
   line-height: 1.02;
   color: var(--mk-text, #152038);
 
+  .dark & {
+    color: var(--color-white);
+  }
+
   span {
-    color: #2a63ca;
+    color: var(--color-brand-600);
+    display: inline-block;
+    position: relative;
   }
 `;
 
@@ -107,6 +113,10 @@ const Description = styled.p`
   line-height: 1.72;
   font-size: 1.01rem;
   max-width: 34rem;
+
+  .dark & {
+    color: var(--color-gray-400);
+  }
 
   ${media('<=desktop')} {
     max-width: 100%;
@@ -130,6 +140,10 @@ const Microcopy = styled.p`
   color: #667693;
   font-size: 0.84rem;
   letter-spacing: 0.01em;
+  
+  .dark & {
+    color: var(--color-gray-500);
+  }
 `;
 
 const VisualColumn = styled.div`
@@ -142,16 +156,23 @@ const VisualColumn = styled.div`
 `;
 
 const VisualFrame = styled.div`
-  width: min(100%, 42rem);
-  border-radius: 1.15rem;
-  border: 1px solid rgba(27, 44, 79, 0.1);
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.7) 0%, rgba(249, 252, 255, 0.9) 100%);
-  box-shadow: var(--mk-shadow-soft, 0 28px 50px rgba(28, 40, 71, 0.1));
-  padding: 1rem 1rem 0.4rem;
-
+  width: min(100%, 48rem);
+  border-radius: 1.5rem;
+  border: 1px solid var(--color-gray-200);
+  background: var(--mk-surface, #ffffff);
+  padding: 0.5rem;
+  overflow: hidden;
+  position: relative;
+  
+  .dark & {
+    border-color: rgba(255, 255, 255, 0.1);
+  }
+  
   svg {
     width: 100%;
     height: auto;
     display: block;
+    position: relative;
+    z-index: 1;
   }
 `;

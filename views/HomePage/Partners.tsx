@@ -60,6 +60,10 @@ const Title = styled.h3`
   ${media('<=desktop')} {
     line-height: 1.5;
   }
+
+  .dark & {
+    color: var(--color-white);
+  }
 `;
 
 const PartnersWrapper = styled(Container)`

@@ -60,34 +60,41 @@ export default function Features() {
 }
 
 const FeatureSection = styled(Container)`
-  margin-top: 3.1rem;
+  margin-top: 4.5rem;
+  margin-bottom: 4.5rem;
 `;
 
 const HeadingWrap = styled.div`
   text-align: center;
+  max-width: 48rem;
+  margin: 0 auto;
 `;
 
 const Eyebrow = styled.p`
   margin: 0;
-  color: var(--mk-accent, #1f4fbf);
-  font-size: 0.76rem;
-  letter-spacing: 0.12em;
+  color: var(--color-brand-600);
+  font-size: 0.9rem;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
-  font-weight: 600;
+  font-weight: 700;
 `;
 
 const Title = styled.h2`
-  margin: 0.66rem 0 0;
-  font-size: clamp(1.7rem, 2.7vw, 2.35rem);
-  line-height: 1.15;
-  letter-spacing: -0.02em;
+  margin: 0.85rem 0 0;
+  font-size: clamp(2rem, 3.5vw, 2.8rem);
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+  
+  .dark & {
+    color: var(--color-white);
+  }
 `;
 
 const Grid = styled.div`
-  margin-top: 1.6rem;
+  margin-top: 3rem;
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 0.85rem;
+  gap: 1.5rem;
 
   ${media('<=tablet')} {
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -95,27 +102,39 @@ const Grid = styled.div`
 
   ${media('<=phone')} {
     grid-template-columns: 1fr;
+    gap: 1rem;
   }
 `;
 
 const Card = styled.article`
-  border-radius: 1rem;
-  border: 1px solid var(--mk-border, #d7dce7);
-  background: color-mix(in srgb, #ffffff 90%, #f7f8fb 10%);
-  box-shadow: var(--mk-shadow-card, 0 12px 30px rgba(25, 42, 79, 0.08));
-  padding: 1rem;
+  border-radius: 1.5rem;
+  border: 1px solid var(--color-gray-200);
+  background: var(--mk-surface, #ffffff);
+  padding: 2.2rem 2rem;
   animation: mkFadeFeature 0.5s ease-out both;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
 
   &:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 20px 34px rgba(18, 42, 92, 0.14);
+    transform: translateY(-8px);
+    border-color: var(--color-brand-500);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.04);
+  }
+
+  .dark & {
+    background: #000000;
+    border-color: rgba(255, 255, 255, 0.1);
+    
+    &:hover {
+      background: #0a0a0a;
+      border-color: var(--color-brand-500);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+    }
   }
 
   @keyframes mkFadeFeature {
     from {
       opacity: 0;
-      transform: translateY(8px);
+      transform: translateY(12px);
     }
     to {
       opacity: 1;
@@ -125,25 +144,42 @@ const Card = styled.article`
 `;
 
 const IconWrap = styled.div`
-  width: 3.25rem;
-  height: 3.25rem;
-  border-radius: 0.75rem;
-  border: 1px solid #dce4f5;
-  background: #f8fbff;
+  width: 3.5rem;
+  height: 3.5rem;
+  border-radius: 1.25rem;
+  border: 1px solid var(--color-brand-100);
+  background: var(--color-brand-50);
   display: grid;
   place-items: center;
+  transition: all 0.3s ease;
+  margin-bottom: 1.5rem;
+  
+  .dark & {
+    background: #0a0a0a;
+    border-color: rgba(255, 255, 255, 0.08);
+  }
 `;
 
 const CardTitle = styled.h3`
-  margin: 0.9rem 0 0;
-  color: #122341;
-  font-size: 1.02rem;
-  letter-spacing: -0.01em;
+  margin: 0;
+  color: #101828;
+  font-size: 1.2rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+
+  .dark & {
+    color: var(--color-white);
+  }
 `;
 
 const CardDescription = styled.p`
-  margin: 0.5rem 0 0;
-  color: #556580;
+  margin: 0.75rem 0 0;
+  color: #475467;
   line-height: 1.6;
-  font-size: 0.9rem;
+  font-size: 1rem;
+
+  .dark & {
+    color: var(--color-gray-400);
+  }
 `;
+
