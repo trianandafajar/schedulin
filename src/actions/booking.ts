@@ -2,7 +2,13 @@
 
 import { auth } from "@clerk/nextjs/server";
 import { revalidatePath } from "next/cache";
-import supabase from "@/lib/supabase";
+import { cookies } from "next/headers";
+import { createClient } from "@/lib/supabase/server";
+
+async function getSupabaseClient() {
+  const cookieStore = await cookies();
+  return createClient(cookieStore);
+}
 
 function getLocalDateLabel(dateStr: string): string {
   if (!dateStr) return "N/A";
@@ -46,6 +52,7 @@ export interface CreateBookingData {
 }
 
 export async function createBooking(data: CreateBookingData) {
+  const supabase = await getSupabaseClient();
   const { userId } = await auth();
   if (!userId) {
     return { error: "Unauthorized" };
@@ -101,6 +108,7 @@ export async function updateBookingStatus(
   bookingId: string,
   status: BookingStatus
 ) {
+  const supabase = await getSupabaseClient();
   const { userId } = await auth();
   if (!userId) {
     return { error: "Unauthorized" };
@@ -159,6 +167,7 @@ export async function updateBookingStatus(
   }
 }
 export async function getBookings() {
+  const supabase = await getSupabaseClient();
   const { userId } = await auth();
   if (!userId) {
     return { error: "Unauthorized" };

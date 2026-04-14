@@ -1,8 +1,13 @@
 "use server";
 
-import supabase from "@/lib/supabase";
-
 import { auth } from "@clerk/nextjs/server";
+import { cookies } from "next/headers";
+import { createClient } from "@/lib/supabase/server";
+
+async function getSupabaseClient() {
+  const cookieStore = await cookies();
+  return createClient(cookieStore);
+}
 
 export type ServiceStatus = "active" | "inactive";
 
@@ -20,6 +25,7 @@ export interface Service {
 
 export async function getServices(): Promise<{ data: Service[] | null; error: string | null }> {
   try {
+    const supabase = await getSupabaseClient();
     const { userId } = await auth();
     if (!userId) {
       return { data: null, error: "Unauthorized" };
@@ -57,6 +63,7 @@ export async function createService(serviceData: {
   price: number;
 }): Promise<{ data: Service | null; error: string | null }> {
   try {
+    const supabase = await getSupabaseClient();
     const { userId } = await auth();
     if (!userId) {
       return { data: null, error: "Unauthorized" };
@@ -104,6 +111,7 @@ export async function updateService(
   }
 ): Promise<{ data: Service | null; error: string | null }> {
   try {
+    const supabase = await getSupabaseClient();
     const { userId } = await auth();
     if (!userId) {
       return { data: null, error: "Unauthorized" };
@@ -136,6 +144,7 @@ export async function deleteService(
   id: string
 ): Promise<{ data: null; error: string | null }> {
   try {
+    const supabase = await getSupabaseClient();
     const { userId } = await auth();
     if (!userId) {
       return { data: null, error: "Unauthorized" };
@@ -161,6 +170,7 @@ export async function toggleServiceStatus(
   isActive: boolean
 ): Promise<{ data: Service | null; error: string | null }> {
   try {
+    const supabase = await getSupabaseClient();
     const { userId } = await auth();
     if (!userId) {
       return { data: null, error: "Unauthorized" };

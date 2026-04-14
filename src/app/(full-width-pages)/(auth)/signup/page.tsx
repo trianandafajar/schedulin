@@ -1,5 +1,4 @@
 import SignUpForm from "@/components/auth/SignUpForm";
-import { getBusinessCategories } from "@/service/businessService";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -8,6 +7,8 @@ export const metadata: Metadata = {
 };
 
 export default async function SignUp() {
-  const categories = await getBusinessCategories();
+  const baseUrl = process.env.NEXT_PUBLIC_URL_API || "http://localhost:3000";
+  const response = await fetch(`${baseUrl}/api/business/categories`, { cache: "no-store" });
+  const categories = response.ok ? await response.json() : [];
   return <SignUpForm categories={categories} />
 }

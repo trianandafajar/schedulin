@@ -1,7 +1,8 @@
-import supabase from "@/lib/supabase";
+import { createClient } from "@/lib/supabase/client";
 import axios from "@/app/utils/axios";
 
 export const getBusinessCategories = async () => {
+  const supabase = createClient();
   const { data, error } = await supabase
     .from('business_categories_master')
     .select('id, name')
@@ -45,6 +46,7 @@ export const getMyBusiness = async () => {
 };
 
 export const getBusinessesByOwner = async (ownerId: string) => {
+  const supabase = createClient();
   const { data, error } = await supabase
     .from("business")
     .select("*")

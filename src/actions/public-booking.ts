@@ -1,7 +1,13 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import supabase from "@/lib/supabase";
+import { cookies } from "next/headers";
+import { createClient } from "@/lib/supabase/server";
+
+async function getSupabaseClient() {
+  const cookieStore = await cookies();
+  return createClient(cookieStore);
+}
 
 
 export interface PublicBookingData {
@@ -16,6 +22,7 @@ export interface PublicBookingData {
 
 export async function createPublicBooking(data: PublicBookingData) {
   try {
+    const supabase = await getSupabaseClient();
     const { data: business, error: businessError } = await supabase
       .from("business")
       .select("owner_id")

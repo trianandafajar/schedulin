@@ -1,9 +1,12 @@
 import { NextResponse } from "next/server";
-import supabase from "@/lib/supabase";
+import { cookies } from "next/headers";
+import { createClient } from "@/lib/supabase/server";
 
 
 export async function GET() {
   try {
+    const cookieStore = await cookies();
+    const supabase = createClient(cookieStore);
     const { data, error } = await supabase
       .from('business_categories_master')
       .select('id, name')

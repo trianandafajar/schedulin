@@ -1,8 +1,13 @@
 "use server";
 
 import { auth } from "@clerk/nextjs/server";
-import { redirect } from "next/navigation";
-import supabase from "@/lib/supabase";
+import { cookies } from "next/headers";
+import { createClient } from "@/lib/supabase/server";
+
+async function getSupabaseClient() {
+    const cookieStore = await cookies();
+    return createClient(cookieStore);
+}
 
 
 export interface DashboardBooking {
@@ -20,6 +25,7 @@ export async function getDashboardData(): Promise<{
     error?: string;
     redirect?: string
 }> {
+    const supabase = await getSupabaseClient();
     const { userId } = await auth();
     if (!userId) {
         return { error: "Unauthorized", redirect: "/sign-in" };

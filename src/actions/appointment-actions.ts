@@ -1,8 +1,13 @@
 "use server";
 
-import supabase from "@/lib/supabase";
-
 import { revalidatePath } from "next/cache";
+import { cookies } from "next/headers";
+import { createClient } from "@/lib/supabase/server";
+
+async function getSupabaseClient() {
+    const cookieStore = await cookies();
+    return createClient(cookieStore);
+}
 
 export interface DaySchedule {
     isOpen: boolean;
@@ -17,6 +22,7 @@ export interface Holiday {
 }
 
 export async function getAppointmentSettings(businessId: string) {
+    const supabase = await getSupabaseClient();
     const { data: schedulesData } = await supabase
         .from("business_schedules")
         .select("*")
@@ -36,6 +42,7 @@ export async function saveAppointmentSettings(
     holidays: Holiday[]
 ) {
     try {
+        const supabase = await getSupabaseClient();
         const schedulePayload = Object.entries(schedules).map(([day, data]) => ({
             business_id: businessId,
             day_of_week: day,

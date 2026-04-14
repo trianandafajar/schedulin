@@ -1,4 +1,4 @@
-import supabase from "@/lib/supabase";
+import { createClient } from "@/lib/supabase/client";
 
 
 export interface CalendarEvent {
@@ -15,6 +15,7 @@ export interface CalendarEvent {
 }
 
 export const getCalendarEvents = async (userId: string): Promise<CalendarEvent[]> => {
+    const supabase = createClient();
     const { data: manualEvents, error: manualError } = await supabase
         .from("calendar_events")
         .select("*")
@@ -92,6 +93,7 @@ export const getCalendarEvents = async (userId: string): Promise<CalendarEvent[]
 
 
 export const saveCalendarEvent = async (userId: string, eventData: any, id?: string) => {
+    const supabase = createClient();
     const eventPayload = {
         title: eventData.title,
         start_date: eventData.start,

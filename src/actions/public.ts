@@ -1,6 +1,12 @@
 "use server";
 
-import supabase from "@/lib/supabase";
+import { cookies } from "next/headers";
+import { createClient } from "@/lib/supabase/server";
+
+async function getSupabaseClient() {
+  const cookieStore = await cookies();
+  return createClient(cookieStore);
+}
 
 
 // Types
@@ -48,6 +54,7 @@ export interface BookedSlot {
 // Get business by slug
 export async function getBusinessBySlug(slug: string): Promise<{ data: Business | null; error: string | null }> {
   try {
+    const supabase = await getSupabaseClient();
     const { data: business, error } = await supabase
       .from("business")
       .select("id, name, slug, description, address, logo_url")
@@ -68,6 +75,7 @@ export async function getBusinessBySlug(slug: string): Promise<{ data: Business 
 // Get services by business ID
 export async function getServicesByBusinessId(businessId: string): Promise<{ data: Service[] | null; error: string | null }> {
   try {
+    const supabase = await getSupabaseClient();
     const { data: services, error } = await supabase
       .from("services")
       .select("id, name, duration_minutes, price, is_active, business_id")
@@ -88,6 +96,7 @@ export async function getServicesByBusinessId(businessId: string): Promise<{ dat
 // Get business schedule
 export async function getBusinessSchedule(businessId: string): Promise<{ data: BusinessSchedule[] | null; error: string | null }> {
   try {
+    const supabase = await getSupabaseClient();
     const { data: schedule, error } = await supabase
       .from("business_schedules")
       .select("id, business_id, day_of_week, is_open, start_time, end_time")
@@ -107,6 +116,7 @@ export async function getBusinessSchedule(businessId: string): Promise<{ data: B
 // Get booked slots for a specific date
 export async function getBookedSlots(businessId: string, date: string): Promise<{ data: BookedSlot[] | null; error: string | null }> {
   try {
+    const supabase = await getSupabaseClient();
     const { data: slots, error } = await supabase
       .from("appointment_slots")
       .select("id, date, time, is_booked")
@@ -127,6 +137,7 @@ export async function getBookedSlots(businessId: string, date: string): Promise<
 // Get all booked slots for a date range (for calendar highlighting)
 export async function getBookedSlotsForMonth(businessId: string, year: number, month: number): Promise<{ data: string[] | null; error: string | null }> {
   try {
+    const supabase = await getSupabaseClient();
     const startDate = `${year}-${String(month + 1).padStart(2, '0')}-01`;
     const endDate = new Date(year, month + 1, 0).toISOString().split('T')[0];
 
@@ -153,6 +164,7 @@ export async function getBookedSlotsForMonth(businessId: string, year: number, m
 // Get business holidays
 export async function getBusinessHolidays(businessId: string): Promise<{ data: BusinessHoliday[] | null; error: string | null }> {
   try {
+    const supabase = await getSupabaseClient();
     const { data: holidays, error } = await supabase
       .from("business_holidays")
       .select("id, business_id, date, name")
