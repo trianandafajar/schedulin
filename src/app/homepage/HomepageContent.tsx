@@ -81,10 +81,7 @@ const LandingRoot = styled.div`
   --mk-shadow-soft: 0 28px 50px rgba(28, 40, 71, 0.1);
   --mk-shadow-card: 0 12px 30px rgba(25, 42, 79, 0.08);
 
-  background:
-    radial-gradient(circle at 8% 7%, rgba(31, 79, 191, 0.1), transparent 34%),
-    radial-gradient(circle at 90% 0%, rgba(30, 106, 146, 0.12), transparent 28%),
-    linear-gradient(180deg, #f9faff 0%, var(--mk-bg) 45%, #f4f7ff 100%);
+
   color: var(--mk-text);
 
     .dark & {
