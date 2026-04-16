@@ -219,7 +219,7 @@ const AppointmentSettings: React.FC<AppointmentSettingsProps> = ({
                       onChange={(e) => handleScheduleChange(day, "isOpen", e.target.checked)}
                       className="peer sr-only"
                     />
-                    <div className="h-6 w-11 rounded-full bg-gray-200 after:absolute after:left-[2px] after:top-[2px] after:h-5 after:w-5 after:rounded-full after:bg-white after:transition-all after:content-[''] peer-checked:bg-brand-500 peer-checked:after:translate-x-full peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-brand-500 peer-focus:ring-offset-2 dark:bg-gray-700 dark:border-gray-600 dark:peer-focus:ring-offset-[#111111]"></div>
+                    <div className="h-6 w-11 rounded-full bg-gray-200 after:absolute after:left-[2px] after:top-[2px] after:h-5 after:w-5 after:rounded-full after:bg-white after:transition-all after:content-[''] peer-checked:bg-brand-500 peer-checked:after:translate-x-full peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-brand-500 peer-focus:ring-offset-2  dark:border-gray-600 dark:peer-focus:ring-offset-[#111111]"></div>
                     <span className={`ml-3 text-sm font-medium ${isOpen ? "text-brand-600 dark:text-brand-400" : "text-gray-400 dark:text-gray-500"}`}>
                       {isOpen ? "Open" : "Closed"}
                     </span>
@@ -281,7 +281,7 @@ const AppointmentSettings: React.FC<AppointmentSettingsProps> = ({
             <button
               onClick={handleAddHoliday}
               disabled={!newHoliday.date || !newHoliday.name}
-              className="h-11 whitespace-nowrap rounded-xl bg-gray-900 px-6 text-sm font-medium text-white transition-colors hover:bg-gray-800 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-white dark:text-gray-900 dark:hover:bg-gray-200"
+              className="h-11 whitespace-nowrap rounded-xl bg-[var(--color-brand-500)] px-6 text-sm font-medium text-white transition-colors hover:bg-[var(--color-brand-600)] disabled:cursor-not-allowed disabled:opacity-50   "
             >
               Add Date
             </button>

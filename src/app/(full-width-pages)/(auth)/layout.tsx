@@ -36,7 +36,7 @@ export default function AuthLayout({
 
               <div className="text-center space-y-4">
                 <h2 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-white leading-tight">
-                  Maketime for <span className="text-brand-500">Appointment</span> <span className="text-[#2F72FB]">Teams</span>
+                  Maketime for <span className="text-brand-500">Appointment Teams</span> 
                 </h2>
               </div>
             </div>

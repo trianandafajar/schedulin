@@ -14,6 +14,14 @@ const outfit = Outfit({
   subsets: ["latin"],
 });
 
+export const metadata = {
+  title: "Maketime",
+  description: "Platform booking dan maketime modern",
+  icons: {
+    icon: "./favicon.svg",
+  },
+};
+
 export default function RootLayout({
   children,
 }: {

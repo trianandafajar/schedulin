@@ -26,7 +26,7 @@ export default function Cta() {
             </Button>
           </Link>
           <Link href="/signin">
-            <Button className="!rounded-full !bg-white dark:!bg-black !px-8 !py-4 !text-sm !font-bold !text-[#2F72FB] dark:!text-white ring-1 ring-gray-200 dark:ring-white/20 hover:!bg-gray-50 dark:hover:!bg-gray-900 transition-all duration-300" type="button">
+            <Button className="!rounded-full !bg-white dark:!bg-black !px-8 !py-4 !text-sm !font-bold !text-[var(--color-brand-500)] dark:!text-white ring-1 ring-gray-200 dark:ring-white/20 hover:!bg-gray-50 dark:hover:!bg-gray-900 transition-all duration-300" type="button">
               Sign in
             </Button>
           </Link>

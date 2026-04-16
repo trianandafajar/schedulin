@@ -308,10 +308,10 @@ const AppSidebar: React.FC = () => {
       >
         <Link href="/" className="flex items-center gap-2">
           <Image
-            src="/images/menu.jpg"
+            src="/images/logo.svg"
             alt="Maketime Logo"
-            width={32}
-            height={32}
+            width={42}
+            height={42}
             className="rounded-md object-cover flex-shrink-0"
           />
           {(isExpanded || isHovered || isMobileOpen) && (

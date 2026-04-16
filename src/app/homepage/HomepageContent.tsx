@@ -121,7 +121,7 @@ const SectionEyebrow = styled.p`
   font-weight: 600;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: var(--mk-accent);
+  color: var(--color-brand-600);
   margin: 0;
 `;
 

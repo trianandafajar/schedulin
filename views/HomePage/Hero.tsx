@@ -83,7 +83,7 @@ const TextColumn = styled.div`
 
 const Eyebrow = styled.p`
   margin: 0;
-  color: var(--mk-accent);
+  color: var(--color-brand-600);
   letter-spacing: 0.14em;
   font-size: 0.85rem;
   text-transform: uppercase;

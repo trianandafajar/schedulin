@@ -73,7 +73,7 @@ const HeadingWrap = styled.div`
 
 const Eyebrow = styled.p`
   margin: 0;
-  color: var(--mk-accent);
+  color: var(--color-brand-600);
   font-size: 0.9rem;
   letter-spacing: 0.14em;
   text-transform: uppercase;

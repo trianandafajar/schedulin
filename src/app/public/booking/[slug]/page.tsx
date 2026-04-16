@@ -306,9 +306,9 @@ export default function PublicBookingPage({ params }: PageProps) {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-blue-50 p-6 font-sans flex items-center justify-center">
+      <div className="min-h-screen bg-[var(--color-brand-50)] p-6 font-sans flex items-center justify-center">
         <div className="text-center">
-          <Loader2 className="animate-spin w-12 h-12 text-blue-800 mx-auto mb-4" />
+          <Loader2 className="animate-spin w-12 h-12 text-[var(--color-brand-600)] mx-auto mb-4" />
           <p className="text-gray-600 font-medium">Loading Workspace...</p>
         </div>
       </div>
@@ -317,7 +317,7 @@ export default function PublicBookingPage({ params }: PageProps) {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-blue-50 p-6 font-sans flex items-center justify-center">
+      <div className="min-h-screen bg-[var(--color-brand-50)] p-6 font-sans flex items-center justify-center">
         <div className="text-center bg-white rounded-3xl shadow-xl border border-gray-100 p-10 max-w-md">
           <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-red-50 text-red-500">
             <MapPin className="w-8 h-8 mx-auto" />
@@ -331,17 +331,17 @@ export default function PublicBookingPage({ params }: PageProps) {
 
   if (bookingSuccess) {
     return (
-      <div className="min-h-screen bg-blue-50 p-6 font-sans flex items-center justify-center">
+      <div className="min-h-screen bg-[var(--color-brand-50)] p-6 font-sans flex items-center justify-center">
         <div className="text-center bg-white rounded-3xl shadow-xl border border-gray-100 p-10 max-w-md">
-          <div className="w-16 h-16 bg-blue-50 text-blue-800 rounded-full flex items-center justify-center mx-auto mb-4">
+          <div className="w-16 h-16 bg-[var(--color-brand-50)] text-[var(--color-brand-600)] rounded-full flex items-center justify-center mx-auto mb-4">
             <Check className="w-8 h-8" />
           </div>
           <h2 className="text-2xl font-bold text-gray-800 mb-2">Booking Confirmed!</h2>
           <p className="text-gray-600 mb-5">
             Your appointment has been successfully booked.
           </p>
-          <div className="bg-blue-50 border border-blue-100 rounded-2xl p-5 text-left mb-6 space-y-2">
-            <p className="text-sm font-semibold text-blue-800">{selectedService?.name}</p>
+          <div className="bg-[var(--color-brand-50)] border border-[var(--color-brand-100)] rounded-2xl p-5 text-left mb-6 space-y-2">
+            <p className="text-sm font-semibold text-[var(--color-brand-600)]">{selectedService?.name}</p>
             <p className="text-xs text-gray-600">
               {selectedDate?.toDateString()}
             </p>
@@ -358,15 +358,15 @@ export default function PublicBookingPage({ params }: PageProps) {
   }
 
   return (
-    <div className="min-h-screen bg-blue-50 p-6 font-sans pt-12">
+    <div className="min-h-screen bg-[var(--color-brand-50)] p-6 font-sans pt-12">
       <div className="max-w-6xl mx-auto space-y-10">
 
         <div className="flex flex-col lg:flex-row gap-10">
 
           <div className="w-full lg:w-96 order-1 lg:order-1">
-            <div className="bg-blue-50 rounded-2xl shadow-xl p-6 border flex flex-col gap-6 sticky top-6">
+            <div className="bg-[var(--color-brand-50)] rounded-2xl shadow-xl p-6 border flex flex-col gap-6 sticky top-6">
 
-              <h3 className="font-bold text-xl text-blue-800">
+              <h3 className="font-bold text-xl text-[var(--color-brand-600)]">
                   {businessName} - Booking Details
               </h3>
 
@@ -404,11 +404,11 @@ export default function PublicBookingPage({ params }: PageProps) {
                 )}
               </div>
 
-              <div className="h-px bg-blue-100" />
+              <div className="h-px bg-[var(--color-brand-100)]" />
 
               <div className="flex justify-between font-extrabold text-lg">
                 <span className="text-gray-800">Subtotal</span>
-                <span className="text-blue-800">
+                <span className="text-[var(--color-brand-600)]">
                   {selectedService ? `Rp ${selectedService.price.toLocaleString()}` : "Rp 0"}
                 </span>
               </div>
@@ -428,8 +428,8 @@ export default function PublicBookingPage({ params }: PageProps) {
             {selectedService && (
                <div className="p-5 bg-white border border-gray-100 rounded-2xl flex items-center justify-between shadow-lg">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
-                    <Check className="w-5 h-5 text-blue-800" />
+                  <div className="w-10 h-10 bg-[var(--color-brand-100)] rounded-full flex items-center justify-center">
+                    <Check className="w-5 h-5 text-[var(--color-brand-600)]" />
                   </div>
                   <div>
                     <div className="font-semibold text-gray-800">{selectedService.name}</div>
@@ -440,7 +440,7 @@ export default function PublicBookingPage({ params }: PageProps) {
                 </div>
                 <button
                     onClick={resetService}
-                    className="text-sm text-blue-800 font-medium hover:underline"
+                    className="text-sm text-[var(--color-brand-600)] font-medium hover:underline"
                 >
                     Change Service
                 </button>
@@ -450,7 +450,7 @@ export default function PublicBookingPage({ params }: PageProps) {
             {!selectedService ? (
                <div className="bg-white rounded-3xl shadow-lg border border-gray-100 p-8 space-y-6">
                 <div className="flex items-center gap-2">
-                  <Scissors className="w-5 h-5 text-blue-800" />
+                  <Scissors className="w-5 h-5 text-[var(--color-brand-600)]" />
                   <span className="font-bold text-2xl text-gray-800">1. Select Service</span>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -458,13 +458,13 @@ export default function PublicBookingPage({ params }: PageProps) {
                     <button
                       key={service.id}
                       onClick={() => handleServiceSelect(service)}
-                      className="p-5 border-2 border-gray-100 rounded-2xl text-left hover:border-blue-500 hover:bg-blue-50 transition-all space-y-2 group"
+                      className="p-5 border-2 border-gray-100 rounded-2xl text-left hover:border-[var(--color-brand-50)]0 hover:bg-[var(--color-brand-50)] transition-all space-y-2 group"
                     >
                       <div className="font-semibold text-lg text-gray-800 group-hover:text-blue-900">{service.name}</div>
                       <div className="text-sm text-gray-500">
                         Duration: {service.duration_minutes} minutes
                       </div>
-                      <div className="text-blue-800 font-bold text-lg pt-1">
+                      <div className="text-[var(--color-brand-600)] font-bold text-lg pt-1">
                         Rp {service.price.toLocaleString()}
                       </div>
                     </button>
@@ -481,7 +481,7 @@ export default function PublicBookingPage({ params }: PageProps) {
                     <div className="bg-white rounded-3xl shadow-lg border border-gray-100 p-8 space-y-6">
                         <div className="flex items-center justify-between gap-2">
                             <div className="flex items-center gap-2">
-                                <Calendar className="w-5 h-5 text-blue-800" />
+                                <Calendar className="w-5 h-5 text-[var(--color-brand-600)]" />
                                 <span className="font-semibold text-lg">
                                     {currentMonth !== undefined
                                         ? new Date(currentYear, currentMonth).toLocaleString("default", { month: "long", year: "numeric" })
@@ -536,8 +536,8 @@ export default function PublicBookingPage({ params }: PageProps) {
                                         className={`size-10 rounded-xl text-center transition font-semibold text-sm
                                           ${isDisabled ? "text-gray-300 cursor-not-allowed bg-gray-50" : "text-gray-800"}
                                           ${isSelected && !isDisabled
-                                              ? "bg-blue-800 text-white"
-                                              : !isDisabled && "hover:bg-blue-100"
+                                              ? "bg-[var(--color-brand-600)] text-white"
+                                              : !isDisabled && "hover:bg-[var(--color-brand-100)]"
                                           }
                                         `}
                                     >
@@ -551,7 +551,7 @@ export default function PublicBookingPage({ params }: PageProps) {
                     {selectedService && selectedDate && !isDateDisabled(selectedDate) && (
                         <div className="bg-white rounded-3xl shadow-lg border border-gray-100 p-8 space-y-6">
                             <div className="flex items-center gap-2">
-                                <Clock className="w-5 h-5 text-blue-800" />
+                                <Clock className="w-5 h-5 text-[var(--color-brand-600)]" />
                                 <span className="font-semibold text-lg">
                                     Time slots for {selectedDate.getDate()} {new Date(currentYear, currentMonth).toLocaleString("default", { month: "short" })}
                                 </span>
@@ -579,8 +579,8 @@ export default function PublicBookingPage({ params }: PageProps) {
                                                 disabled={disabled}
                                                 onClick={() => handleTimeSelect(time)}
                                                 className={`p-3 border font-semibold rounded-xl text-xs transition
-                                                    ${selectedTime === time ? "bg-blue-800 text-white border-blue-800" : "text-gray-800"}
-                                                    ${disabled ? "bg-gray-200 text-gray-300 cursor-not-allowed line-through" : "border-gray-100 hover:bg-blue-100 hover:border-blue-100"}
+                                                    ${selectedTime === time ? "bg-[var(--color-brand-600)] text-white border-[var(--color-brand-600)]" : "text-gray-800"}
+                                                    ${disabled ? "bg-gray-200 text-gray-300 cursor-not-allowed line-through" : "border-gray-100 hover:bg-[var(--color-brand-100)] hover:border-[var(--color-brand-100)]"}
                                                   `}
                                             >
                                                 {time}
@@ -625,7 +625,7 @@ export default function PublicBookingPage({ params }: PageProps) {
                   value={customerName}
                   onChange={(e) => setCustomerName(e.target.value)}
                   required
-                  className="dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 pl-10 text-sm text-gray-800 placeholder:text-gray-400 focus:border-blue-800 focus:ring-blue-800/10"
+                  className="dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 pl-10 text-sm text-gray-800 placeholder:text-gray-400 focus:border-[var(--color-brand-600)] focus:ring-[var(--color-brand-600)]/10"
                   placeholder="John Doe"
                 />
               </div>
@@ -640,7 +640,7 @@ export default function PublicBookingPage({ params }: PageProps) {
                   value={customerPhone}
                   onChange={(e) => setCustomerPhone(e.target.value)}
                   required
-                  className="dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 pl-10 text-sm text-gray-800 placeholder:text-gray-400 focus:border-blue-800 focus:ring-blue-800/10"
+                  className="dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 pl-10 text-sm text-gray-800 placeholder:text-gray-400 focus:border-[var(--color-brand-600)] focus:ring-[var(--color-brand-600)]/10"
                   placeholder="08123..."
                 />
               </div>
@@ -652,7 +652,7 @@ export default function PublicBookingPage({ params }: PageProps) {
                 value={customerNotes}
                 onChange={(e) => setCustomerNotes(e.target.value)}
                 rows={3}
-                className="dark:bg-dark-900 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:border-blue-800 focus:ring-blue-800/10"
+                className="dark:bg-dark-900 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:border-[var(--color-brand-600)] focus:ring-[var(--color-brand-600)]/10"
                 placeholder="Special requests or notes..."
               />
             </div>

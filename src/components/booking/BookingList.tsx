@@ -53,7 +53,7 @@ const BookingList: React.FC<BookingListProps> = ({ bookings }) => {
       },
       confirmed: { 
         bg: "bg-blue-50 border-blue-200 dark:bg-blue-500/10 dark:border-blue-500/20", 
-        text: "text-blue-700 dark:text-blue-400",
+        text: "text-[var(--color-brand-00)] dark:text-blue-400",
         dot: "bg-blue-500",
         label: "Confirmed" 
       },

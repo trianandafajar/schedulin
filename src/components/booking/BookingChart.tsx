@@ -100,7 +100,7 @@ const BookingChart: React.FC<BookingChartProps> = ({ bookings }) => {
 
               <div className="relative h-48 w-full max-w-[3rem] rounded-t-lg bg-gray-100 dark:bg-gray-800">
                 <div
-                  className="absolute bottom-0 w-full rounded-t-lg bg-blue-800 transition-all duration-500 group-hover/bar:bg-blue-400 group-hover/bar:opacity-100 dark:bg-blue-800"
+                  className="absolute bottom-0 w-full rounded-t-lg bg-[var(--color-brand-500)] transition-all duration-500 group-hover/bar:bg-[var(--color-brand-400)] group-hover/bar:opacity-100 dark:bg-[var(--color-brand-500)]"
                   style={{ height: `${heightPercentage}%` }}
                 />
               </div>
@@ -124,7 +124,7 @@ const BookingChart: React.FC<BookingChartProps> = ({ bookings }) => {
         </div>
         <div className="flex flex-col items-center">
           <p className="text-xs font-medium text-gray-500 dark:text-gray-400">Peak Period</p>
-          <p className="mt-1 text-2xl font-bold text-blue-800">{peakDay || "-"}</p>
+          <p className="mt-1 text-2xl font-bold text-[var(--color-brand-500)]">{peakDay || "-"}</p>
         </div>
       </div>
     </ComponentCard>

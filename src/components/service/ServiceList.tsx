@@ -210,7 +210,7 @@ const ServiceList: React.FC<ServiceListProps> = ({ services }) => {
                     </span>
                   </TableCell>
                   <TableCell className="px-6 py-4 text-center">
-                    <span className=" rounded-md bg-blue-800 px-2.5 py-1 text-xs font-medium text-white dark:bg-gray-800 dark:text-white">
+                    <span className=" rounded-md bg-[var(--color-brand-500)] px-2.5 py-1 text-xs font-medium text-white  dark:text-white">
                       {formatDuration(service.duration_minutes)}
                     </span>
                   </TableCell>

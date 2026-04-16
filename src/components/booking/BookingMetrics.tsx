@@ -37,7 +37,7 @@ const MetricCard: React.FC<MetricCardProps> = ({ title, value, icon, trend }) =>
   const trendDisplay = trend !== undefined ? `${Math.abs(trend).toFixed(1)}%` : "0%";
   
   return (
-    <div className="group relative overflow-hidden rounded-2xl border border-gray-200 bg-white p-6 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg dark:border-gray-800 dark:bg-[#111111] dark:hover:shadow-blue-500/10">
+    <div className="group relative overflow-hidden rounded-2xl border border-gray-200 bg-white p-6 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg dark:border-gray-800 dark:bg-[#111111] dark:hover:shadow-[var(--color-brand-500)]/10">
       <div className="flex items-start justify-between">
         <div>
           <p className="text-sm font-medium text-gray-500 dark:text-gray-400">{title}</p>
@@ -67,7 +67,7 @@ const MetricCard: React.FC<MetricCardProps> = ({ title, value, icon, trend }) =>
             </div>
           )}
         </div>
-        <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-blue-50 text-blue-800 transition-colors duration-300 group-hover:bg-blue-500 group-hover:text-white dark:bg-blue-500/10 dark:text-blue-400 dark:group-hover:bg-blue-500 dark:group-hover:text-white">
+        <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-[var(--color-brand-50)] text-[var(--color-brand-600)] transition-colors duration-300 group-hover:bg-[var(--color-brand-500)] group-hover:text-white dark:bg-[var(--color-brand-500)]/10 dark:text-[var(--color-brand-400)] dark:group-hover:bg-[var(--color-brand-500)] dark:group-hover:text-white">
           {icon}
         </div>
       </div>
