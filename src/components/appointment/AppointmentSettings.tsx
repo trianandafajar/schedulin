@@ -54,22 +54,30 @@ const AppointmentSettings: React.FC<AppointmentSettingsProps> = ({
   const [newHoliday, setNewHoliday] = useState({ date: "", name: "" });
 
   useEffect(() => {
-    const origin = window.location.origin;
+    const origin = typeof window !== 'undefined' ? window.location.origin : '';
     setBookingLink(`${origin}/public/booking/${business.slug}`);
   }, [business.slug]);
 
   const handleTogglePublic = async () => {
+    if (isToggling) return;
+    
     const newState = !isPublic;
     setIsPublic(newState);
     setIsToggling(true);
 
-    const result = await togglePublicBooking(business.id, newState);
+    try {
+      const result = await togglePublicBooking(business.id, newState);
 
-    if (result.error) {
+      if (result?.error) {
+        setIsPublic(!newState);
+        alert("Gagal mengubah setting: " + result.error);
+      }
+    } catch (error) {
       setIsPublic(!newState);
-      alert("Gagal mengubah setting: " + result.error);
+      alert("Terjadi kesalahan sistem saat mengubah visibilitas.");
+    } finally {
+      setIsToggling(false);
     }
-    setIsToggling(false);
   };
 
   const handleCopyLink = () => {
@@ -105,8 +113,11 @@ const AppointmentSettings: React.FC<AppointmentSettingsProps> = ({
 
   const handleSaveSettings = async () => {
     setIsSaving(true);
-    await onSave();
-    setIsSaving(false);
+    try {
+      await onSave();
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   return (
