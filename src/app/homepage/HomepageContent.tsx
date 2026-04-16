@@ -87,6 +87,11 @@ const LandingRoot = styled.div`
     linear-gradient(180deg, #f9faff 0%, var(--mk-bg) 45%, #f4f7ff 100%);
   color: var(--mk-text);
 
+    .dark & {
+    background: #000000 !important;
+    border-color: rgba(255, 255, 255, 0.1) !important;
+  }
+
   @keyframes mkFadeUp {
     from {
       opacity: 0;
@@ -103,6 +108,7 @@ const MainArea = styled.main`
   margin: 0 auto;
   max-width: 1280px;
   padding: 1.1rem 0 4.5rem;
+  
 `;
 
 const ValueSection = styled(Container)`
@@ -126,6 +132,10 @@ const SectionTitle = styled.h2`
   line-height: 1.15;
   letter-spacing: -0.02em;
   color: var(--mk-text);
+
+  .dark & {
+    color: var(--color-white)  !important;
+  }
 `;
 
 const ValueGrid = styled.div`
@@ -151,6 +161,12 @@ const ValueCard = styled.article`
   padding: 1.1rem 1rem 1.2rem;
   animation: mkFadeUp 0.58s ease-out both;
 
+  .dark & {
+    background: var(--color-black) !important;
+    color: var(--color-white);
+    border-color: rgba(255, 255, 255, 0.1) !important;
+  }
+
   &:nth-child(2) {
     animation-delay: 0.05s;
   }
@@ -158,6 +174,8 @@ const ValueCard = styled.article`
   &:nth-child(3) {
     animation-delay: 0.1s;
   }
+
+
 `;
 
 const ValueTitle = styled.h3`

@@ -162,30 +162,35 @@ export default function SignInForm() {
                         Keep me logged in
                       </span>
                     </div>
-                    <Link
+                    {/* <Link
                       href="/reset-password"
-                      className="text-sm text-brand-500 hover:text-brand-600 dark:text-brand-400"
+                      className="text-sm font-semibold text-[#2F72FB] hover:text-[#2F72FB]/80 dark:text-[#2F72FB]/90 transition-colors"
                     >
                       Forgot password?
-                    </Link>
+                    </Link> */}
                   </div>
                   <div>
                     <div id="clerk-captcha"></div>
-                    <Button className="w-full" size="sm" type="submit" disabled={isLoading}>
-                      {isLoading ? "Signing in..." : "Sign in"}
+                    <Button 
+                      className="w-full !rounded-lg !bg-brand-500 hover:!bg-brand-600 transition-all duration-200" 
+                      size="sm" 
+                      type="submit" 
+                      disabled={isLoading}
+                    >
+                      {isLoading ? "Signing in..." : "Sign in "}
                     </Button>
                   </div>
                 </div>
               </form>
 
-              <div className="mt-5">
-                <p className="text-sm font-normal text-center text-gray-700 dark:text-gray-400 sm:text-start">
+              <div className="mt-8 pt-6 border-t border-gray-100 dark:border-white/5">
+                <p className="text-sm font-medium text-center text-gray-600 dark:text-gray-400">
                   Don&apos;t have an account? {""}
                   <Link
                     href="/signup"
-                    className="text-brand-500 hover:text-brand-600 dark:text-brand-400"
+                    className="text-brand-600 hover:text-brand-500 dark:text-brand-400 transition-colors font-bold"
                   >
-                    Sign Up
+                    Create Account
                   </Link>
                 </p>
               </div>

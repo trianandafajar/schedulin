@@ -309,14 +309,14 @@ const AppSidebar: React.FC = () => {
         <Link href="/" className="flex items-center gap-2">
           <Image
             src="/images/menu.jpg"
-            alt="Schedullin Logo"
+            alt="Maketime Logo"
             width={32}
             height={32}
             className="rounded-md object-cover flex-shrink-0"
           />
           {(isExpanded || isHovered || isMobileOpen) && (
             <span className="text-base font-bold text-gray-900 dark:text-white tracking-tight">
-              Schedullin
+              Maketime
             </span>
           )}
         </Link>

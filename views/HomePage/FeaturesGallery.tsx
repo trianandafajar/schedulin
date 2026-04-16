@@ -57,12 +57,12 @@ export default function FeaturesGallery() {
           })}
         </Tabs>
         <VisualPane>
-          <NextImage 
-            src={currentTab.imageUrl} 
-            alt={currentTab.title} 
-            fill 
-            style={{ objectFit: 'contain', padding: '2rem' }} 
-            priority 
+          <NextImage
+            src={currentTab.imageUrl}
+            alt={currentTab.title}
+            fill
+            style={{ objectFit: 'contain', padding: '2rem' }}
+            priority
           />
         </VisualPane>
       </Body>
@@ -139,11 +139,11 @@ const TabButton = styled.button<{ $active: boolean }>`
   box-shadow: ${(p) => (p.$active ? '0 8px 20px rgba(255, 122, 49, 0.08)' : '0 1px 3px rgba(0,0,0,0.02)')};
 
   .dark & {
-    background: ${(p) => (p.$active ? '#0a0a0a' : '#000000')};
-    border-color: ${(p) => (p.$active ? 'var(--color-brand-500)' : 'rgba(255, 255, 255, 0.1)')};
+    background: ${(p) => (p.$active ? 'var(--color-black) !important' : '#0a0a0a !important')};
+    border-color: ${(p) => (p.$active ? 'var(--color-brand-500) !important' : 'rgba(255, 255, 255, 0.1) !important')};
     
     &:hover {
-      border-color: var(--color-brand-400);
+      border-color: var(--color-brand-400) !important;
     }
   }
 
@@ -179,7 +179,7 @@ const VisualPane = styled.div`
   position: relative;
   overflow: hidden;
   min-height: 28rem;
-  border-radius: 1.5rem;
+  border-radius: 1.25rem;
   border: 1px solid var(--color-gray-200);
   background: var(--mk-surface, #ffffff);
   display: flex;
@@ -188,6 +188,7 @@ const VisualPane = styled.div`
   
   .dark & {
     border-color: rgba(255, 255, 255, 0.1);
+    background: var(--color-black) !important;
   }
 
   ${media('<=desktop')} {

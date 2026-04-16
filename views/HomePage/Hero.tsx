@@ -54,6 +54,7 @@ const HeroWrapper = styled(Container)`
   padding-top: 1.4rem;
   animation: mkHeroFade 0.58s ease-out both;
 
+  
   @keyframes mkHeroFade {
     from {
       opacity: 0;
@@ -157,7 +158,7 @@ const VisualColumn = styled.div`
 
 const VisualFrame = styled.div`
   width: min(100%, 48rem);
-  border-radius: 1.5rem;
+  border-radius: 1.25rem;
   border: 1px solid var(--color-gray-200);
   background: var(--mk-surface, #ffffff);
   padding: 0.5rem;
@@ -165,7 +166,8 @@ const VisualFrame = styled.div`
   position: relative;
   
   .dark & {
-    border-color: rgba(255, 255, 255, 0.1);
+    background: var(--color-black) !important;
+    border-color: rgba(255, 255, 255, 0.1) !important;
   }
   
   svg {

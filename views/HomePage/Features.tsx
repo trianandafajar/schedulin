@@ -37,12 +37,13 @@ const FEATURES = [
   },
 ];
 
+
 export default function Features() {
   return (
     <FeatureSection id="features">
       <HeadingWrap>
-        <Eyebrow>Feature set</Eyebrow>
-        <Title>The essentials for modern appointment operations.</Title>
+        <Eyebrow>Editorial workflow for service teams</Eyebrow>
+        <Title>Built to make your calendar feel calm and controllable.</Title>
       </HeadingWrap>
       <Grid>
         {FEATURES.map((feature, index) => (
@@ -72,7 +73,7 @@ const HeadingWrap = styled.div`
 
 const Eyebrow = styled.p`
   margin: 0;
-  color: var(--color-brand-600);
+  color: var(--mk-accent);
   font-size: 0.9rem;
   letter-spacing: 0.14em;
   text-transform: uppercase;
@@ -107,7 +108,7 @@ const Grid = styled.div`
 `;
 
 const Card = styled.article`
-  border-radius: 1.5rem;
+  border-radius: 1rem;
   border: 1px solid var(--color-gray-200);
   background: var(--mk-surface, #ffffff);
   padding: 2.2rem 2rem;
@@ -121,13 +122,13 @@ const Card = styled.article`
   }
 
   .dark & {
-    background: #000000;
-    border-color: rgba(255, 255, 255, 0.1);
+    background: var(--color-black) !important;
+    border-color: rgba(255, 255, 255, 0.1) !important;
     
     &:hover {
-      background: #0a0a0a;
-      border-color: var(--color-brand-500);
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+      background: #0a0a0a !important;
+      border-color: var(--color-brand-500) !important;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4) !important;
     }
   }
 

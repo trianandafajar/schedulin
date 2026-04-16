@@ -247,7 +247,7 @@ export default function SignUpForm({ categories }: SignUpFormProps) {
                   </div>
                 </div>
 
-                <button type="submit" className="flex items-center justify-center w-full px-4 py-3 text-sm font-medium text-white transition rounded-lg bg-brand-500 hover:bg-brand-600">
+                <button type="submit" className="flex items-center justify-center w-full px-4 py-3 text-sm font-bold text-white transition-all rounded-lg bg-brand-500 hover:bg-brand-600">
                   Create Business
                 </button>
               </div>
@@ -342,13 +342,26 @@ export default function SignUpForm({ categories }: SignUpFormProps) {
                   <p className="text-sm text-gray-500 dark:text-[#e2e2e2]">I agree to Terms & Conditions</p>
                 </div>
                 <div id="clerk-captcha"></div>
-                <Button className="w-full" size="sm" type="submit" disabled={isLoading} >
-                  {isLoading ? "Signing up..." : "Sign Up"}
+                <Button 
+                  className="w-full !rounded-lg !bg-brand-500 hover:!bg-brand-600 transition-all duration-200" 
+                  size="sm" 
+                  type="submit" 
+                  disabled={isLoading}
+                >
+                  {isLoading ? "Signing up..." : "Create Account"}
                 </Button>
               </div>
             </form>
-            <div className="mt-5 text-center">
-              <p className="text-sm text-[#e2e2e2]">Already have an account? <Link href="/signin" className="text-brand-500">Sign In</Link></p>
+            <div className="mt-8 pt-6 border-t border-gray-100 dark:border-white/5">
+              <p className="text-sm font-medium text-center text-gray-600 dark:text-gray-400">
+                Already have an account? {""}
+                <Link
+                  href="/signin"
+                  className="text-[#2F72FB] hover:text-brand-500 dark:text-brand-400 transition-colors font-bold"
+                >
+                  Sign In
+                </Link>
+              </p>
             </div>
           </div>
         )}

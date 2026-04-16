@@ -26,14 +26,14 @@ export default function RootLayout({
           <StyledComponentsRegistry>
 
             <NewsletterModalContextProvider>
-            <ThemeProvider>
-              <SidebarProvider>
-                {children}
-              </SidebarProvider>
-            </ThemeProvider>
+              <ThemeProvider>
+                <SidebarProvider>
+                  {children}
+                </SidebarProvider>
+              </ThemeProvider>
             </NewsletterModalContextProvider>
           </StyledComponentsRegistry>
-            
+
         </body>
       </html>
     </ClerkProvider>

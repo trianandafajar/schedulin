@@ -41,6 +41,11 @@ const CtaSection = styled(Container)`
   margin-bottom: 4.5rem;
   animation: mkFadeCta 0.65s cubic-bezier(0.165, 0.84, 0.44, 1) both;
 
+  .dark & {
+    background: #000000 !important;
+    
+  }
+
   @keyframes mkFadeCta {
     from {
       opacity: 0;
@@ -51,10 +56,11 @@ const CtaSection = styled(Container)`
       transform: translateY(0);
     }
   }
+    
 `;
 
 const CtaPanel = styled.section`
-  border-radius: 2rem;
+  border-radius: 1.5rem;
   border: 1px solid var(--color-gray-200);
   background: var(--mk-surface, #ffffff);
   position: relative;
@@ -63,7 +69,9 @@ const CtaPanel = styled.section`
   text-align: center;
   
   .dark & {
-    border-color: rgba(255, 255, 255, 0.1);
+    background: var(--color-black) !important;
+    border-color: rgba(255, 255, 255, 0.1) !important;
+    
   }
 
   ${media('<=phone')} {
