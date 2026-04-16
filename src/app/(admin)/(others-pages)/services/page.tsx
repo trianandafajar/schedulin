@@ -14,7 +14,6 @@ const ServicesPage: React.FC = async () => {
 
   const formattedServices = servicesData || [];
 
-
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-[#0C0C0C]">
       <div className="mx-auto max-w-7xl">
@@ -33,3 +32,4 @@ const ServicesPage: React.FC = async () => {
 };
 
 export default ServicesPage;
+

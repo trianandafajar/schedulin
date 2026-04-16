@@ -3,9 +3,8 @@
 import React, { useState } from "react";
 import ComponentCard from "@/components/common/ComponentCard";
 import { Table, TableHeader, TableBody, TableRow, TableCell } from "@/components/ui/table";
-import { createService, updateService, deleteService, toggleServiceStatus, ServiceStatus } from "@/actions/service";
+import { createService, updateService, deleteService, toggleServiceStatus } from "@/actions/service";
 import { Modal } from "@/components/ui/modal";
-import Button from "@/components/ui/button/Button";
 import { Check, X, Loader2, Pencil, Trash2, Plus } from "lucide-react";
 
 interface Service {
@@ -28,7 +27,6 @@ const ServiceList: React.FC<ServiceListProps> = ({ services }) => {
   const [loading, setLoading] = useState(false);
   const [deletingId, setDeletingId] = useState<string | null>(null);
 
-  // Form state
   const [formName, setFormName] = useState("");
   const [formDuration, setFormDuration] = useState("");
   const [formPrice, setFormPrice] = useState("");
@@ -89,10 +87,9 @@ const ServiceList: React.FC<ServiceListProps> = ({ services }) => {
         }
       }
 
-      // Reload the page to fetch updated data
       window.location.reload();
     } catch (error) {
-      console.error("Error saving service:", error);
+      console.error(error);
       alert("Failed to save service");
     } finally {
       setLoading(false);
@@ -109,7 +106,7 @@ const ServiceList: React.FC<ServiceListProps> = ({ services }) => {
         window.location.reload();
       }
     } catch (error) {
-      console.error("Error toggling status:", error);
+      console.error(error);
       alert("Failed to update status");
     } finally {
       setLoading(false);
@@ -128,7 +125,7 @@ const ServiceList: React.FC<ServiceListProps> = ({ services }) => {
         window.location.reload();
       }
     } catch (error) {
-      console.error("Error deleting service:", error);
+      console.error(error);
       alert("Failed to delete service");
     } finally {
       setDeletingId(null);
@@ -153,149 +150,159 @@ const ServiceList: React.FC<ServiceListProps> = ({ services }) => {
   };
 
   return (
-    <ComponentCard title="Services Management">
-      <div className="flex justify-between items-center mb-6">
-        <div className="flex gap-2">
-          <button
-            onClick={() => setFilter("all")}
-            className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${filter === "all"
-                ? "bg-brand-500 text-white"
-                : "bg-gray-100 text-gray-600 dark:bg-[#212121] dark:text-gray-400"
+    <ComponentCard title="Services Inventory">
+      <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <div className="inline-flex w-fit items-center rounded-xl bg-gray-100/80 p-1.5 dark:bg-[#151515]">
+          {(["all", "active", "inactive"] as const).map((f) => (
+            <button
+              key={f}
+              onClick={() => setFilter(f)}
+              className={`relative rounded-lg px-5 py-2 text-sm font-semibold capitalize tracking-wide transition-all duration-300 ${
+                filter === f
+                  ? "bg-white text-gray-900 shadow-sm dark:bg-[#222] dark:text-white"
+                  : "text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
               }`}
-          >
-            All
-          </button>
-          <button
-            onClick={() => setFilter("active")}
-            className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${filter === "active"
-                ? "bg-brand-500 text-white"
-                : "bg-gray-100 text-gray-600 dark:bg-[#212121] dark:text-gray-400"
-              }`}
-          >
-            Active
-          </button>
-          <button
-            onClick={() => setFilter("inactive")}
-            className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${filter === "inactive"
-                ? "bg-brand-500 text-white"
-                : "bg-gray-100 text-gray-600 dark:bg-[#212121] dark:text-gray-400"
-              }`}
-          >
-            Inactive
-          </button>
+            >
+              {f}
+            </button>
+          ))}
         </div>
-        <Button onClick={openAddModal}>
-          <Plus className="w-4 h-4 mr-2" />
+        <button
+          onClick={openAddModal}
+          className="inline-flex h-10 items-center justify-center rounded-xl bg-brand-500 px-5 text-sm font-medium text-white shadow-sm transition-all hover:bg-brand-600 hover:shadow-brand-500/20 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 dark:focus:ring-offset-[#111111]"
+        >
+          <Plus className="mr-2 h-4 w-4" />
           Add Service
-        </Button>
+        </button>
       </div>
 
-      <div className="overflow-x-auto">
-        <Table>
-          <TableHeader className="border-b border-gray-200 dark:border-[#313131]">
-            <TableRow>
-              <TableCell isHeader className="py-3 font-semibold text-left text-gray-600 dark:text-[#e2e2e2]">
-                Service Name
-              </TableCell>
-              <TableCell isHeader className="py-3 font-semibold text-left text-gray-600 dark:text-[#e2e2e2]">
-                Duration
-              </TableCell>
-              <TableCell isHeader className="py-3 font-semibold text-left text-gray-600 dark:text-[#e2e2e2]">
-                Price
-              </TableCell>
-              <TableCell isHeader className="py-3 font-semibold text-left text-gray-600 dark:text-[#e2e2e2]">
-                Status
-              </TableCell>
-              <TableCell isHeader className="py-3 font-semibold text-left text-gray-600 dark:text-[#e2e2e2]">
-                Actions
-              </TableCell>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {filteredServices.map((service) => (
-              <TableRow
-                key={service.id}
-                className="border-b border-gray-100 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors"
-              >
-                <TableCell className="py-4 text-gray-900 dark:text-white font-medium">
-                  {service.name}
+      <div className="overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm dark:border-gray-800 dark:bg-[#111111]">
+        <div className="overflow-x-auto">
+          <Table className="w-full">
+            <TableHeader className="border-b border-gray-100 bg-gray-50/50 dark:border-gray-800 dark:bg-[#151515]/50">
+              <TableRow>
+                <TableCell isHeader className="px-6 py-4 text-xs font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400">
+                  Service Details
                 </TableCell>
-                <TableCell className="py-4 text-gray-600 dark:text-gray-400">
-                  {formatDuration(service.duration_minutes)}
+                <TableCell isHeader className="px-6 py-4 text-xs font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400">
+                  Duration
                 </TableCell>
-                <TableCell className="py-4 text-gray-600 dark:text-gray-400">
-                  {formatPrice(service.price)}
+                <TableCell isHeader className="px-6 py-4 text-xs font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400">
+                  Price
                 </TableCell>
-                <TableCell className="py-4">
-                  <span className={`inline-flex px-3 py-1 text-xs font-medium rounded-full ${service.is_active
-                      ? "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400"
-                      : "bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-400"
-                    }`}>
-                    {service.is_active ? "Active" : "Inactive"}
-                  </span>
+                <TableCell isHeader className="px-6 py-4 text-xs font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400">
+                  Status
                 </TableCell>
-                <TableCell className="py-4">
-                  <div className="flex gap-2">
-                    <button
-                      onClick={() => openEditModal(service)}
-                      className="p-2 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 rounded-lg hover:bg-blue-200 dark:hover:bg-blue-900/50 transition-colors"
-                      title="Edit Service"
-                    >
-                      <Pencil className="w-4 h-4" />
-                    </button>
-                    <button
-                      onClick={() => handleToggleStatus(service.id, service.is_active)}
-                      disabled={loading}
-                      className={`p-2 rounded-lg transition-colors ${service.is_active
-                          ? "bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-400 hover:bg-yellow-200 dark:hover:bg-yellow-900/50"
-                          : "bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 hover:bg-green-200 dark:hover:bg-green-900/50"
-                        }`}
-                      title={service.is_active ? "Deactivate" : "Activate"}
-                    >
-                      {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : (
-                        service.is_active ? <X className="w-4 h-4" /> : <Check className="w-4 h-4" />
-                      )}
-                    </button>
-                    <button
-                      onClick={() => handleDelete(service.id)}
-                      disabled={deletingId === service.id}
-                      className="p-2 bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400 rounded-lg hover:bg-red-200 dark:hover:bg-red-900/50 transition-colors disabled:opacity-50"
-                      title="Delete Service"
-                    >
-                      {deletingId === service.id ? (
-                        <Loader2 className="w-4 h-4 animate-spin" />
-                      ) : (
-                        <Trash2 className="w-4 h-4" />
-                      )}
-                    </button>
-                  </div>
+                <TableCell isHeader className="px-6 py-4 text-right text-xs font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400">
+                  Actions
                 </TableCell>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
+            </TableHeader>
+            <TableBody className="divide-y divide-gray-50 dark:divide-gray-800/50">
+              {filteredServices.map((service) => (
+                <TableRow
+                  key={service.id}
+                  className="group transition-colors hover:bg-gray-50/50 dark:hover:bg-[#151515]/50"
+                >
+                  <TableCell className="px-6 py-4 text-center">
+                    <span className="font-semibold text-gray-900 dark:text-white">
+                      {service.name}
+                    </span>
+                  </TableCell>
+                  <TableCell className="px-6 py-4 text-center">
+                    <span className=" rounded-md bg-blue-800 px-2.5 py-1 text-xs font-medium text-white dark:bg-gray-800 dark:text-white">
+                      {formatDuration(service.duration_minutes)}
+                    </span>
+                  </TableCell>
+                  <TableCell className="px-6 py-4 text-center">
+                    <span className="font-medium text-gray-700 dark:text-gray-300">
+                      {formatPrice(service.price)}
+                    </span>
+                  </TableCell>
+                  <TableCell className="px-6 py-4 text-center">
+                    <span className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-xs font-semibold ${
+                      service.is_active
+                        ? "border-emerald-200 bg-emerald-50 text-emerald-700 dark:border-emerald-500/20 dark:bg-emerald-500/10 dark:text-emerald-400"
+                        : "border-gray-200 bg-gray-50 text-gray-600 dark:border-gray-700 dark:bg-[#1a1a1a] dark:text-gray-400"
+                    }`}>
+                      <span className={`h-1.5 w-1.5 rounded-full ${service.is_active ? "bg-emerald-500" : "bg-gray-400"}`} />
+                      {service.is_active ? "Active" : "Inactive"}
+                    </span>
+                  </TableCell>
+                  <TableCell className="px-6 py-4">
+                    <div className="flex items-center justify-end gap-1.5">
+                      <button
+                        onClick={() => openEditModal(service)}
+                        className="flex h-8 w-8 items-center justify-center rounded-lg text-gray-500 transition-colors hover:bg-blue-50 hover:text-blue-600 dark:text-gray-400 dark:hover:bg-blue-500/10 dark:hover:text-blue-400"
+                        title="Edit Service"
+                      >
+                        <Pencil className="h-4 w-4" />
+                      </button>
+                      <button
+                        onClick={() => handleToggleStatus(service.id, service.is_active)}
+                        disabled={loading}
+                        className={`flex h-8 w-8 items-center justify-center rounded-lg transition-colors disabled:opacity-50 ${
+                          service.is_active
+                            ? "text-gray-500 hover:bg-amber-50 hover:text-amber-600 dark:text-gray-400 dark:hover:bg-amber-500/10 dark:hover:text-amber-400"
+                            : "text-gray-500 hover:bg-emerald-50 hover:text-emerald-600 dark:text-gray-400 dark:hover:bg-emerald-500/10 dark:hover:text-emerald-400"
+                        }`}
+                        title={service.is_active ? "Deactivate" : "Activate"}
+                      >
+                        {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : (
+                          service.is_active ? <X className="h-4 w-4 stroke-[2.5]" /> : <Check className="h-4 w-4 stroke-[2.5]" />
+                        )}
+                      </button>
+                      <button
+                        onClick={() => handleDelete(service.id)}
+                        disabled={deletingId === service.id}
+                        className="flex h-8 w-8 items-center justify-center rounded-lg text-gray-500 transition-colors hover:bg-rose-50 hover:text-rose-600 disabled:opacity-50 dark:text-gray-400 dark:hover:bg-rose-500/10 dark:hover:text-rose-400"
+                        title="Delete Service"
+                      >
+                        {deletingId === service.id ? (
+                          <Loader2 className="h-4 w-4 animate-spin" />
+                        ) : (
+                          <Trash2 className="h-4 w-4" />
+                        )}
+                      </button>
+                    </div>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </div>
+
+        {filteredServices.length === 0 && (
+          <div className="flex flex-col items-center justify-center py-16 text-center">
+            <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-gray-50 dark:bg-[#151515]">
+              <Plus className="h-8 w-8 text-gray-400" />
+            </div>
+            <h4 className="text-sm font-semibold text-gray-900 dark:text-white">No services found</h4>
+            <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
+              Get started by creating a new service offering.
+            </p>
+          </div>
+        )}
       </div>
 
-      {filteredServices.length === 0 && (
-        <div className="py-8 text-center text-gray-500 dark:text-gray-400">
-          No services found. Add your first service!
-        </div>
-      )}
-
-      {/* Add/Edit Modal */}
       <Modal
         isOpen={isModalOpen}
         onClose={closeModal}
-        className="max-w-[500px] p-6"
+        className="w-full max-w-md overflow-hidden rounded-2xl border border-gray-100 bg-white p-0 shadow-2xl dark:border-gray-800 dark:bg-[#111111]"
       >
-        <div className="flex flex-col">
-          <h5 className="mb-4 font-semibold text-gray-800 dark:text-white text-xl">
-            {editingService ? "Edit Service" : "Add New Service"}
-          </h5>
+        <div className="flex items-center justify-between border-b border-gray-100 bg-gray-50/50 px-6 py-4 dark:border-gray-800 dark:bg-[#151515]/50">
+          <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+            {editingService ? "Edit Service" : "Create Service"}
+          </h3>
+          <button onClick={closeModal} className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200">
+            <X className="h-5 w-5" />
+          </button>
+        </div>
 
-          <form onSubmit={handleSubmit}>
-            <div className="mt-4">
-              <label className="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
+        <div className="p-6">
+          <form onSubmit={handleSubmit} className="space-y-5">
+            <div>
+              <label className="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-300">
                 Service Name
               </label>
               <input
@@ -303,78 +310,93 @@ const ServiceList: React.FC<ServiceListProps> = ({ services }) => {
                 value={formName}
                 onChange={(e) => setFormName(e.target.value)}
                 required
-                className="dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-[#313131] dark:bg-[#111111] dark:text-white/90 dark:placeholder:text-white/30"
-                placeholder="e.g., Haircut, Massage, Manicure"
+                className="h-11 w-full rounded-xl border border-gray-200 bg-gray-50/50 px-4 text-sm text-gray-900 outline-none transition-all focus:border-brand-500 focus:bg-white focus:ring-4 focus:ring-brand-500/10 dark:border-gray-800 dark:bg-[#151515] dark:text-white dark:focus:border-brand-500"
+                placeholder="e.g., Signature Haircut"
               />
             </div>
 
-            <div className="mt-4">
-              <label className="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
-                Duration (minutes)
-              </label>
-              <input
-                type="text"
-                value={formDuration}
-                onChange={(e) => {
-                  const value = e.target.value;
-                  if (/^\d*$/.test(value)) {
-                    setFormDuration(value);
-                  }
-                }}
-                required
-                inputMode="numeric"
-                pattern="[0-9]*"
-                className="dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs dark:border-[#313131] dark:bg-[#111111] dark:text-white/90"
-                placeholder="30"
-              />
-            </div>
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-300">
+                  Duration <span className="text-gray-400">(mins)</span>
+                </label>
+                <input
+                  type="text"
+                  value={formDuration}
+                  onChange={(e) => {
+                    const value = e.target.value;
+                    if (/^\d*$/.test(value)) setFormDuration(value);
+                  }}
+                  required
+                  inputMode="numeric"
+                  className="h-11 w-full rounded-xl border border-gray-200 bg-gray-50/50 px-4 text-sm text-gray-900 outline-none transition-all focus:border-brand-500 focus:bg-white focus:ring-4 focus:ring-brand-500/10 dark:border-gray-800 dark:bg-[#151515] dark:text-white dark:focus:border-brand-500"
+                  placeholder="30"
+                />
+              </div>
 
-            <div className="mt-4">
-              <label className="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
-                Price (IDR)
-              </label>
-              <input
-                type="text"
-                value={formPrice}
-                onChange={(e) => {
-                  const value = e.target.value;
-                  if (/^\d*$/.test(value)) {
-                    setFormPrice(value);
-                  }
-                }}
-                required
-                inputMode="numeric"
-                pattern="[0-9]*"
-                className="dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs dark:border-[#313131] dark:bg-[#111111] dark:text-white/90"
-                placeholder="50000"
-              />
+              <div>
+                <label className="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-300">
+                  Price <span className="text-gray-400">(IDR)</span>
+                </label>
+                <input
+                  type="text"
+                  value={formPrice}
+                  onChange={(e) => {
+                    const value = e.target.value;
+                    if (/^\d*$/.test(value)) setFormPrice(value);
+                  }}
+                  required
+                  inputMode="numeric"
+                  className="h-11 w-full rounded-xl border border-gray-200 bg-gray-50/50 px-4 text-sm text-gray-900 outline-none transition-all focus:border-brand-500 focus:bg-white focus:ring-4 focus:ring-brand-500/10 dark:border-gray-800 dark:bg-[#151515] dark:text-white dark:focus:border-brand-500"
+                  placeholder="150000"
+                />
+              </div>
             </div>
 
             {editingService && (
-              <div className="mt-4 flex items-center">
-                <label className="flex items-center text-sm font-medium text-gray-700 dark:text-gray-400 cursor-pointer">
-                  <input
-                    type="checkbox"
-                    checked={formIsActive}
-                    onChange={() => setFormIsActive(!formIsActive)}
-                    className="mr-3 h-5 w-5 rounded border-gray-300 text-brand-500 focus:ring-brand-500 dark:border-[#313131] dark:bg-[#111111]"
-                  />
-                  Active
+              <div className="pt-2">
+                <label className="flex cursor-pointer items-center justify-between rounded-xl border border-gray-100 bg-white p-4 transition-colors hover:bg-gray-50 dark:border-gray-800 dark:bg-[#111111] dark:hover:bg-[#151515]">
+                  <div>
+                    <span className="block text-sm font-medium text-gray-900 dark:text-white">Active Status</span>
+                    <span className="block text-xs text-gray-500 dark:text-gray-400">Available for booking</span>
+                  </div>
+                  <div className="relative flex items-center">
+                    <input
+                      type="checkbox"
+                      checked={formIsActive}
+                      onChange={() => setFormIsActive(!formIsActive)}
+                      className="peer sr-only"
+                    />
+                    <div className="h-6 w-11 rounded-full bg-gray-200 after:absolute after:left-[2px] after:top-[2px] after:h-5 after:w-5 after:rounded-full after:bg-white after:transition-all after:content-[''] peer-checked:bg-brand-500 peer-checked:after:translate-x-full peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-brand-500 peer-focus:ring-offset-2 dark:border-gray-600 dark:bg-gray-700 dark:peer-focus:ring-offset-[#111111]"></div>
+                  </div>
                 </label>
               </div>
             )}
 
-            <div className="flex items-center gap-3 mt-6 sm:justify-end">
-              <Button type="button" onClick={closeModal} variant="outline">
+            <div className="mt-8 flex items-center justify-end gap-3 border-t border-gray-100 pt-6 dark:border-gray-800">
+              <button
+                type="button"
+                onClick={closeModal}
+                className="h-10 rounded-xl px-5 text-sm font-medium text-gray-600 transition-colors hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-[#222]"
+              >
                 Cancel
-              </Button>
-              <Button
+              </button>
+              <button
                 type="submit"
                 disabled={!formName || !formDuration || !formPrice || loading}
-                className="btn btn-success"
+                className="inline-flex h-10 items-center justify-center rounded-xl bg-brand-500 px-6 text-sm font-medium text-white transition-all hover:bg-brand-600 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:focus:ring-offset-[#111111]"
               >
-                {loading ? "Saving..." : editingService ? "Update Service" : "Add Service"}
-              </Button>
+                {loading ? (
+                  <span className="flex items-center gap-2">
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                    Saving...
+                  </span>
+                ) : editingService ? (
+                  "Save Changes"
+                ) : (
+                  "Create Service"
+                )}
+              </button>
             </div>
           </form>
         </div>

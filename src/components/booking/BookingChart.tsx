@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, useMemo } from "react";
 import ComponentCard from "@/components/common/ComponentCard";
-import { format, parseISO, getDay, startOfWeek, addDays, isSameWeek, isSameMonth } from "date-fns";
+import { parseISO, getDay, startOfWeek, isSameMonth } from "date-fns";
 
 interface Booking {
   id: string;
@@ -20,22 +20,20 @@ const BookingChart: React.FC<BookingChartProps> = ({ bookings }) => {
 
   const data = useMemo(() => {
     if (timeRange === "week") {
-      // Group by day of week (Mon-Sun)
       const days = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
       const counts = new Array(7).fill(0);
       
       bookings.forEach(booking => {
         if (!booking.slot?.date) return;
         const date = parseISO(booking.slot.date);
-        const dayIndex = getDay(date); // 0 = Sunday, 1 = Monday
-        const adjustedIndex = dayIndex === 0 ? 6 : dayIndex - 1; // Convert to Mon-Sun
+        const dayIndex = getDay(date); 
+        const adjustedIndex = dayIndex === 0 ? 6 : dayIndex - 1; 
         counts[adjustedIndex]++;
       });
 
-      return days.map((day, idx) => ({ day, bookings: counts[idx] }));
+      return days.map((day, idx) => ({ label: day, value: counts[idx] }));
     } else {
-      // Group by week of month (Week 1-4)
-      const weeks = ["Week 1", "Week 2", "Week 3", "Week 4"];
+      const weeks = ["W1", "W2", "W3", "W4"];
       const counts = new Array(4).fill(0);
       const now = new Date();
       
@@ -53,75 +51,80 @@ const BookingChart: React.FC<BookingChartProps> = ({ bookings }) => {
         }
       });
 
-      return weeks.map((day, idx) => ({ day, bookings: counts[idx] }));
+      return weeks.map((week, idx) => ({ label: week, value: counts[idx] }));
     }
   }, [bookings, timeRange]);
 
-  const maxBookings = Math.max(...data.map((d) => d.bookings), 1);
+  const maxBookings = Math.max(...data.map((d) => d.value), 1);
+  const totalBookings = data.reduce((sum, d) => sum + d.value, 0);
+  const avgBookings = Math.round(totalBookings / data.length);
+  const peakDay = data.reduce((prev, current) => (prev.value > current.value) ? prev : current).label;
 
   return (
-    <ComponentCard title="Booking Statistics">
-      <div className="flex gap-2 mb-6">
-        <button
-          onClick={() => setTimeRange("week")}
-          className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-            timeRange === "week"
-              ? "bg-brand-500 text-[#e2e2e2]"
-              : "bg-gray-100 text-gray-600 dark:bg-[#212121] dark:text-gray-400"
-          }`}
-        >
-          This Week
-        </button>
-        <button
-          onClick={() => setTimeRange("month")}
-          className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-            timeRange === "month"
-              ? "bg-brand-500 text-[#e2e2e2]"
-              : "bg-gray-100 text-gray-600 dark:bg-[#212121] dark:text-gray-400"
-          }`}
-        >
-          This Month
-        </button>
+    <ComponentCard title="Booking Analytics">
+      <div className="mb-8 flex">
+        <div className="inline-flex rounded-lg bg-gray-100 p-1 dark:bg-gray-800">
+          <button
+            onClick={() => setTimeRange("week")}
+            className={`rounded-md px-5 py-2 text-sm font-medium transition-all duration-200 ${
+              timeRange === "week"
+                ? "bg-white text-gray-900 shadow-sm dark:bg-[#212121] dark:text-white"
+                : "text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+            }`}
+          >
+            This Week
+          </button>
+          <button
+            onClick={() => setTimeRange("month")}
+            className={`rounded-md px-5 py-2 text-sm font-medium transition-all duration-200 ${
+              timeRange === "month"
+                ? "bg-white text-gray-900 shadow-sm dark:bg-[#212121] dark:text-white"
+                : "text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+            }`}
+          >
+            This Month
+          </button>
+        </div>
       </div>
 
-      <div className="flex items-end justify-between gap-4 h-64">
-        {data.map((item, index) => (
-          <div key={index} className="flex-1 flex flex-col items-center gap-2">
-            <div className="text-sm font-medium text-gray-900 dark:text-white">
-              {item.bookings}
+      <div className="mt-8 flex h-64 items-end justify-between gap-2 sm:gap-4">
+        {data.map((item, index) => {
+          const heightPercentage = item.value === 0 ? 0 : Math.max((item.value / maxBookings) * 100, 1);
+          
+          return (
+            <div key={index} className="group/bar relative flex h-full flex-1 flex-col items-center justify-end gap-2">
+              <div className="absolute top-0 z-10 scale-0 rounded-md bg-gray-900 px-2.5 py-1 text-xs font-bold text-white opacity-0 transition-all duration-200 group-hover/bar:scale-100 group-hover/bar:opacity-100 dark:bg-white dark:text-gray-900">
+                {item.value}
+                <div className="absolute -bottom-1 left-1/2 h-2 w-2 -translate-x-1/2 rotate-45 bg-gray-900 dark:bg-white"></div>
+              </div>
+
+              <div className="relative h-48 w-full max-w-[3rem] rounded-t-lg bg-gray-100 dark:bg-gray-800">
+                <div
+                  className="absolute bottom-0 w-full rounded-t-lg bg-blue-800 transition-all duration-500 group-hover/bar:bg-blue-400 group-hover/bar:opacity-100 dark:bg-blue-800"
+                  style={{ height: `${heightPercentage}%` }}
+                />
+              </div>
+
+              <span className="text-xs font-medium text-gray-500 dark:text-gray-400">
+                {item.label}
+              </span>
             </div>
-            <div
-              className="w-full bg-brand-100 rounded-t-lg dark:bg-brand-900/30"
-              style={{ height: `${(item.bookings / maxBookings) * 200}px` }}
-            >
-              <div
-                className="w-full bg-brand-500 rounded-t-lg transition-all duration-300 hover:bg-brand-600"
-                style={{ height: "100%" }}
-              />
-            </div>
-            <div className="text-xs text-gray-500 dark:text-gray-400">{item.day}</div>
-          </div>
-        ))}
+          );
+        })}
       </div>
 
-      <div className="grid grid-cols-3 gap-4 mt-6 pt-6 border-t border-gray-200 dark:border-gray-700">
-        <div className="text-center">
-          <p className="text-sm text-gray-500 dark:text-gray-400">Total</p>
-          <p className="text-xl font-bold text-gray-900 dark:text-white">
-            {data.reduce((sum, d) => sum + d.bookings, 0)}
-          </p>
+      <div className="mt-8 grid grid-cols-3 gap-4 rounded-xl border border-gray-100 bg-gray-50/50 p-4 dark:border-gray-800 dark:bg-[#151515]">
+        <div className="flex flex-col items-center border-r border-gray-200 dark:border-gray-800">
+          <p className="text-xs font-medium text-gray-500 dark:text-gray-400">Total Bookings</p>
+          <p className="mt-1 text-2xl font-bold text-gray-900 dark:text-white">{totalBookings}</p>
         </div>
-        <div className="text-center">
-          <p className="text-sm text-gray-500 dark:text-gray-400">Average</p>
-          <p className="text-xl font-bold text-gray-900 dark:text-white">
-            {Math.round(data.reduce((sum, d) => sum + d.bookings, 0) / data.length)}
-          </p>
+        <div className="flex flex-col items-center border-r border-gray-200 dark:border-gray-800">
+          <p className="text-xs font-medium text-gray-500 dark:text-gray-400">Average</p>
+          <p className="mt-1 text-2xl font-bold text-gray-900 dark:text-white">{avgBookings}</p>
         </div>
-        <div className="text-center">
-          <p className="text-sm text-gray-500 dark:text-gray-400">Peak Day</p>
-          <p className="text-xl font-bold text-gray-900 dark:text-white">
-            {data.find((d) => d.bookings === maxBookings)?.day || "-"}
-          </p>
+        <div className="flex flex-col items-center">
+          <p className="text-xs font-medium text-gray-500 dark:text-gray-400">Peak Period</p>
+          <p className="mt-1 text-2xl font-bold text-blue-800">{peakDay || "-"}</p>
         </div>
       </div>
     </ComponentCard>

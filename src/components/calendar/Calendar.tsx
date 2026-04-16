@@ -13,6 +13,7 @@ import {
 import { useModal } from "@/hooks/useModal";
 import { Modal } from "@/components/ui/modal";
 import Button from "../ui/button/Button";
+// import "./calendar-overrides.css"; 
 
 interface CalendarEvent {
   id: string;
@@ -67,7 +68,6 @@ const Calendar: React.FC<CalendarProps> = ({ events, onSaveEvent }) => {
     let startStr = selectInfo.startStr;
     let endStr = selectInfo.endStr || selectInfo.startStr;
 
-    // Tambahkan jam default jika user klik di blok yang tidak ada jamnya (misal: area bulan / all day)
     if (!startStr.includes("T")) startStr += "T09:00";
     if (!endStr.includes("T")) endStr += "T10:00";
 
@@ -95,7 +95,6 @@ const Calendar: React.FC<CalendarProps> = ({ events, onSaveEvent }) => {
     setEventTitle(event.title);
     setIsAllDay(event.allDay);
 
-    // Prioritaskan mengambil jam ASLI dari database jika tersedia, jika tidak ambil dari UI Fullcalendar
     let startStr = event.extendedProps.originalStart || event.startStr;
     let endStr = event.extendedProps.originalEnd || event.endStr || startStr;
 
@@ -111,7 +110,6 @@ const Calendar: React.FC<CalendarProps> = ({ events, onSaveEvent }) => {
   const handleAddOrUpdateEvent = async () => {
     setIsLoading(true);
     try {
-      // Selalu konversi waktu utuh (Tanggal + Jam) ke UTC ISO String untuk disimpan
       const payloadStart = new Date(eventStartDate).toISOString();
       const payloadEnd = eventEndDate ? new Date(eventEndDate).toISOString() : null;
 
@@ -144,17 +142,17 @@ const Calendar: React.FC<CalendarProps> = ({ events, onSaveEvent }) => {
   };
 
   return (
-    <div className="rounded-2xl border border-gray-200 bg-white dark:border-[#313131] dark:bg-[#111111]">
-      <div className="custom-calendar">
+    <div className="w-full bg-white dark:bg-[#151515] rounded-3xl shadow-sm border border-gray-100 dark:border-gray-800 p-4 md:p-6 transition-all duration-300">
+      <div className="calendar-container [&_.fc-theme-standard_.fc-scrollgrid]:border-gray-100 dark:[&_.fc-theme-standard_.fc-scrollgrid]:border-gray-800 [&_.fc-button-primary]:bg-blue-600 [&_.fc-button-primary]:border-blue-600 [&_.fc-button-primary:hover]:bg-blue-700 [&_.fc-button-primary:hover]:border-blue-700 [&_.fc-today-button]:bg-gray-100 [&_.fc-today-button]:text-gray-700 [&_.fc-today-button]:border-gray-200 dark:[&_.fc-today-button]:bg-gray-800 dark:[&_.fc-today-button]:text-gray-300 dark:[&_.fc-today-button]:border-gray-700 [&_.fc-col-header-cell]:py-3 [&_.fc-col-header-cell]:text-gray-500 [&_.fc-col-header-cell]:font-medium dark:[&_.fc-col-header-cell]:text-gray-400 [&_.fc-day-today]:bg-blue-50/30 dark:[&_.fc-day-today]:bg-blue-900/10">
         <FullCalendar
           ref={calendarRef}
           plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
           initialView="timeGridDay"
           allDaySlot={true}
           headerToolbar={{
-            left: "prev,next addEventButton",
+            left: "prev,next today",
             center: "title",
-            right: "timeGridDay,timeGridWeek,dayGridMonth",
+            right: "dayGridMonth,timeGridWeek,timeGridDay addEventCustom",
           }}
           events={events}
           selectable={true}
@@ -166,118 +164,144 @@ const Calendar: React.FC<CalendarProps> = ({ events, onSaveEvent }) => {
             minute: '2-digit',
             hour12: false
           }}
+          height="auto"
+          dayMaxEvents={true}
           customButtons={{
-            addEventButton: {
-              text: "Add Event +",
+            addEventCustom: {
+              text: "+ New Event",
               click: openModal,
             },
           }}
         />
       </div>
+
       <Modal
         isOpen={isOpen}
         onClose={closeModal}
-        className="max-w-[700px] p-6 lg:p-10"
+        className="max-w-md w-full rounded-2xl p-0 overflow-hidden shadow-2xl border border-gray-100 dark:border-gray-800"
       >
-        <div className="flex flex-col px-2 overflow-y-auto custom-scrollbar">
+        <div className="bg-gray-50 dark:bg-[#1a1a1a] px-6 py-4 border-b border-gray-100 dark:border-gray-800 flex justify-between items-center">
+          <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+            {selectedEvent ? "Edit Appointment" : "New Appointment"}
+          </h3>
+          <button onClick={closeModal} className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 transition-colors">
+            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
+          </button>
+        </div>
+
+        <div className="p-6 space-y-5 bg-white dark:bg-[#111111]">
           <div>
-            <h5 className="mb-2 font-semibold text-gray-800 modal-title text-theme-xl dark:text-white/90 lg:text-2xl">
-              {selectedEvent ? "Edit Event" : "Add Event"}
-            </h5>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">
+              Event Title
+            </label>
+            <input
+              type="text"
+              placeholder="e.g. Client Meeting"
+              value={eventTitle}
+              onChange={(e) => setEventTitle(e.target.value)}
+              className="w-full h-11 rounded-xl border border-gray-200 bg-gray-50/50 px-4 text-sm text-gray-900 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all outline-none dark:border-gray-800 dark:bg-[#151515] dark:text-white dark:focus:border-blue-500"
+            />
           </div>
-          <div className="mt-8">
+
+          <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
-                Event Title
-              </label>
-              <input
-                type="text"
-                value={eventTitle}
-                onChange={(e) => setEventTitle(e.target.value)}
-                className="dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-[#313131] dark:bg-[#111111] dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800"
-              />
-            </div>
-
-            <div className="mt-5 flex items-center">
-              <label className="flex items-center text-sm font-medium text-gray-700 dark:text-gray-400 cursor-pointer">
-                <input
-                  type="checkbox"
-                  checked={isAllDay}
-                  onChange={() => setIsAllDay(!isAllDay)}
-                  className="mr-3 h-5 w-5 rounded border-gray-300 text-brand-500 focus:ring-brand-500 dark:border-[#313131] dark:bg-[#111111]"
-                />
-                Show as All Day Event
-              </label>
-            </div>
-
-            <div className="mt-6">
-              <label className="block mb-4 text-sm font-medium text-gray-700 dark:text-gray-400">
-                Event Color
-              </label>
-              <div className="flex flex-wrap items-center gap-4 sm:gap-5">
-                {Object.entries(calendarsEvents).map(([key, value]) => (
-                  <div key={key} className="n-chk">
-                    <div className={`form-check form-check-${value} form-check-inline`}>
-                      <label className="flex items-center text-sm text-gray-700 form-check-label dark:text-gray-400">
-                        <span className="relative">
-                          <input
-                            className="sr-only form-check-input"
-                            type="radio"
-                            name="event-level"
-                            value={value}
-                            checked={eventLevel === value}
-                            onChange={() => setEventLevel(value)}
-                          />
-                          <span className="flex items-center justify-center w-5 h-5 mr-2 border border-gray-300 rounded-full box dark:border-[#313131]">
-                            <span className={`h-2 w-2 rounded-full ${eventLevel === value ? "bg-gray-800 dark:bg-white" : ""}`}></span>
-                          </span>
-                        </span>
-                        {key}
-                      </label>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            <div className="mt-6">
-              <label className="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
-                Start Date & Time
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">
+                Starts
               </label>
               <input
                 type="datetime-local"
                 value={eventStartDate}
                 onChange={(e) => setEventStartDate(e.target.value)}
-                className="dark:[&::-webkit-calendar-picker-indicator]:invert dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs dark:border-[#313131] dark:bg-[#111111] dark:text-white/90"
+                className="w-full h-11 rounded-xl border border-gray-200 bg-gray-50/50 px-3 text-sm text-gray-900 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all outline-none dark:[&::-webkit-calendar-picker-indicator]:invert dark:border-gray-800 dark:bg-[#151515] dark:text-white dark:focus:border-blue-500"
               />
             </div>
-
-            <div className="mt-6">
-              <label className="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
-                End Date & Time
+            <div>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">
+                Ends
               </label>
               <input
                 min={eventStartDate}
                 type="datetime-local"
                 value={eventEndDate}
                 onChange={(e) => setEventEndDate(e.target.value)}
-                className="dark:[&::-webkit-calendar-picker-indicator]:invert dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs dark:border-[#313131] dark:bg-[#111111] dark:text-white/90"
+                className="w-full h-11 rounded-xl border border-gray-200 bg-gray-50/50 px-3 text-sm text-gray-900 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all outline-none dark:[&::-webkit-calendar-picker-indicator]:invert dark:border-gray-800 dark:bg-[#151515] dark:text-white dark:focus:border-blue-500"
               />
             </div>
           </div>
-          <div className="flex items-center gap-3 mt-6 modal-footer sm:justify-end">
-            <Button onClick={closeModal} type="button" variant="outline">
-              Close
-            </Button>
-            <Button
-              onClick={handleAddOrUpdateEvent}
-              type="button"
-              disabled={!eventTitle || !eventLevel || !eventStartDate || isLoading}
-              className="btn btn-success flex w-full justify-center rounded-lg bg-brand-500 px-4 py-2.5 text-sm font-medium text-white hover:bg-brand-600 sm:w-auto"
-            >
-              {isLoading ? "Saving..." : selectedEvent ? "Update Changes" : "Add Event"}
-            </Button>
+
+          <label className="flex items-center gap-3 p-3 rounded-xl border border-gray-100 hover:bg-gray-50 cursor-pointer transition-colors dark:border-gray-800 dark:hover:bg-[#151515]">
+            <div className="relative flex items-center justify-center">
+              <input
+                type="checkbox"
+                checked={isAllDay}
+                onChange={() => setIsAllDay(!isAllDay)}
+                className="peer sr-only"
+              />
+              <div className="h-5 w-5 rounded border border-gray-300 bg-white peer-checked:border-blue-500 peer-checked:bg-blue-500 transition-colors dark:border-gray-700 dark:bg-[#222]"></div>
+              <svg className="absolute w-3 h-3 text-white scale-0 peer-checked:scale-100 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>
+            </div>
+            <span className="text-sm font-medium text-gray-700 dark:text-gray-300 select-none">
+              All Day Event
+            </span>
+          </label>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              Category / Color
+            </label>
+            <div className="flex flex-wrap gap-3">
+              {Object.entries(calendarsEvents).map(([key, value]) => {
+                const colors = {
+                  danger: "bg-red-500 border-red-500 ring-red-500/20",
+                  success: "bg-green-500 border-green-500 ring-green-500/20",
+                  primary: "bg-blue-500 border-blue-500 ring-blue-500/20",
+                  warning: "bg-yellow-500 border-yellow-500 ring-yellow-500/20",
+                }[value] || "bg-gray-500 border-gray-500";
+
+                const isSelected = eventLevel === value;
+
+                return (
+                  <label key={key} className="cursor-pointer group relative flex items-center">
+                    <input
+                      type="radio"
+                      name="eventCategory"
+                      value={value}
+                      checked={isSelected}
+                      onChange={() => setEventLevel(value)}
+                      className="sr-only"
+                    />
+                    <div className={`flex items-center gap-2 px-3 py-1.5 rounded-full border text-xs font-medium transition-all ${
+                      isSelected 
+                        ? `${colors} text-white shadow-md ring-4` 
+                        : 'border-gray-200 bg-white text-gray-600 hover:bg-gray-50 dark:border-gray-700 dark:bg-[#1a1a1a] dark:text-gray-300 dark:hover:bg-[#222]'
+                    }`}>
+                      {!isSelected && <span className={`w-2 h-2 rounded-full ${colors.split(' ')[0]}`}></span>}
+                      {key}
+                    </div>
+                  </label>
+                );
+              })}
+            </div>
           </div>
+        </div>
+
+        <div className="bg-gray-50 dark:bg-[#1a1a1a] px-6 py-4 border-t border-gray-100 dark:border-gray-800 flex items-center justify-end gap-3">
+          <Button onClick={closeModal} type="button" variant="outline" className="h-10 px-4 rounded-xl border-gray-200 text-gray-600 hover:bg-gray-100 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-[#222]">
+            Cancel
+          </Button>
+          <Button
+            onClick={handleAddOrUpdateEvent}
+            type="button"
+            disabled={!eventTitle || !eventLevel || !eventStartDate || isLoading}
+            className="h-10 px-5 rounded-xl bg-blue-600 text-white font-medium hover:bg-blue-700 focus:ring-4 focus:ring-blue-500/20 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+          >
+            {isLoading ? (
+              <span className="flex items-center gap-2">
+                <svg className="animate-spin h-4 w-4 text-white" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none"></circle><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+                Saving...
+              </span>
+            ) : selectedEvent ? "Save Changes" : "Create Event"}
+          </Button>
         </div>
       </Modal>
     </div>
@@ -286,18 +310,35 @@ const Calendar: React.FC<CalendarProps> = ({ events, onSaveEvent }) => {
 
 const renderEventContent = (eventInfo: EventContentArg) => {
   const level = eventInfo.event.extendedProps.calendar?.toLowerCase() || "primary";
-  const colorClass = `fc-bg-${level}`;
+  
+  const bgColors: Record<string, string> = {
+    danger: "bg-red-100 border-red-200 text-red-700 dark:bg-red-500/10 dark:border-red-500/20 dark:text-red-400",
+    success: "bg-green-100 border-green-200 text-green-700 dark:bg-green-500/10 dark:border-green-500/20 dark:text-green-400",
+    primary: "bg-blue-100 border-blue-200 text-blue-700 dark:bg-blue-500/10 dark:border-blue-500/20 dark:text-blue-400",
+    warning: "bg-yellow-100 border-yellow-200 text-yellow-800 dark:bg-yellow-500/10 dark:border-yellow-500/20 dark:text-yellow-400",
+  };
+
+  const dotColors: Record<string, string> = {
+    danger: "bg-red-500",
+    success: "bg-green-500",
+    primary: "bg-blue-500",
+    warning: "bg-yellow-500",
+  };
+
+  const currentBgClass = bgColors[level] || bgColors.primary;
+  const currentDotClass = dotColors[level] || dotColors.primary;
 
   return (
-    <div
-      className={`event-fc-color flex items-center fc-event-main ${colorClass} p-1 rounded-sm`}
-    >
-      <div className="fc-daygrid-event-dot"></div>
-
+    <div className={`flex w-full flex-col overflow-hidden rounded-md border-l-4 border-l-current ${currentBgClass} p-1.5 transition-all hover:brightness-95`}>
+      <div className="flex items-center gap-1.5">
+        <div className={`h-2 w-2 flex-shrink-0 rounded-full ${currentDotClass}`}></div>
+        <div className="truncate text-xs font-semibold leading-tight">{eventInfo.event.title}</div>
+      </div>
       {!eventInfo.event.allDay && (
-        <div className="fc-event-time text-[#e2e2e2] font-semibold mr-2">{eventInfo.timeText}</div>
+        <div className="mt-0.5 pl-3.5 text-[10px] font-medium opacity-80">
+          {eventInfo.timeText}
+        </div>
       )}
-      <div className="fc-event-title truncate ">{eventInfo.event.title}</div>
     </div>
   );
 };
