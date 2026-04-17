@@ -1,7 +1,6 @@
 'use client';
 import Link from 'next/link';
-import { NavItem, NavLink, NavList } from './Navbar.styles';
-import Button from '@/components/ui/button/Button';
+import { NavItem, NavLink, NavList, NavButton } from './Navbar.styles';
 
 export type SingleNavItem = {
   title: string;
@@ -29,9 +28,9 @@ export default function NavLinks({ items }: { items: SingleNavItem[] }) {
       {items.map((item) => (
         <NavItem key={item.href}>
           {item.outlined ? (
-            <Button as={Link} href={item.href}>
+            <NavButton as={Link} href={item.href}>
               {item.title}
-            </Button>
+            </NavButton>
           ) : (
             <NavLink as={Link} href={item.href} onClick={(e) => handleScroll(e, item.href)}>
               {item.title}

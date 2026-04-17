@@ -30,9 +30,10 @@ interface CalendarEvent {
 interface CalendarProps {
   events: CalendarEvent[];
   onSaveEvent: (eventData: any, id?: string) => Promise<void>;
+  onDeleteEvent: (id: string) => Promise<void>;
 }
 
-const Calendar: React.FC<CalendarProps> = ({ events, onSaveEvent }) => {
+const Calendar: React.FC<CalendarProps> = ({ events, onSaveEvent, onDeleteEvent }) => {
   const [selectedEvent, setSelectedEvent] = useState<CalendarEvent | null>(null);
   const [eventTitle, setEventTitle] = useState("");
   const [eventStartDate, setEventStartDate] = useState("");
@@ -40,6 +41,7 @@ const Calendar: React.FC<CalendarProps> = ({ events, onSaveEvent }) => {
   const [eventLevel, setEventLevel] = useState("");
   const [isAllDay, setIsAllDay] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   const calendarRef = useRef<FullCalendar>(null);
   const { isOpen, openModal, closeModal } = useModal();
@@ -131,6 +133,21 @@ const Calendar: React.FC<CalendarProps> = ({ events, onSaveEvent }) => {
       console.error(error);
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const handleDeleteEvent = async () => {
+    if (!selectedEvent) return;
+    
+    setIsDeleting(true);
+    try {
+      await onDeleteEvent(selectedEvent.id);
+      closeModal();
+      resetModalFields();
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsDeleting(false);
     }
   };
 
@@ -265,18 +282,34 @@ const Calendar: React.FC<CalendarProps> = ({ events, onSaveEvent }) => {
               />
             </div>
           </div>
-          <div className="flex items-center gap-3 mt-6 modal-footer sm:justify-end">
-            <Button onClick={closeModal} type="button" variant="outline">
-              Close
-            </Button>
-            <Button
-              onClick={handleAddOrUpdateEvent}
-              type="button"
-              disabled={!eventTitle || !eventLevel || !eventStartDate || isLoading}
-              className="btn btn-success flex w-full justify-center rounded-lg bg-brand-500 px-4 py-2.5 text-sm font-medium text-white hover:bg-brand-600 sm:w-auto"
-            >
-              {isLoading ? "Saving..." : selectedEvent ? "Update Changes" : "Add Event"}
-            </Button>
+          <div className="flex items-center gap-3 mt-6 modal-footer justify-between">
+            <div>
+              {selectedEvent && (
+                <Button 
+                  onClick={handleDeleteEvent} 
+                  type="button" 
+                  variant="outline"
+                  className="!text-red-500 !border-red-200 hover:!bg-red-50"
+                  disabled={isDeleting}
+                >
+                  {isDeleting ? "Deleting..." : "Delete Event"}
+                </Button>
+              )}
+            </div>
+            
+            <div className="flex gap-3">
+              <Button onClick={closeModal} type="button" variant="outline">
+                Close
+              </Button>
+              <Button
+                onClick={handleAddOrUpdateEvent}
+                type="button"
+                disabled={!eventTitle || !eventLevel || !eventStartDate || isLoading || isDeleting}
+                className="btn btn-success flex w-full justify-center rounded-lg bg-brand-500 px-4 py-2.5 text-sm font-medium text-white hover:bg-brand-600 sm:w-auto"
+              >
+                {isLoading ? "Saving..." : selectedEvent ? "Update Changes" : "Add Event"}
+              </Button>
+            </div>
           </div>
         </div>
       </Modal>

@@ -4,7 +4,7 @@ import React, { useState, useEffect, useCallback } from "react";
 import Calendar from "@/components/calendar/Calendar";
 import PageBreadcrumb from "@/components/common/PageBreadCrumb";
 import { useAuth } from "@clerk/nextjs";
-import { getCalendarEvents, saveCalendarEvent, type CalendarEvent } from "@/service/calendarService";
+import { getCalendarEvents, saveCalendarEvent, deleteCalendarEvent, type CalendarEvent } from "@/service/calendarService";
 
 export default function Page() {
   const [events, setEvents] = useState<CalendarEvent[]>([]);
@@ -39,6 +39,18 @@ export default function Page() {
     }
   };
 
+  const handleDeleteEvent = async (id: string) => {
+    if (!userId) return;
+
+    try {
+      await deleteCalendarEvent(userId, id);
+      await loadEvents();
+    } catch (error) {
+      console.error("Error deleting event:", error);
+      throw error;
+    }
+  };
+
 
   if (!isLoaded) {
     return null;
@@ -47,7 +59,7 @@ export default function Page() {
   return (
     <div>
       <PageBreadcrumb pageTitle="Calendar" />
-      <Calendar events={events} onSaveEvent={handleSaveEvent} />
+      <Calendar events={events} onSaveEvent={handleSaveEvent} onDeleteEvent={handleDeleteEvent} />
     </div>
   );
 }

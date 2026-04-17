@@ -38,21 +38,6 @@ const FEATURES = [
     title: 'Deposit & Payments',
     description: 'Collect deposits at checkout to lower no-shows and protect your time.',
   },
-  {
-    imageUrl: '/grid-icons/asset-7.svg',
-    title: 'Team Routing',
-    description: 'Route new bookings to the right staff member based on service and availability.',
-  },
-  {
-    imageUrl: '/grid-icons/asset-8.svg',
-    title: 'Custom Intake Forms',
-    description: 'Capture client details before meetings so your team is prepared.',
-  },
-  {
-    imageUrl: '/grid-icons/asset-9.svg',
-    title: 'Booking Analytics',
-    description: 'Track conversion, no-show rates, and top-performing services in one dashboard.',
-  },
 ];
 
 export default function Features() {
@@ -163,8 +148,8 @@ const FeatureCard = styled.div`
   padding: 1.75rem;
   background: white;
   border-radius: 1.25rem;
-  border: 1px solid rgba(20, 115, 250, 0.08);
-  box-shadow: 0 4px 12px -2px rgba(0, 0, 0, 0.02);
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
   transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   animation: ${fadeUp} 0.6s ease both;
 
@@ -176,7 +161,7 @@ const FeatureCard = styled.div`
 
   .dark & {
     background: #0f172a;
-    border-color: rgba(255, 255, 255, 0.08);
+    border-color: #1e293b;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
 
     &:hover {

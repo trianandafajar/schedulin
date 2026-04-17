@@ -117,3 +117,13 @@ export const saveCalendarEvent = async (userId: string, eventData: any, id?: str
         if (error) throw error;
     }
 };
+
+export const deleteCalendarEvent = async (userId: string, id: string) => {
+    const { error } = await supabase
+        .from("calendar_events")
+        .delete()
+        .eq("id", id)
+        .eq("user_id", userId);
+
+    if (error) throw error;
+};

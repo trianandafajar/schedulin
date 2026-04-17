@@ -157,12 +157,14 @@ const Tab = styled.div<{ $isActive: boolean }>`
   padding: 1.5rem 2rem;
   background: ${(p) => (p.$isActive ? 'white' : 'transparent')};
   border-radius: 1.25rem;
+  border: 1px solid ${(p) => (p.$isActive ? '#e2e8f0' : 'transparent')};
   cursor: pointer;
   transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-  box-shadow: ${(p) => (p.$isActive ? '0 10px 25px -5px rgba(0, 0, 0, 0.05)' : 'none')};
+  box-shadow: ${(p) => (p.$isActive ? '0 10px 15px -3px rgba(0, 0, 0, 0.05)' : 'none')};
 
   .dark & {
     background: ${(p) => (p.$isActive ? '#0f172a' : 'transparent')};
+    border-color: ${(p) => (p.$isActive ? '#1e293b' : 'transparent')};
   }
 
   &:hover {
@@ -219,9 +221,23 @@ const ImageDisplay = styled.div`
   flex: 1.2;
   position: relative;
   width: 100%;
+  aspect-ratio: 16 / 10;
   border-radius: 1.5rem;
-  padding: 1rem;
+  background: white;
+  border: 1px solid #e2e8f0;
+  padding: 2.5rem;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
   animation: ${fadeUp} 0.8s 0.2s ease both;
+
+  .dark & {
+    background: #0f172a;
+    border-color: #1e293b;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  }
+
+  ${media('<=phone')} {
+    padding: 1rem;
+  }
 `;
 
 const ImageContainer = styled.div<{ $isActive: boolean }>`

@@ -85,6 +85,31 @@ export const NavLink = styled.a`
   }
 `;
 
+export const NavButton = styled.a`
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.75rem 1.5rem;
+  font-size: 14px;
+  font-weight: 700;
+  border-radius: 10px;
+  background: #1473fa;
+  color: white;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 12px rgba(20, 115, 250, 0.2);
+
+  &:hover {
+    background: #0e5fd4;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 16px rgba(20, 115, 250, 0.3);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+`;
+
 export const LogoArea = styled.div`
   display: flex;
   align-items: center;
