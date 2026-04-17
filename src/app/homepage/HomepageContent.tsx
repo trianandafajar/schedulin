@@ -16,7 +16,7 @@ import { ThemeProvider } from "@/context/ThemeContext";
 import { useUser } from "@clerk/nextjs";
 
 export default function HomepageContent() {
-  const { isSignedIn,user } = useUser();
+  const { isSignedIn, user } = useUser();
 
   const userName = user?.firstName || "Guest";
   const startLink = isSignedIn ? "/dashboard" : "/signin";
@@ -24,6 +24,9 @@ export default function HomepageContent() {
 
 
   const navItems: SingleNavItem[] = [
+    { title: "Features", href: "#features" },
+    { title: "Benefits", href: "#benefits" },
+    { title: "Solutions", href: "#solutions" },
     { title: isSignedIn ? userName : "Sign In", href: startLink, outlined: true },
   ];
 
@@ -35,6 +38,7 @@ export default function HomepageContent() {
           <WhiteBackgroundContainer>
             <Hero />
             {/* <Partners /> */}
+          <div id="benefits">
             <BasicSection imageUrl="/demo-illustration-1.svg" title="Appointment booking on autopilot." overTitle="SaaS Appointment Booking">
               <p>
                 Accept bookings 24/7 with an online page that syncs instantly with your team calendar. Clients choose open slots and get automatic
@@ -56,10 +60,15 @@ export default function HomepageContent() {
                 </ul>
               </CustomRichText>
             </BasicSection>
+          </div>
           </WhiteBackgroundContainer>
           <Cta />
-          <FeaturesGallery />
-          <Features />
+          <div id="features">
+            <FeaturesGallery />
+          </div>
+          <div id="solutions">
+            <Features />
+          </div>
         </HomepageWrapper>
         <Footer />
         <div className="fixed bottom-6 right-6 z-50 hidden sm:block">
@@ -71,35 +80,22 @@ export default function HomepageContent() {
 }
 
 const HomepageWrapper = styled.div`
-
-      margin: 0 auto;
-      max-width:1280px;
-      padding-top: 2rem;
+  margin: 0 auto;
+  max-width: 1280px;
+  padding-top: 2rem;
 
   & > :last-child {
-        margin-bottom: 5rem;
+    margin-bottom: 5rem;
   }
-      `;
-
-const DarkerBackgroundContainer = styled.div`
-      background: rgb(var(--background)); 
-
-  & > *:not(:first-child) {
-        margin-top: 5rem;
-  }
-      `;
+`;
 
 const WhiteBackgroundContainer = styled.div`
-      background: rgb(var(--secondBackground));
+  background: rgb(var(--secondBackground));
 
   & > :last-child {
-        padding-bottom: 5rem;
+    padding-bottom: 2rem;
   }
-
-  & > *:not(:first-child) {
-        margin-top: 5rem;
-  }
-      `;
+`;
 
 const CustomRichText = styled(RichText)`
 

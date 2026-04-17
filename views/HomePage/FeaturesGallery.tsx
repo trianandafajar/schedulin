@@ -1,225 +1,247 @@
-'use client'
+'use client';
 import { media } from '@/app/utils/media';
 import Collapse from '@/components/Collapse';
 import Container from '@/components/Container';
 import OverTitle from '@/components/OverTitle';
-import SectionTitle from '@/components/SectionTitle';
-import ThreeLayersCircle from '@/components/ThreeLayersCircle';
 import NextImage from 'next/image';
 import React, { useState } from 'react';
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 
 const TABS = [
   {
     title: 'Booking page that fills itself',
     description:
-      '<p>Publish one link and let clients choose open slots based on your live team availability.</p>',
-    imageUrl: '/demo-illustration-3.png',
-    baseColor: '249,82,120',
-    secondColor: '221,9,57',
+      'Publish one link and let clients choose open slots based on your live team availability.',
+    imageUrl: '/demo-illustration-3.svg',
   },
   {
     title: 'Automations that reduce no-shows',
     description:
-      '<p>Automatically send confirmations, reminders, and follow-ups so appointments stay on track.</p>',
-    imageUrl: '/demo-illustration-4.png',
-    baseColor: '57,148,224',
-    secondColor: '99,172,232',
+      'Automatically send confirmations, reminders, and follow-ups so appointments stay on track.',
+    imageUrl: '/demo-illustration-4.svg',
   },
   {
     title: 'Team scheduling without conflicts',
     description:
-      '<p>Sync calendars across staff and locations to stop double booking and scheduling mistakes.</p>',
-    imageUrl: '/demo-illustration-5.png',
-    baseColor: '88,193,132',
-    secondColor: '124,207,158',
+      'Sync calendars across staff and locations to stop double booking and scheduling mistakes.',
+    imageUrl: '/demo-illustration-5.svg',
   },
 ];
 
 export default function FeaturesGallery() {
-  const [currentTab, setCurrentTab] = useState(TABS[0]);
+  const [currentTabIdx, setCurrentTabIdx] = useState(0);
 
   const imagesMarkup = TABS.map((singleTab, idx) => {
-    const isActive = singleTab.title === currentTab.title;
-    const isFirst = idx === 0;
-
+    const isActive = idx === currentTabIdx;
     return (
       <ImageContainer key={singleTab.title} $isActive={isActive}>
+        <GlowOverlay />
         <NextImage
           src={singleTab.imageUrl}
           alt={singleTab.title}
           fill
           style={{ objectFit: 'contain' }}
-          priority={isFirst}
+          priority={idx === 0}
         />
       </ImageContainer>
     );
   });
 
   const tabsMarkup = TABS.map((singleTab, idx) => {
-    const isActive = singleTab.title === currentTab.title;
+    const isActive = idx === currentTabIdx;
 
     return (
-      <Tab $isActive={isActive} key={idx} onClick={() => handleTabClick(idx)}>
-        <TabTitleContainer>
-          <CircleContainer>
-            <ThreeLayersCircle
-              $baseColor={isActive ? 'transparent' : singleTab.baseColor}
-              $secondColor={singleTab.secondColor}
-            />
-          </CircleContainer>
-          <h4>{singleTab.title}</h4>
-        </TabTitleContainer>
+      <Tab $isActive={isActive} key={idx} onClick={() => setCurrentTabIdx(idx)}>
+        <Indicator $isActive={isActive} />
+        <TabHeader>
+          <TabTitle $isActive={isActive}>{singleTab.title}</TabTitle>
+        </TabHeader>
         <Collapse isOpen={isActive} duration={300}>
-          <TabContent>
-            <div dangerouslySetInnerHTML={{ __html: singleTab.description }} />
-          </TabContent>
+          <TabDescription>{singleTab.description}</TabDescription>
         </Collapse>
       </Tab>
     );
   });
 
-  function handleTabClick(idx: number) {
-    setCurrentTab(TABS[idx]);
-  }
-
   return (
     <FeaturesGalleryWrapper>
-      <Content>
-        <OverTitle>features</OverTitle>
-        <SectionTitle>Everything you need to run appointment operations.</SectionTitle>
-      </Content>
-      <GalleryWrapper>
-        <TabsContainer>{tabsMarkup}</TabsContainer>
-        {imagesMarkup}
-      </GalleryWrapper>
+      <ContentHeader>
+        <CustomOverTitle>Features</CustomOverTitle>
+        <Headline>Everything you need to run appointment operations.</Headline>
+      </ContentHeader>
+      <GalleryLayout>
+        <TabsList>{tabsMarkup}</TabsList>
+        <ImageDisplay>{imagesMarkup}</ImageDisplay>
+      </GalleryLayout>
     </FeaturesGalleryWrapper>
   );
 }
 
+/* ─── Keyframes ─── */
+const fadeUp = keyframes`
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+`;
+
+const pulseGlow = keyframes`
+  0%, 100% { transform: scale(1); opacity: 0.1; }
+  50% { transform: scale(1.1); opacity: 0.2; }
+`;
+
+/* ─── Layout ─── */
 const FeaturesGalleryWrapper = styled(Container)`
-  align-items: center;
-  flex-direction: column;
-  justify-content: center;
-`;
-
-const GalleryWrapper = styled.div`
   display: flex;
-  align-items: center;
-  margin-top: 4rem;
+  flex-direction: column;
+  padding-top: 5rem;
+  padding-bottom: 5rem;
 
-  ${media('<=desktop')} {
-    flex-direction: column;
+  ${media('<=tablet')} {
+    padding-top: 3rem;
+    padding-bottom: 3rem;
   }
 `;
 
-const Content = styled.div`
-  & > *:not(:first-child) {
-    margin-top: 1rem;
-  }
+const ContentHeader = styled.div`
   text-align: center;
+  max-width: 800px;
+  margin: 0 auto 4rem;
+  animation: ${fadeUp} 0.7s ease both;
 `;
 
-const TabsContainer = styled.div`
-  flex: 1;
-  margin-right: 4rem;
-
-  & > *:not(:first-child) {
-    margin-top: 2rem;
-  }
-
-  ${media('<=desktop')} {
-    margin-right: 0;
-    margin-bottom: 4rem;
-    width: 100%;
-  }
+const CustomOverTitle = styled(OverTitle)`
+  margin-bottom: 1rem;
 `;
 
-const ImageContainer = styled.div<{ $isActive: boolean }>`
-  position: relative;
-  overflow: hidden;
-  border-radius: 0.8rem;
-  flex: ${(p) => (p.$isActive ? '2' : '0')};
-  box-shadow: var(--shadow-md);
-
-  &:before {
-    display: block;
-    content: '';
-    width: 100%;
-    padding-top: calc((9 / 16) * 100%);
-  }
-
-  & > div {
-    position: absolute;
-    inset: 0;
-  }
-
-  ${media('<=desktop')} {
-    width: ${(p) => (p.$isActive ? '100%' : '0')};
-  }
-`;
-
-const Tab = styled.div<{ $isActive: boolean }>`
-  display: flex;
-  flex-direction: column;
-  padding: 2rem 1.5rem;
-  background: white;
-  box-shadow: var(--shadow-md);
-  opacity: ${(p) => (p.$isActive ? 1 : 0.6)};
-  cursor: pointer;
-  border-radius: 0.6rem;
-  transition: opacity 0.2s;
-  font-size: 1.6rem;
-  font-weight: bold;
-
-  .dark & {
-    background: #111111;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.6);
-  }
-
-  ${media('<=desktop')} {
-    width: 100%;
-  }
-`;
-
-const TabTitleContainer = styled.div`
-  display: flex;
-  align-items: center;
+const Headline = styled.h2`
+  font-size: 2.5rem;
+  font-weight: 800;
+  line-height: 1.2;
+  letter-spacing: -0.03em;
+  color: #0f172a;
 
   .dark & {
     color: white;
   }
 
-  h4 {
-    flex: 1;
+  ${media('<=tablet')} {
+    font-size: 2.2rem;
+  }
+
+  ${media('<=phone')} {
+    font-size: 1.8rem;
   }
 `;
 
-const TabContent = styled.div`
+const GalleryLayout = styled.div`
+  display: flex;
+  align-items: flex-start;
+  gap: 4rem;
+
+  ${media('<=desktop')} {
+    flex-direction: column;
+    gap: 3rem;
+  }
+`;
+
+/* ─── Tabs ─── */
+const TabsList = styled.div`
+  flex: 1;
   display: flex;
   flex-direction: column;
-  font-weight: normal;
-  margin-top: 0.5rem;
-  font-size: 1.5rem;
-  padding-left: calc(5rem + 1.5rem);
+  gap: 1.25rem;
+  width: 100%;
+`;
+
+const Tab = styled.div<{ $isActive: boolean }>`
+  position: relative;
+  padding: 1.5rem 2rem;
+  background: ${(p) => (p.$isActive ? 'white' : 'transparent')};
+  border-radius: 1.25rem;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: ${(p) => (p.$isActive ? '0 10px 25px -5px rgba(0, 0, 0, 0.05)' : 'none')};
 
   .dark & {
-    color: #e2e2e2;
+    background: ${(p) => (p.$isActive ? '#0f172a' : 'transparent')};
   }
 
-  ${media('<=tablet')} {
-    padding-left: calc(4rem + 1.25rem);
-  }
-
-  p {
-    font-weight: normal;
+  &:hover {
+    background: ${(p) => (!p.$isActive ? 'rgba(20, 115, 250, 0.04)' : 'white')};
+    .dark &:hover {
+      background: ${(p) => (!p.$isActive ? 'rgba(255, 255, 255, 0.02)' : '#0f172a')};
+    }
   }
 `;
 
-const CircleContainer = styled.div`
-  flex: 0 calc(5rem + 1.5rem);
+const Indicator = styled.div<{ $isActive: boolean }>`
+  position: absolute;
+  left: 0;
+  top: 1.5rem;
+  bottom: 1.5rem;
+  width: 4px;
+  background: #1473fa;
+  border-radius: 0 4px 4px 0;
+  opacity: ${(p) => (p.$isActive ? 1 : 0)};
+  transform: scaleY(${(p) => (p.$isActive ? 1 : 0.5)});
+  transition: all 0.3s ease;
+`;
 
-  ${media('<=tablet')} {
-    flex: 0 calc(4rem + 1.25rem);
+const TabHeader = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
+const TabTitle = styled.h4<{ $isActive: boolean }>`
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: ${(p) => (p.$isActive ? '#0f172a' : '#64748b')};
+  transition: color 0.3s ease;
+
+  .dark & {
+    color: ${(p) => (p.$isActive ? 'white' : '#94a3b8')};
   }
+`;
+
+const TabDescription = styled.p`
+  margin-top: 1rem;
+  font-size: 1rem;
+  line-height: 1.6;
+  color: #64748b;
+  opacity: 0.9;
+
+  .dark & {
+    color: #cbd5e1;
+  }
+`;
+
+/* ─── Images ─── */
+const ImageDisplay = styled.div`
+  flex: 1.2;
+  position: relative;
+  width: 100%;
+  border-radius: 1.5rem;
+  padding: 1rem;
+  animation: ${fadeUp} 0.8s 0.2s ease both;
+`;
+
+const ImageContainer = styled.div<{ $isActive: boolean }>`
+  position: relative;
+  width: 100%;
+  display: ${(p) => (p.$isActive ? 'block' : 'none')};
+  aspect-ratio: 16 / 10;
+  transition: all 0.5s ease;
+
+  & > div {
+    position: absolute;
+    inset: 0;
+  }
+`;
+
+const GlowOverlay = styled.div`
+  position: absolute;
+  inset: -10%;
+  background: radial-gradient(circle, rgba(20, 115, 250, 0.15) 0%, transparent 70%);
+  animation: ${pulseGlow} 6s ease-in-out infinite;
+  z-index: 0;
+  pointer-events: none;
 `;

@@ -8,20 +8,20 @@ export const NavbarContainer = styled.header<{ $hidden: boolean }>`
   width: 100%;
   z-index: 999;
   padding: 0;
-  height: 72px;               /* dari 8rem -> 72px */
-  background: #ffffff;
-  border-bottom: 1px solid rgba(0,0,0,0.06);
-
-  .dark & {
-    background: #111111;
-    border-bottom: 1px solid #313131;
-  }
-
+  height: 80px;
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
   display: flex;
   align-items: center;
+  transform: ${(p) => (p.$hidden ? 'translateY(-100%)' : 'translateY(0)')};
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), background 0.3s ease;
 
-  transform: ${(p) => (p.$hidden ? "translateY(-100%)" : "translateY(0)")};
-  transition: transform .25s ease;
+  .dark & {
+    background: rgba(12, 12, 12, 0.85);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  }
 `;
 
 export const Content = styled(Container)`
@@ -48,13 +48,40 @@ export const NavItem = styled.li`
 `;
 
 export const NavLink = styled.a`
-  font-size: 16px;
-  font-weight: 600;
-  color: rgb(var(--text));
+  font-size: 15px;
+  font-weight: 700;
+  color: #475569;
   text-decoration: none;
+  position: relative;
+  transition: color 0.3s ease;
+  cursor: pointer;
+
+  &::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 2px;
+    bottom: -4px;
+    left: 0;
+    background-color: #1473fa;
+    transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
 
   &:hover {
-    color: rgb(var(--primary));
+    color: #1473fa;
+    &::after {
+      width: 100%;
+    }
+  }
+
+  .dark & {
+    color: #94a3b8;
+    &:hover {
+      color: white;
+      &::after {
+        background-color: white;
+      }
+    }
   }
 `;
 

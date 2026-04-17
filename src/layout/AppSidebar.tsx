@@ -308,7 +308,7 @@ const AppSidebar: React.FC = () => {
       >
         <Link href="/" className="flex items-center gap-2">
           <Image
-            src="/images/menu.jpg"
+            src="/images/logo.svg"
             alt="Schedullin Logo"
             width={32}
             height={32}

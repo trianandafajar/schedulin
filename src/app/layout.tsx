@@ -9,6 +9,16 @@ import { ThemeProvider } from '@/context/ThemeContext';
 import { ClerkProvider } from '@clerk/nextjs';
 import { NewsletterModalContextProvider } from './contexts/newsletter-modal.context';
 import StyledComponentsRegistry from '@/lib/registry';
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: {
+    template: '%s | Schedullin',
+    default: 'Schedullin | Appointment Booking on Autopilot',
+  },
+  description: 'Schedullin is a professional appointment booking platform for clinics, salons, and consultants.',
+};
+
 
 const outfit = Outfit({
   subsets: ["latin"],

@@ -3,8 +3,8 @@ import { getBusinessCategories } from "@/service/businessService";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Next.js SignUp Page | Schedullin - Next.js Dashboard Template",
-  description: "This is Next.js SignUp Page Schedullin Dashboard Template",
+  title: "Create Account",
+  description: "Start your free journey with Schedullin. Set up your professional booking page in minutes.",
 };
 
 export default async function SignUp() {
