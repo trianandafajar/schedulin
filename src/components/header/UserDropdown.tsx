@@ -1,5 +1,4 @@
 "use client";
-import Image from "next/image";
 import Link from "next/link";
 import React, { useState } from "react";
 import { Dropdown } from "../ui/dropdown/Dropdown";
@@ -29,15 +28,8 @@ export default function UserDropdown() {
         onClick={toggleDropdown}
         className="flex items-center text-gray-700 dark:text-[#e2e2e2] dropdown-toggle"
       >
-        <span className="mr-3 overflow-hidden rounded-full h-11 w-11">
-          {user?.imageUrl && (
-            <Image
-              width={44}
-              height={44}
-              src={user!.imageUrl}
-              alt="User"
-            />
-          )}
+        <span className="flex items-center justify-center mr-3 overflow-hidden rounded-full h-11 w-11 bg-brand-500/10 dark:bg-brand-500/20 text-brand-600 dark:text-brand-400 font-bold border border-brand-500/10 dark:border-brand-500/20 shadow-theme-xs">
+          {`${user?.firstName?.charAt(0) || ""}${user?.lastName?.charAt(0) || ""}`.toUpperCase() || "U"}
         </span>
 
         <span className="block mr-1 font-medium text-theme-sm">{user?.firstName}</span>
