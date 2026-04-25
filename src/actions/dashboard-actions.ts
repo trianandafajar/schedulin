@@ -25,6 +25,16 @@ export async function getDashboardData(): Promise<{
         return { error: "Unauthorized", redirect: "/sign-in" };
     }
 
+    const { data: user } = await supabase
+        .from("users")
+        .select("plan")
+        .eq("id", userId)
+        .single();
+
+    if (!user || user.plan !== 'business') {
+        return { error: "This feature is only available for Business plan users.", redirect: "/billing" };
+    }
+
     const { data: business } = await supabase
         .from("business")
         .select("id")

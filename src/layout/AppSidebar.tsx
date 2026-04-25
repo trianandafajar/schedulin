@@ -1,5 +1,6 @@
 "use client";
 import React, { useEffect, useRef, useState, useCallback } from "react";
+import { usePlan } from "@/context/PlanContext";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
@@ -19,6 +20,7 @@ import {
   TimeIcon,
   UserCircleIcon,
 } from "../icons/index";
+import { Lock } from "lucide-react";
 
 type NavItem = {
   name: string;
@@ -57,6 +59,11 @@ const navItems: NavItem[] = [
     icon: <UserCircleIcon />,
     name: "User Profile",
     path: "/profile",
+  },
+  {
+    icon: <DollarLineIcon />,
+    name: "Billing",
+    path: "/billing",
   },
 
   // {
@@ -105,6 +112,7 @@ const othersItems: NavItem[] = [
 
 const AppSidebar: React.FC = () => {
   const { isExpanded, isMobileOpen, isHovered, setIsHovered } = useSidebar();
+  const { isFeatureEnabled, showUpgradeModal } = usePlan();
   const pathname = usePathname();
 
   const renderMenuItems = (
@@ -148,23 +156,35 @@ const AppSidebar: React.FC = () => {
             </button>
           ) : (
             nav.path && (
-              <Link
-                href={nav.path}
-                className={`menu-item group ${isActive(nav.path) ? "menu-item-active" : "menu-item-inactive"
-                  }`}
+              <div
+                onClick={(e) => {
+                  if (nav.name === 'Dashboard' && !isFeatureEnabled('dashboard')) {
+                    e.preventDefault();
+                    showUpgradeModal('Dashboard Statistics');
+                  }
+                }}
               >
-                <span
-                  className={`${isActive(nav.path)
-                    ? "menu-item-icon-active"
-                    : "menu-item-icon-inactive"
-                    }`}
+                <Link
+                  href={nav.name === 'Dashboard' && !isFeatureEnabled('dashboard') ? '#' : nav.path}
+                  className={`menu-item group ${isActive(nav.path) ? "menu-item-active" : "menu-item-inactive"
+                    } ${nav.name === 'Dashboard' && !isFeatureEnabled('dashboard') ? 'opacity-50' : ''}`}
                 >
-                  {nav.icon}
-                </span>
-                {(isExpanded || isHovered || isMobileOpen) && (
-                  <span className={`menu-item-text`}>{nav.name}</span>
-                )}
-              </Link>
+                  <span
+                    className={`${isActive(nav.path)
+                      ? "menu-item-icon-active"
+                      : "menu-item-icon-inactive"
+                      }`}
+                  >
+                    {nav.icon}
+                  </span>
+                  {(isExpanded || isHovered || isMobileOpen) && (
+                    <span className={`menu-item-text flex items-center gap-2`}>
+                      {nav.name}
+                      {nav.name === 'Dashboard' && !isFeatureEnabled('dashboard') && <Lock className="w-3 h-3" />}
+                    </span>
+                  )}
+                </Link>
+              </div>
             )
           )}
           {nav.subItems && (isExpanded || isHovered || isMobileOpen) && (

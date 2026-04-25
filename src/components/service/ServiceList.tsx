@@ -7,6 +7,7 @@ import { createService, updateService, deleteService, toggleServiceStatus, Servi
 import { Modal } from "@/components/ui/modal";
 import Button from "@/components/ui/button/Button";
 import { Check, X, Loader2, Pencil, Trash2, Plus } from "lucide-react";
+import { usePlan } from "@/context/PlanContext";
 
 interface Service {
   id: string;
@@ -22,25 +23,32 @@ interface ServiceListProps {
 }
 
 const ServiceList: React.FC<ServiceListProps> = ({ services }) => {
+  const { checkRestriction, showUpgradeModal } = usePlan();
   const [filter, setFilter] = useState<"all" | "active" | "inactive">("all");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingService, setEditingService] = useState<Service | null>(null);
   const [loading, setLoading] = useState(false);
   const [deletingId, setDeletingId] = useState<string | null>(null);
-
+ 
   // Form state
   const [formName, setFormName] = useState("");
   const [formDuration, setFormDuration] = useState("");
   const [formPrice, setFormPrice] = useState("");
   const [formIsActive, setFormIsActive] = useState(true);
-
+ 
   const filteredServices = services?.filter((service) => {
     if (filter === "active") return service.is_active;
     if (filter === "inactive") return !service.is_active;
     return true;
   }) || [];
-
+ 
   const openAddModal = () => {
+    const restriction = checkRestriction('services', services?.length || 0);
+    if (!restriction.enabled) {
+      showUpgradeModal('adding more services');
+      return;
+    }
+
     setEditingService(null);
     setFormName("");
     setFormDuration("");

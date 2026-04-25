@@ -11,6 +11,7 @@ import Footer from '@/components/Footer';
 import RichText from '@/components/RichText';
 import Navbar from '@/components/landing/Navbar/Navbar';
 import { SingleNavItem } from '@/components/landing/Navbar/NavbarLinks';
+import Pricing from '@/components/landing/Pricing';
 import ThemeTogglerTwo from '@/components/common/ThemeTogglerTwo';
 import { ThemeProvider } from "@/context/ThemeContext";
 import { useUser } from "@clerk/nextjs";
@@ -27,6 +28,7 @@ export default function HomepageContent() {
     { title: "Features", href: "#features" },
     { title: "Benefits", href: "#benefits" },
     { title: "Solutions", href: "#solutions" },
+    { title: "Pricing", href: "#pricing" },
     { title: isSignedIn ? userName : "Sign In", href: startLink, outlined: true },
   ];
 
@@ -69,6 +71,7 @@ export default function HomepageContent() {
           <div id="solutions">
             <Features />
           </div>
+          <Pricing />
         </HomepageWrapper>
         <Footer />
         <div className="fixed bottom-6 right-6 z-50 hidden sm:block">

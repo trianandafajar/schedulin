@@ -6,6 +6,7 @@ import './globals.css';
 import "flatpickr/dist/flatpickr.css";
 import { SidebarProvider } from '@/context/SidebarContext';
 import { ThemeProvider } from '@/context/ThemeContext';
+import { PlanProvider } from '@/context/PlanContext';
 import { ClerkProvider } from '@clerk/nextjs';
 import { NewsletterModalContextProvider } from './contexts/newsletter-modal.context';
 import StyledComponentsRegistry from '@/lib/registry';
@@ -37,11 +38,13 @@ export default function RootLayout({
 
             <NewsletterModalContextProvider>
             <ThemeProvider>
-              <SidebarProvider>
-                <main>
-                {children}
-                </main>
-              </SidebarProvider>
+              <PlanProvider>
+                <SidebarProvider>
+                  <main>
+                  {children}
+                  </main>
+                </SidebarProvider>
+              </PlanProvider>
             </ThemeProvider>
             </NewsletterModalContextProvider>
           </StyledComponentsRegistry>
