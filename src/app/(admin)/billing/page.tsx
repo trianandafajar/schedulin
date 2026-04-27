@@ -129,7 +129,7 @@ export default function BillingPage() {
   }
 
   return (
-    <PayPalScriptProvider options={{ "client-id": PAYPAL_CLIENT_ID }}>
+    <PayPalScriptProvider options={{ clientId: PAYPAL_CLIENT_ID }}>
       <div className="p-6">
         <div className="mb-8 flex flex-col md:flex-row md:items-end justify-between gap-4">
           <div>
