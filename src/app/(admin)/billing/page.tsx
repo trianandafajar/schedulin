@@ -34,6 +34,7 @@ const plans = [
       'Max 100–200 bookings / month',
       'Max 10–15 services',
       'Flexible Closed Days',
+      'Basic dashboard (booking stats)',
       'Appointment settings',
     ],
   },

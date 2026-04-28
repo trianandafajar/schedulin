@@ -30,7 +30,7 @@ export const planLimits = {
     maxBookings: 200,
     maxServices: 15,
     maxHolidays: 999,
-    dashboard: false,
+    dashboard: true,
     flexibleHolidays: true,
   },
   business: {

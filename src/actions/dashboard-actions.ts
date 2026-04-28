@@ -31,8 +31,8 @@ export async function getDashboardData(): Promise<{
         .eq("id", userId)
         .single();
 
-    if (!user || user.plan !== 'business') {
-        return { error: "This feature is only available for Business plan users.", redirect: "/billing" };
+    if (!user || (user.plan !== 'business' && user.plan !== 'medium')) {
+        return { error: "This feature is only available for Business and Medium plan users.", redirect: "/billing" };
     }
 
     const { data: business } = await supabase
