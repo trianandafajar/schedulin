@@ -1,5 +1,5 @@
 import { google } from "@ai-sdk/google";
-import { streamText, embed } from "ai";
+import { streamText, embed, convertToModelMessages } from "ai";
 import supabase from "@/lib/supabase";
 
 export const maxDuration = 30;
@@ -16,9 +16,7 @@ export async function POST(req: Request) {
     }
 
     const lastMessage = messages[messages.length - 1];
-    const lastMessageText = lastMessage.content ||
-      (lastMessage.parts && lastMessage.parts.filter((p: any) => p.type === 'text').map((p: any) => p.text).join(' ')) ||
-      "";
+    const lastMessageText = (lastMessage.parts && lastMessage.parts.filter((p: any) => p.type === 'text').map((p: any) => p.text).join(' ')) || "";
 
     console.log("Generating embedding for:", lastMessageText);
 
@@ -65,10 +63,7 @@ export async function POST(req: Request) {
       
       CONTEXT:
       ${context}`,
-      messages: messages.map((m: any) => ({
-        role: m.role,
-        content: m.content || (m.parts && m.parts.filter((p: any) => p.type === 'text').map((p: any) => p.text).join(' ')) || ""
-      })),
+      messages: await convertToModelMessages(messages),
     });
 
     return result.toUIMessageStreamResponse();

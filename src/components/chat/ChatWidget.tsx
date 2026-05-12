@@ -2,6 +2,8 @@
 
 import React, { useState, useRef, useEffect } from "react";
 import { useChat } from "@ai-sdk/react";
+import { DefaultChatTransport } from "ai";
+
 import { MessageCircle, X, Send, Bot, User, Loader2, Moon, Sun } from "lucide-react";
 import { useTheme } from "@/context/ThemeContext";
 import ReactMarkdown from "react-markdown";
@@ -18,11 +20,14 @@ export default function ChatWidget() {
 
   // In ai@6.0, useChat helpers are different
   const { messages, sendMessage, status, error } = useChat({
-    api: "/api/chat",
+    transport: new DefaultChatTransport({
+      api: "/api/chat",
+    }),
     onError: (err) => {
       console.error("Chat error details:", err);
     }
   });
+
 
   const isLoading = status === "submitted" || status === "streaming";
 
@@ -124,7 +129,7 @@ export default function ChatWidget() {
                           p: ({ children }) => <p className="mb-2 last:mb-0">{children}</p>
                         }}
                       >
-                        {m.content || (m.parts && m.parts.filter((p: any) => p.type === 'text').map((p: any) => p.text).join(' ')) || ""}
+                        {m.parts.filter((p: any) => p.type === 'text').map((p: any) => p.text).join(' ')}
                       </ReactMarkdown>
                     </div>
                   </div>
@@ -148,7 +153,7 @@ export default function ChatWidget() {
 
             {error && (
               <div className="p-3 bg-red-50 dark:bg-red-900/20 text-red-500 text-[11px] text-center rounded-xl border border-red-100 dark:border-red-900/30 font-medium">
-                ⚠️ Failed to send message. Make sure the API Key is installed in .env.local.
+                ⚠️ Failed to send message. Make sure the API Key is installed 
               </div>
             )}
           </div>
