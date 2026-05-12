@@ -173,6 +173,10 @@ const Title = styled.h2`
   color: rgb(var(--text));
   margin-bottom: 1.5rem;
 
+  .dark & {
+    color: white;
+  }
+
   @media (max-width: 768px) {
     font-size: 2.5rem;
   }
@@ -183,6 +187,10 @@ const Description = styled.p`
   color: rgb(var(--textSecondary));
   max-width: 600px;
   margin: 0 auto 3rem;
+
+  .dark & {
+    color: #e2e2e2;
+  }
 `;
 
 const ToggleContainer = styled.div`
@@ -262,6 +270,12 @@ const PricingCard = styled.div<{ $highlight?: boolean }>`
     transform: translateY(-10px);
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
   }
+
+  .dark & {
+    background: #111111;
+    border-color: ${(props) => (props.$highlight ? '#3b82f6' : 'rgba(255, 255, 255, 0.1)')};
+    box-shadow: ${(props) => (props.$highlight ? '0 20px 40px rgba(59, 130, 246, 0.2)' : 'none')};
+  }
 `;
 
 const Badge = styled.div`
@@ -284,6 +298,10 @@ const PlanName = styled.h3`
   font-weight: 700;
   color: rgb(var(--text));
   margin-bottom: 1.5rem;
+
+  .dark & {
+    color: white;
+  }
 `;
 
 const PriceContainer = styled.div`
@@ -296,6 +314,10 @@ const Price = styled.span`
   font-size: 3rem;
   font-weight: 800;
   color: rgb(var(--text));
+
+  .dark & {
+    color: white;
+  }
 `;
 
 const Period = styled.span`
@@ -309,6 +331,10 @@ const PlanDescription = styled.p`
   color: rgb(var(--textSecondary));
   margin-bottom: 2.5rem;
   min-height: 3rem;
+
+  .dark & {
+    color: #e2e2e2;
+  }
 `;
 
 const FeatureList = styled.ul`
@@ -340,6 +366,10 @@ const FeatureText = styled.span`
   font-size: 1rem;
   color: rgb(var(--text));
   line-height: 1.5;
+
+  .dark & {
+    color: white;
+  }
 `;
 
 const ButtonWrapper = styled.div`

@@ -11,6 +11,7 @@ import { ClerkProvider } from '@clerk/nextjs';
 import { NewsletterModalContextProvider } from './contexts/newsletter-modal.context';
 import StyledComponentsRegistry from '@/lib/registry';
 import { Metadata } from 'next';
+import ChatWidget from '@/components/chat/ChatWidget';
 
 export const metadata: Metadata = {
   title: {
@@ -33,7 +34,7 @@ export default function RootLayout({
   return (
     <ClerkProvider>
       <html lang="en">
-        <body className={`${outfit.className} dark:bg-[#0c0c0c]`}>
+        <body className={`${outfit.className} dark:bg-[#0c0c0c]`} suppressHydrationWarning>
           <StyledComponentsRegistry>
 
             <NewsletterModalContextProvider>
@@ -44,6 +45,7 @@ export default function RootLayout({
                   {children}
                   </main>
                 </SidebarProvider>
+                <ChatWidget />
               </PlanProvider>
             </ThemeProvider>
             </NewsletterModalContextProvider>
