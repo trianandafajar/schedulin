@@ -3,7 +3,7 @@ import { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Sign Up | Maketime",
-  description: "Create your Maketime account to launch your booking page and automate Maketimeg.",
+  description: "Create your Maketime account to launch your booking page and automate scheduling.",
 };
 
 export default async function SignUp() {

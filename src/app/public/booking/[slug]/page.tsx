@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, use, useMemo, useCallback } from "react";
+import { usePathname } from "next/navigation";
 import { Calendar, Clock, ChevronLeft, ChevronRight, Scissors, Check, Loader2, User, Phone, MapPin, Inbox } from "lucide-react";
 import Button from "@/components/ui/button/Button";
 import { Modal } from "@/components/ui/modal";
@@ -38,6 +39,17 @@ export default function PublicBookingPage({ params }: PageProps) {
   const [bookingSuccess, setBookingSuccess] = useState(false);
   const [bookingError, setBookingError] = useState<string | null>(null);
   const [disabledTimes, setDisabledTimes] = useState<string[]>([]);
+
+  // Force light mode on public booking page
+  useEffect(() => {
+    const isDark = document.documentElement.classList.contains("dark");
+    if (isDark) {
+      document.documentElement.classList.remove("dark");
+    }
+    
+    // Optional: Restore if needed, but usually not necessary for public links
+    // return () => { if (isDark) document.documentElement.classList.add("dark"); };
+  }, []);
 
   useEffect(() => {
     let isMounted = true;

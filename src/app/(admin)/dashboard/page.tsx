@@ -5,7 +5,7 @@ import { redirect } from "next/navigation";
 import { getDashboardData } from "@/actions/dashboard-actions";
 
 export const metadata: Metadata = {
-  title: "Dashboard | Maketime - Appointment Maketimeg",
+  title: "Dashboard | Maketime - Appointment Scheduling",
   description: "Maketime Dashboard - Manage your appointments and bookings",
 };
 

@@ -3,7 +3,7 @@ import HomepageContent from './HomepageContent';
 
 export const metadata: Metadata = {
   title: 'Maketime | Appointment Booking Platform',
-  description: 'Modern appointment booking software with automated reminders and clean team Maketimeg workflows.',
+  description: 'Modern appointment booking software with automated reminders and clean team scheduling workflows.',
 };
 
 export default function Homepage() {

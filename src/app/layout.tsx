@@ -10,6 +10,9 @@ import { ClerkProvider } from '@clerk/nextjs';
 import { NewsletterModalContextProvider } from './contexts/newsletter-modal.context';
 import StyledComponentsRegistry from '@/lib/registry';
 
+import { PlanProvider } from '@/context/PlanContext';
+import ChatWidget from '@/components/chat/ChatWidget';
+
 const outfit = Outfit({
   subsets: ["latin"],
 });
@@ -35,9 +38,12 @@ export default function RootLayout({
 
             <NewsletterModalContextProvider>
               <ThemeProvider>
-                <SidebarProvider>
-                  {children}
-                </SidebarProvider>
+                <PlanProvider>
+                  <SidebarProvider>
+                    {children}
+                  </SidebarProvider>
+                  <ChatWidget />
+                </PlanProvider>
               </ThemeProvider>
             </NewsletterModalContextProvider>
           </StyledComponentsRegistry>
