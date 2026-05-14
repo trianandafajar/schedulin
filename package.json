@@ -6,7 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "seed:knowledge": "node --env-file=.env scripts/seed-knowledge.mjs",
+    "seed:knowledge:reset": "node --env-file=.env scripts/seed-knowledge.mjs --clear"
   },
   "dependencies": {
     "@accessible/drawer": "^3.0.2",

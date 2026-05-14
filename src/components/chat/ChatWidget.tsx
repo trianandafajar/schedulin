@@ -1,28 +1,41 @@
 "use client";
 
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useMemo } from "react";
+import { usePathname } from "next/navigation";
 import { useChat } from "@ai-sdk/react";
 import { DefaultChatTransport } from "ai";
 
-import { MessageCircle, X, Send, Bot, User, Loader2, Moon, Sun } from "lucide-react";
-import { useTheme } from "@/context/ThemeContext";
+import { MessageCircle, X, Send, Bot, User, Loader2 } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 
 export default function ChatWidget() {
   const [isOpen, setIsOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
+  const pathname = usePathname();
+
+  // Detect if we're on a public booking page and grab the business slug from the URL
+  const businessSlug = useMemo(() => {
+    if (!pathname) return null;
+    const match = pathname.match(/^\/public\/booking\/([^\/]+)/);
+    return match ? match[1] : null;
+  }, [pathname]);
 
   // Local state for input (mandatory in AI SDK 4.0/ai@6.0 useChat)
   const [localInput, setLocalInput] = useState("");
 
-  const { theme, toggleTheme } = useTheme();
+  const transport = useMemo(
+    () =>
+      new DefaultChatTransport({
+        api: "/api/chat",
+        body: businessSlug ? { businessSlug } : undefined,
+      }),
+    [businessSlug],
+  );
 
   // In ai@6.0, useChat helpers are different
   const { messages, sendMessage, status, error } = useChat({
-    transport: new DefaultChatTransport({
-      api: "/api/chat",
-    }),
+    transport,
     onError: (err) => {
       console.error("Chat error details:", err);
     }
@@ -59,15 +72,6 @@ export default function ChatWidget() {
 
   return (
     <div className="fixed bottom-6 right-6 flex flex-col gap-3 z-[9999]">
-      {/* Theme Toggle Button */}
-      <button
-        onClick={toggleTheme}
-        className="p-4 bg-white dark:bg-gray-800 text-gray-800 dark:text-white rounded-full shadow-2xl hover:scale-110 transition-all flex items-center justify-center border border-gray-200 dark:border-gray-700"
-        title="Toggle Theme"
-      >
-        {theme === 'light' ? <Moon size={24} /> : <Sun size={24} />}
-      </button>
-
       {/* Chat Toggle Button */}
       <button
         onClick={() => setIsOpen(!isOpen)}
@@ -87,7 +91,9 @@ export default function ChatWidget() {
                 <Bot size={20} />
               </div>
               <div>
-                <h3 className="font-bold text-sm">Schedulin AI Assistant</h3>
+                <h3 className="font-bold text-sm">
+                  {businessSlug ? "Booking Assistant" : "AI Assistant"}
+                </h3>
                 <p className="text-[10px] text-white/80">Online</p>
               </div>
             </div>
@@ -106,7 +112,11 @@ export default function ChatWidget() {
                 <div className="w-12 h-12 bg-brand-500/10 text-brand-500 rounded-full flex items-center justify-center mx-auto mb-3">
                   <Bot size={24} />
                 </div>
-                <p className="text-sm text-gray-500 font-medium dark:text-gray-400">Halo! Ada yang bisa saya bantu terkait Schedulin?</p>
+                <p className="text-sm text-gray-500 font-medium dark:text-gray-400">
+                  {businessSlug
+                    ? "Hi! Ask me anything about our services, hours, or pricing."
+                    : "Hi! How can I help you today?"}
+                </p>
               </div>
             )}
 
@@ -161,12 +171,20 @@ export default function ChatWidget() {
           {/* Quick Options */}
           {messages.length === 0 && (
             <div className="px-4 py-2 flex flex-wrap gap-2 bg-white dark:bg-gray-900 border-t border-gray-100 dark:border-gray-800">
-              {[
-                "How does Schedulin work?",
-                "What are the pricing plans?",
-                "Can I cancel my subscription?",
-                "How do I set up a booking link?"
-              ].map((option) => (
+              {(businessSlug
+                ? [
+                    "What services are available?",
+                    "What are the prices?",
+                    "What are your opening hours?",
+                    "What is the cancellation policy?",
+                  ]
+                : [
+                    "How does this platform work?",
+                    "What are the pricing plans?",
+                    "Can I cancel my subscription?",
+                    "How do I set up a booking link?",
+                  ]
+              ).map((option) => (
                 <button
                   key={option}
                   onClick={() => {
@@ -186,7 +204,7 @@ export default function ChatWidget() {
             <input
               value={localInput}
               onChange={(e) => setLocalInput(e.target.value)}
-              placeholder="Tanya sesuatu..."
+              placeholder="Ask something..."
               className="flex-1 bg-gray-100 dark:bg-gray-800 border-none rounded-full px-4 py-2 text-sm focus:ring-2 focus:ring-brand-500 outline-none text-gray-800 dark:text-white"
             />
             <button

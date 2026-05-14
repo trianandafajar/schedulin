@@ -13,8 +13,11 @@ export async function POST(req: Request) {
 
     // 1. Generate embedding using Gemini
     const { embedding } = await embed({
-      model: google.embedding("text-embedding-004"),
+      model: google.embedding("gemini-embedding-001"),
       value: content,
+      providerOptions: {
+        google: { outputDimensionality: 768 },
+      },
     });
 
     // 2. Save to Supabase

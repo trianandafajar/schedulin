@@ -20,7 +20,7 @@ import {
   TimeIcon,
   UserCircleIcon,
 } from "../icons/index";
-import { Lock } from "lucide-react";
+import { Lock, BookOpen } from "lucide-react";
 
 type NavItem = {
   name: string;
@@ -54,6 +54,11 @@ const navItems: NavItem[] = [
     icon: <BoxCubeIcon />,
     name: "Services",
     path: "/services",
+  },
+  {
+    icon: <BookOpen className="w-5 h-5" />,
+    name: "AI Knowledge",
+    path: "/knowledge",
   },
   {
     icon: <UserCircleIcon />,
