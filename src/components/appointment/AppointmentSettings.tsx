@@ -114,7 +114,7 @@ const AppointmentSettings: React.FC<AppointmentSettingsProps> = ({
   const handleSaveSettings = async () => {
     setIsSaving(true);
     try {
-      await onSave();
+      await (onSave as any)();
     } finally {
       setIsSaving(false);
     }
@@ -153,19 +153,19 @@ const AppointmentSettings: React.FC<AppointmentSettingsProps> = ({
           <div
             className={`flex flex-col gap-4 rounded-xl border p-4 transition-all duration-300 sm:flex-row sm:items-center sm:justify-between ${
               isPublic
-                ? "border-green-200 bg-green-50/50 dark:border-green-900/30 dark:bg-green-900/10"
+                ? "border-success-200 bg-success-50/50 dark:border-success-900/30 dark:bg-success-900/10"
                 : "border-gray-200 bg-gray-50 dark:border-gray-800 dark:bg-gray-800/30"
             }`}
           >
             <div className="flex items-center gap-3">
-              <div className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-full ${isPublic ? "bg-green-100 text-green-600 dark:bg-green-900/50 dark:text-green-400" : "bg-gray-200 text-gray-500 dark:bg-gray-700 dark:text-gray-400"}`}>
+              <div className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-full ${isPublic ? "bg-success-100 text-success-600 dark:bg-success-900/50 dark:text-success-400" : "bg-gray-200 text-gray-500 dark:bg-gray-700 dark:text-gray-400"}`}>
                 {isPublic ? (
                   <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
                 ) : (
                   <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" /></svg>
                 )}
               </div>
-              <p className={`text-sm font-medium ${isPublic ? "text-green-800 dark:text-green-300" : "text-gray-600 dark:text-gray-400"}`}>
+              <p className={`text-sm font-medium ${isPublic ? "text-success-800 dark:text-success-300" : "text-gray-600 dark:text-gray-400"}`}>
                 {isPublic ? "Your booking page is live and accessible to the public." : "Your booking page is currently private."}
               </p>
             </div>
@@ -247,6 +247,7 @@ const AppointmentSettings: React.FC<AppointmentSettingsProps> = ({
         </div>
       </div>
 
+
       <div className="rounded-2xl border border-gray-100 bg-white shadow-sm dark:border-gray-800 dark:bg-[#111111]">
         <div className="border-b border-gray-100 p-6 dark:border-gray-800">
           <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
@@ -281,7 +282,7 @@ const AppointmentSettings: React.FC<AppointmentSettingsProps> = ({
             <button
               onClick={handleAddHoliday}
               disabled={!newHoliday.date || !newHoliday.name}
-              className="h-11 whitespace-nowrap rounded-xl bg-[var(--color-brand-500)] px-6 text-sm font-medium text-white transition-colors hover:bg-[var(--color-brand-600)] disabled:cursor-not-allowed disabled:opacity-50   "
+              className="h-11 whitespace-nowrap rounded-xl bg-brand- px-6 text-sm font-medium text-white transition-colors hover:bg-brand- disabled:cursor-not-allowed disabled:opacity-50   "
             >
               Add Date
             </button>
@@ -315,7 +316,7 @@ const AppointmentSettings: React.FC<AppointmentSettingsProps> = ({
                       <td className="px-6 py-4 text-right">
                         <button
                           onClick={() => handleDeleteHoliday(holiday.id)}
-                          className="inline-flex h-8 items-center justify-center rounded-lg px-3 text-xs font-medium text-red-600 transition-colors hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-900/20"
+                          className="inline-flex h-8 items-center justify-center rounded-lg px-3 text-xs font-medium text-error-600 transition-colors hover:bg-error-50 dark:text-error-400 dark:hover:bg-error-900/20"
                         >
                           Remove
                         </button>

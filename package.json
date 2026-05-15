@@ -51,7 +51,7 @@
     "swiper": "^11.2.10",
     "tailwind-merge": "^2.6.0",
     "use-resize-observer": "^9.1.0",
-    "zod": "^4.4.3"
+    "zod": "^3.25.76"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.3.1",

@@ -43,6 +43,7 @@ export async function saveAppointmentSettings(
 ) {
     try {
         const supabase = await getSupabaseClient();
+
         const schedulePayload = Object.entries(schedules).map(([day, data]) => ({
             business_id: businessId,
             day_of_week: day,
