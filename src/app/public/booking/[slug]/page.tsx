@@ -39,6 +39,36 @@ export default function PublicBookingPage({ params }: PageProps) {
   const [bookingSuccess, setBookingSuccess] = useState(false);
   const [bookingError, setBookingError] = useState<string | null>(null);
   const [disabledTimes, setDisabledTimes] = useState<string[]>([]);
+
+  useEffect(() => {
+    // Force light mode on public booking page (unaffected by dark mode)
+    const html = document.documentElement;
+    const hasDark = html.classList.contains("dark");
+    
+    if (hasDark) {
+      html.classList.remove("dark");
+    }
+
+    // Set up MutationObserver to ensure 'dark' class is immediately removed if dynamically added
+    const observer = new MutationObserver((mutations) => {
+      mutations.forEach((mutation) => {
+        if (mutation.attributeName === "class" && html.classList.contains("dark")) {
+          html.classList.remove("dark");
+        }
+      });
+    });
+
+    observer.observe(html, { attributes: true });
+
+    return () => {
+      observer.disconnect();
+      // Restore original dark mode state on cleanup
+      if (hasDark) {
+        html.classList.add("dark");
+      }
+    };
+  }, []);
+
   useEffect(() => {
     async function loadData() {
       try {

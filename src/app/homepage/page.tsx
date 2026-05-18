@@ -3,7 +3,7 @@ import HomepageContent from './HomepageContent';
 
 export const metadata: Metadata = {
   title: 'Schedulin Homepage',
-  description: 'SaaS aplikasi untuk booking appointment otomatis, reminder, dan manajemen jadwal layanan.',
+  description: 'SaaS application for automated appointment booking, reminders, and service schedule management.',
 };
 
 export default function Homepage() {

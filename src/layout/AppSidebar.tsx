@@ -56,11 +56,6 @@ const navItems: NavItem[] = [
     path: "/services",
   },
   {
-    icon: <BookOpen className="w-5 h-5" />,
-    name: "AI Knowledge",
-    path: "/knowledge",
-  },
-  {
     icon: <UserCircleIcon />,
     name: "User Profile",
     path: "/profile",

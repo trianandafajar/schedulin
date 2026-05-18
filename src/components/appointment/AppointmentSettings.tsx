@@ -130,6 +130,22 @@ const AppointmentSettings: React.FC<AppointmentSettingsProps> = ({
     field: keyof DaySchedule,
     value: string | boolean
   ) => {
+    if (field === "startTime" && typeof value === "string") {
+      const currentEndTime = schedules[day].endTime;
+      if (currentEndTime && value >= currentEndTime) {
+        alert("End time cannot be earlier than start time.");
+        return;
+      }
+    }
+
+    if (field === "endTime" && typeof value === "string") {
+      const currentStartTime = schedules[day].startTime;
+      if (currentStartTime && value <= currentStartTime) {
+        alert("End time cannot be earlier than start time.");
+        return;
+      }
+    }
+
     setSchedules((prev) => ({
       ...prev,
       [day]: { ...prev[day], [field]: value },
