@@ -36,7 +36,7 @@ export const getCalendarEvents = async (userId: string): Promise<CalendarEvent[]
                 id,
                 customer_name,
                 status,
-                service:services(name),
+                service:services(name, duration_minutes),
                 slot:appointment_slots(date, time)
             `)
             .eq("business_id", business.id)
@@ -52,11 +52,16 @@ export const getCalendarEvents = async (userId: string): Promise<CalendarEvent[]
 
                 const startDateTime = `${slot.date}T${slot.time}`;
 
-
-                // For bookings, we might want to calculate end time based on service duration, 
-                // but for now let's default to 1 hour
-                const endDate = new Date(new Date(startDateTime).getTime() + 60 * 60 * 1000);
-                const endDateTime = endDate.toISOString();
+                // Calculate end time based on service duration (default to 60 minutes)
+                const durationMinutes = service?.duration_minutes || 60;
+                
+                const [year, month, day] = slot.date.split("-").map(Number);
+                const [hour, minute] = slot.time.split(":").map(Number);
+                const localStartDate = new Date(year, month - 1, day, hour, minute);
+                const localEndDate = new Date(localStartDate.getTime() + durationMinutes * 60 * 1000);
+                
+                const pad = (num: number) => String(num).padStart(2, "0");
+                const endDateTime = `${localEndDate.getFullYear()}-${pad(localEndDate.getMonth() + 1)}-${pad(localEndDate.getDate())}T${pad(localEndDate.getHours())}:${pad(localEndDate.getMinutes())}:${pad(localEndDate.getSeconds() || 0)}`;
 
                 return {
                     id: b.id,

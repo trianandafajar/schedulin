@@ -26,6 +26,41 @@ export async function createPublicBooking(data: PublicBookingData) {
       return { error: "Business not found" };
     }
 
+    // 1. Check if the date is a business holiday
+    const { data: holidays, error: holidayError } = await supabase
+      .from("business_holidays")
+      .select("id")
+      .eq("business_id", data.businessId)
+      .eq("date", data.date);
+
+    if (holidayError) {
+      return { error: "Database error checking holidays: " + holidayError.message };
+    }
+
+    if (holidays && holidays.length > 0) {
+      return { error: "The selected date is a business holiday" };
+    }
+
+    // 2. Check if the business is closed on this day of the week
+    const [year, month, day] = data.date.split("-").map(Number);
+    const dateObj = new Date(year, month - 1, day);
+    const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+    const dayName = days[dateObj.getDay()];
+
+    const { data: schedules, error: scheduleError } = await supabase
+      .from("business_schedules")
+      .select("is_open")
+      .eq("business_id", data.businessId)
+      .eq("day_of_week", dayName);
+
+    if (scheduleError) {
+      return { error: "Database error checking schedule: " + scheduleError.message };
+    }
+
+    if (schedules && schedules.length > 0 && !schedules[0].is_open) {
+      return { error: `The business is closed on ${dayName}` };
+    }
+
     const { data: existingSlot } = await supabase
       .from("appointment_slots")
       .select("id, is_booked, is_disabled")

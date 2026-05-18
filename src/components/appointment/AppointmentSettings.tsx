@@ -2,6 +2,7 @@
 import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { CopyIcon } from '@/icons';
 import { togglePublicBooking } from "@/service/businessService";
+import { Loader2, Check } from "lucide-react";
 
 interface AppointmentSettingsProps {
   business: {
@@ -13,7 +14,8 @@ interface AppointmentSettingsProps {
   holidays: Holiday[];
   setSchedules: Dispatch<SetStateAction<Record<string, DaySchedule>>>;
   setHolidays: Dispatch<SetStateAction<Holiday[]>>;
-  onSave: ()=>any;
+  onSave: () => any;
+  saveStatus?: "idle" | "saving" | "saved";
 }
 
 interface DaySchedule {
@@ -44,7 +46,9 @@ const AppointmentSettings: React.FC<AppointmentSettingsProps> = ({
   holidays,
   setSchedules,
   setHolidays,
-onSave }) => {
+  onSave,
+  saveStatus = "idle",
+}) => {
   const [isPublic, setIsPublic] = useState(business.is_public_enabled);
   const [isToggling, setIsToggling] = useState(false);
   const [copied, setCopied] = useState(false);
@@ -336,16 +340,7 @@ onSave }) => {
           )}
         </div>
       </div>
-      <div className="flex justify-end">
-        <button
-          onClick={handleSaveSettings}
-          disabled={isSaving}
-          className={`rounded-lg px-6 py-2.5 text-sm font-medium text-white transition-colors shadow-lg ${isSaving ? "bg-brand-400 cursor-not-allowed" : "bg-brand-500 hover:bg-brand-600 shadow-brand-500/20"
-            }`}
-        >
-          {isSaving ? "Menyimpan..." : "Save Settings"}
-        </button>
-      </div>
+
     </div>
   );
 };
