@@ -67,7 +67,7 @@ export default function UserInfoCard() {
       console.log("Profile updated!");
       closeModal();
     } catch (error) {
-      console.error("Update gagal:", error);
+      console.error("Update failed:", error);
     }
   };
 

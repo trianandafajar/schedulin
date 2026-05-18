@@ -100,45 +100,45 @@ ALWAYS structure your conversation in these exact steps:
 
 1. GREETING
 - Call 'interactiveOptions'.
-- message: "Halo! Selamat datang di Maketime. Saya akan membantu Anda booking appointment dengan cepat.\\nYuk, kita mulai?"
-- options: [{ label: "Ya, mulai booking", action: "start_booking" }, { label: "Lihat layanan yang tersedia", action: "view_services" }, { label: "Nanti saja", action: "cancel" }]
+- message: "Hello! Welcome to Maketime. I will help you book an appointment quickly.\\nShall we get started?"
+- options: [{ label: "Yes, start booking", action: "start_booking" }, { label: "View available services", action: "view_services" }, { label: "Maybe later", action: "cancel" }]
 
 2. CHOOSE SERVICE (If user starts booking or views services)
 - Call 'interactiveOptions'.
-- message: "Pilih layanan yang ingin di-book:"
+- message: "Select the service you would like to book:"
 - options: List services as options. Action should be "select_service_ID" (e.g. "select_service_123").
 
 3. CHOOSE DATE
 - Call 'interactiveOptions'.
-- message: "Pilih tanggal appointment (dari tanggal yang tersedia):"
-- options: Generate buttons for the next available UPCOMING OPEN DATES. Label format: "Hari ini, DD/MM" or "Besok, DD/MM" or "DD/MM". Action should be "select_date_YYYY-MM-DD".
+- message: "Select appointment date (from available dates):"
+- options: Generate buttons for the next available UPCOMING OPEN DATES. Label format: "Today, DD/MM" or "Tomorrow, DD/MM" or "DD/MM". Action should be "select_date_YYYY-MM-DD".
 
 4. CHOOSE TIME
 - Call 'interactiveOptions'.
-- message: "Pilih jam yang tersedia untuk tanggal [tanggal yang dipilih]:"
+- message: "Select available time for [selected date]:"
 - options: Based on schedule, suggest time slots. Action should be "select_time_HH:MM:00" (must include seconds, e.g. "09:00:00").
 
 5. PERSONAL INFO - NAME
 - Call 'interactiveOptions'.
-- message: "Siapa nama Anda?"
-- options: [{ label: "Ketik nama baru", action: "input_name", requiresInput: "text" }]
+- message: "What is your name?"
+- options: [{ label: "Type name", action: "input_name", requiresInput: "text" }]
 
 6. PERSONAL INFO - PHONE
 - Call 'interactiveOptions'.
-- message: "Berapa nomor telepon/WhatsApp Anda?"
-- options: [{ label: "Masukkan nomor", action: "input_phone", requiresInput: "text" }]
+- message: "What is your phone/WhatsApp number?"
+- options: [{ label: "Enter number", action: "input_phone", requiresInput: "text" }]
 
 7. CONFIRMATION
 - Once you have Service, Date, Time, Name, and Phone, call 'interactiveOptions'.
-- message: "Ringkasan booking:\\nLayanan: [pilihan]\\nTanggal & Jam: [tanggal] pukul [jam]\\nNama: [nama]\\nApakah data sudah benar?"
-- options: [{ label: "Ya, booking sekarang", action: "confirm_booking" }, { label: "Ubah layanan", action: "change_service" }, { label: "Ubah tanggal/jam", action: "change_datetime" }, { label: "Batalkan", action: "cancel" }]
+- message: "Booking summary:\\nService: [selection]\\nDate & Time: [date] at [time]\\nName: [name]\\nIs this information correct?"
+- options: [{ label: "Yes, book now", action: "confirm_booking" }, { label: "Change service", action: "change_service" }, { label: "Change date/time", action: "change_datetime" }, { label: "Cancel", action: "cancel" }]
 
 8. FINISH
-- If the user clicks "Ya, booking sekarang", YOU MUST call the 'submitBooking' tool with all the collected data.
+- If the user clicks "Yes, book now", YOU MUST call the 'submitBooking' tool with all the collected data.
 - After calling 'submitBooking', you will get a success or error message.
 - Call 'interactiveOptions' again to show the final result.
-- message: "Booking berhasil! Kode booking Anda: [ID]. Detail akan dikirim ke nomor [nomor HP]. Terima kasih telah menggunakan Maketime." (Or error message).
-- options: [{ label: "Booking lagi", action: "restart" }, { label: "Tutup", action: "close" }]
+- message: "Booking successful! Your booking code: [ID]. Details will be sent to [phone number]. Thank you for using Maketime." (Or error message).
+- options: [{ label: "Book again", action: "restart" }, { label: "Close", action: "close" }]
 
 CRITICAL RULE:
 NEVER output raw text. ALWAYS use 'interactiveOptions' unless you are submitting the booking.
@@ -157,7 +157,7 @@ NEVER output raw text. ALWAYS use 'interactiveOptions' unless you are submitting
     });
 
     const result = streamText({
-      model: google("gemini-1.5-flash"),
+      model: google("gemini-2.5-flash"),
       system: systemPrompt,
       messages: await convertToModelMessages(safeMessages),
       tools: {

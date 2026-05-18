@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import AppointmentSettings from "@/components/appointment/AppointmentSettings";
 import { getAppointmentSettings, saveAppointmentSettings, type DaySchedule, type Holiday } from "@/actions/appointment-actions";
 
@@ -25,8 +25,10 @@ const daysOfWeek = [
 const AppointmentSettingsWrapper = ({ business }: AppointmentSettingsProps) => {
     const [schedules, setSchedules] = useState<Record<string, DaySchedule>>({});
     const [isLoading, setIsLoading] = useState(true);
-
     const [holidays, setHolidays] = useState<Holiday[]>([]);
+    const [saveStatus, setSaveStatus] = useState<"idle" | "saving" | "saved" | "error">("idle");
+
+    const isLoaded = useRef(false);
 
     useEffect(() => {
         const loadSettings = async () => {
@@ -66,16 +68,41 @@ const AppointmentSettingsWrapper = ({ business }: AppointmentSettingsProps) => {
         loadSettings();
     }, [business.id]);
 
-    const handleSave = async () => {
-        await saveAppointmentSettings(
-            business.id,
-            schedules,
-            holidays
-        );
-    };
+    // Auto-save changes with debounce
+    useEffect(() => {
+        if (isLoading) {
+            isLoaded.current = false;
+            return;
+        }
+
+        if (!isLoaded.current) {
+            isLoaded.current = true;
+            return;
+        }
+
+        const delayDebounceFn = setTimeout(async () => {
+            setSaveStatus("saving");
+            const result = await saveAppointmentSettings(
+                business.id,
+                schedules,
+                holidays
+            );
+            if (result?.error) {
+                setSaveStatus("error");
+            } else {
+                setSaveStatus("saved");
+                // Reset to idle after 2 seconds
+                setTimeout(() => setSaveStatus("idle"), 2000);
+            }
+        }, 600);
+
+        return () => clearTimeout(delayDebounceFn);
+    }, [schedules, holidays, isLoading, business.id]);
+
     if (isLoading) {
         return <div className="p-6 text-center text-gray-500">Memuat pengaturan...</div>;
     }
+
     return (
         <AppointmentSettings
             business={business}
@@ -83,7 +110,7 @@ const AppointmentSettingsWrapper = ({ business }: AppointmentSettingsProps) => {
             holidays={holidays}
             setSchedules={setSchedules}
             setHolidays={setHolidays}
-            onSave={handleSave}
+            saveStatus={saveStatus}
         />
     );
 };

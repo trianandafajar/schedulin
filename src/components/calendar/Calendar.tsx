@@ -31,9 +31,10 @@ interface CalendarEvent {
 interface CalendarProps {
   events: CalendarEvent[];
   onSaveEvent: (eventData: any, id?: string) => Promise<void>;
+  onDeleteEvent?: (id: string, isBooking?: boolean) => Promise<void>;
 }
 
-const Calendar: React.FC<CalendarProps> = ({ events, onSaveEvent }) => {
+const Calendar: React.FC<CalendarProps> = ({ events, onSaveEvent, onDeleteEvent }) => {
   const [selectedEvent, setSelectedEvent] = useState<CalendarEvent | null>(null);
   const [eventTitle, setEventTitle] = useState("");
   const [eventStartDate, setEventStartDate] = useState("");
@@ -88,7 +89,8 @@ const Calendar: React.FC<CalendarProps> = ({ events, onSaveEvent }) => {
       extendedProps: {
         calendar: event.extendedProps.calendar,
         originalStart: event.extendedProps.originalStart,
-        originalEnd: event.extendedProps.originalEnd
+        originalEnd: event.extendedProps.originalEnd,
+        isBooking: event.extendedProps.isBooking
       }
     });
 
@@ -108,6 +110,10 @@ const Calendar: React.FC<CalendarProps> = ({ events, onSaveEvent }) => {
   };
 
   const handleAddOrUpdateEvent = async () => {
+    if (eventEndDate && new Date(eventEndDate) < new Date(eventStartDate)) {
+      alert("End time cannot be earlier than start time.");
+      return;
+    }
     setIsLoading(true);
     try {
       const payloadStart = new Date(eventStartDate).toISOString();
@@ -123,6 +129,20 @@ const Calendar: React.FC<CalendarProps> = ({ events, onSaveEvent }) => {
         },
         selectedEvent?.id
       );
+      closeModal();
+      resetModalFields();
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleDeleteEvent = async () => {
+    if (!selectedEvent || !onDeleteEvent) return;
+    setIsLoading(true);
+    try {
+      await onDeleteEvent(selectedEvent.id, selectedEvent.extendedProps.isBooking);
       closeModal();
       resetModalFields();
     } catch (error) {
@@ -286,6 +306,16 @@ const Calendar: React.FC<CalendarProps> = ({ events, onSaveEvent }) => {
         </div>
 
         <div className="bg-gray-50 dark:bg-[#1a1a1a] px-6 py-4 border-t border-gray-100 dark:border-gray-800 flex items-center justify-end gap-3">
+          {selectedEvent && onDeleteEvent && (
+            <Button
+              onClick={handleDeleteEvent}
+              disabled={isLoading}
+              type="button"
+              className="mr-auto h-10 px-4 rounded-xl bg-red-600 hover:bg-red-700 text-white font-medium focus:ring-4 focus:ring-red-500/20 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+            >
+              Delete Event
+            </Button>
+          )}
           <Button onClick={closeModal} type="button" variant="outline" className="h-10 px-4 rounded-xl border-gray-200 text-gray-600 hover:bg-gray-100 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-[#222]">
             Cancel
           </Button>

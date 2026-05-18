@@ -37,7 +37,7 @@ export default function SignInForm() {
       router.push('/dashboard');
       setIsLoading(false);
     } else {
-      setError(result?.error || "Gagal Login");
+      setError(result?.error || "Failed to login");
       setIsLoading(false);
     }
   };

@@ -28,7 +28,7 @@ function InteractiveOptionButton({ option, onSelect, disabled }: { option: any; 
             }
           }}
           disabled={disabled}
-          className="flex-1 rounded-xl border border-gray-300 py-2.5 px-3 text-sm focus:border-brand- focus:ring-1 focus:ring-brand- disabled:bg-gray-100 disabled:text-gray-400"
+          className="flex-1 rounded-xl border border-gray-300 py-2.5 px-3 text-sm focus:border-brand-500 focus:ring-1 focus:ring-brand-500 disabled:bg-gray-100 disabled:text-gray-400"
           placeholder={option.label}
         />
         <button 
@@ -38,7 +38,7 @@ function InteractiveOptionButton({ option, onSelect, disabled }: { option: any; 
              }
           }}
           disabled={!inputValue.trim() || disabled}
-          className="rounded-xl bg-brand- px-3 py-2.5 text-white disabled:bg-gray-300 transition-all flex items-center justify-center shrink-0"
+          className="rounded-xl bg-brand-500 hover:bg-brand-600 px-3 py-2.5 text-white disabled:bg-gray-300 transition-all flex items-center justify-center shrink-0"
         >
           <Send className="w-4 h-4" />
         </button>
@@ -56,8 +56,8 @@ function InteractiveOptionButton({ option, onSelect, disabled }: { option: any; 
         }
       }}
       disabled={disabled}
-      className={`w-full text-left rounded-xl border border-brand- bg-white px-4 py-2.5 text-sm text-brand- font-medium transition-all
-        ${disabled ? "opacity-50 cursor-not-allowed" : "hover:bg-brand- hover:border-brand-"}`}
+      className={`w-full text-left rounded-xl border border-brand-500 bg-white px-4 py-2.5 text-sm text-brand-500 font-medium transition-all
+        ${disabled ? "opacity-50 cursor-not-allowed" : "hover:bg-brand-50 hover:border-brand-600 hover:text-brand-600"}`}
     >
       {option.label}
     </button>
@@ -73,7 +73,7 @@ interface AIBookingChatProps {
 }
 
 const QUICK_PROMPTS = [
-  "Mulai booking appointment",
+  "Start booking appointment",
 ];
 
 export default function AIBookingChat({
@@ -184,7 +184,7 @@ export default function AIBookingChat({
           style={{ boxShadow: "0 25px 60px -12px rgba(0,0,0,0.18)" }}
         >
           {/* Header */}
-          <div className="flex items-center justify-between p-4 text-white bg-brand-">
+          <div className="flex items-center justify-between p-4 text-white bg-brand-500">
             <div className="flex items-center gap-3">
               <div className="relative flex h-10 w-10 items-center justify-center rounded-full bg-white/20 ring-2 ring-white/30">
                 <Bot className="h-5 w-5" />
@@ -209,7 +209,7 @@ export default function AIBookingChat({
             {/* Welcome State */}
             {messages.length === 0 && (
               <div className="flex h-full flex-col items-center justify-center text-center gap-4 px-4">
-                <div className="flex h-16 w-16 items-center justify-center rounded-full bg-brand- text-brand-">
+                <div className="flex h-16 w-16 items-center justify-center rounded-full bg-brand-50 text-brand-500">
                   <Sparkles className="h-8 w-8" />
                 </div>
                 <div>
@@ -225,9 +225,9 @@ export default function AIBookingChat({
                     <button
                       key={p}
                       onClick={() => handleQuickPrompt(p)}
-                      className="rounded-2xl border border-brand- bg-brand- px-4 py-3 text-sm text-white font-bold transition-all text-center"
+                      className="rounded-2xl border border-brand-500 bg-brand-500 hover:bg-brand-600 px-4 py-3 text-sm text-white font-bold transition-all text-center"
                     >
-                      Mulai Booking Sekarang
+                      Start Booking Now
                     </button>
                   ))}
                 </div>
@@ -249,7 +249,7 @@ export default function AIBookingChat({
                     <div
                       className={`h-8 w-8 rounded-full flex items-center justify-center shrink-0 text-white ${
                         m.role === "user"
-                          ? "bg-brand-"
+                          ? "bg-brand-500"
                           : "bg-gray-700"
                       }`}
                     >
@@ -262,7 +262,7 @@ export default function AIBookingChat({
                         <div
                           className={`rounded-2xl px-4 py-2.5 text-sm leading-relaxed ${
                             m.role === "user"
-                              ? "bg-brand- text-white rounded-tr-none"
+                              ? "bg-brand-500 text-white rounded-tr-none"
                               : "bg-white border border-gray-100 text-gray-800 shadow-sm rounded-tl-none"
                           }`}
                         >
@@ -293,8 +293,8 @@ export default function AIBookingChat({
                           if (isPartial) {
                             return (
                               <div key={key} className="p-3 rounded-2xl border border-gray-200 bg-white flex items-center justify-center animate-pulse shadow-sm">
-                                <Loader2 className="w-4 h-4 text-brand- animate-spin mr-2" />
-                                <span className="text-xs font-medium text-gray-500">Menyiapkan opsi...</span>
+                                <Loader2 className="w-4 h-4 text-brand-500 animate-spin mr-2" />
+                                <span className="text-xs font-medium text-gray-500">Preparing options...</span>
                               </div>
                             );
                           }
@@ -333,8 +333,8 @@ export default function AIBookingChat({
                           if (isPartial) {
                             return (
                               <div key={key} className="p-3 rounded-2xl border border-gray-200 bg-white flex items-center justify-center animate-pulse shadow-sm">
-                                <Loader2 className="w-4 h-4 text-brand- animate-spin mr-2" />
-                                <span className="text-xs font-medium text-gray-500">Memproses booking Anda...</span>
+                                <Loader2 className="w-4 h-4 text-brand-500 animate-spin mr-2" />
+                                <span className="text-xs font-medium text-gray-500">Processing your booking...</span>
                               </div>
                             );
                           }
@@ -346,24 +346,24 @@ export default function AIBookingChat({
                                 <div key={key} className="p-4 rounded-2xl border border-success-200 bg-success-50 flex flex-col gap-3 shadow-sm mt-2">
                                   <div className="flex items-center gap-2 text-success-700 font-bold">
                                     <CheckCircle2 className="w-5 h-5" />
-                                    <span>Booking Berhasil!</span>
+                                    <span>Booking Successful!</span>
                                   </div>
                                   <p className="text-sm text-success-800">
-                                    Kode Booking: <strong>{result.bookingId}</strong><br/>
-                                    Detail telah disimpan. Terima kasih!
+                                    Booking Code: <strong>{result.bookingId}</strong><br/>
+                                    Details have been saved. Thank you!
                                   </p>
                                   <div className="flex gap-2 mt-1">
                                     <button 
                                       onClick={() => window.location.reload()} 
                                       className="px-3 py-2 bg-success-600 hover:bg-success-700 transition-colors text-white text-xs font-bold rounded-xl flex-1"
                                     >
-                                      Booking Lagi
+                                      Book Again
                                     </button>
                                     <button 
                                       onClick={() => setIsOpen(false)} 
                                       className="px-3 py-2 bg-white hover:bg-success-100 transition-colors text-success-700 border border-success-200 text-xs font-bold rounded-xl flex-1"
                                     >
-                                      Tutup
+                                      Close
                                     </button>
                                   </div>
                                 </div>
@@ -373,9 +373,9 @@ export default function AIBookingChat({
                                 <div key={key} className="p-4 rounded-2xl border border-error-200 bg-error-50 flex flex-col gap-2 shadow-sm mt-2">
                                   <div className="flex items-center gap-2 text-error-700 font-bold">
                                     <X className="w-5 h-5" />
-                                    <span>Booking Gagal</span>
+                                    <span>Booking Failed</span>
                                   </div>
-                                  <p className="text-sm text-error-600">{result.error || "Terjadi kesalahan sistem."}</p>
+                                  <p className="text-sm text-error-600">{result.error || "A system error occurred."}</p>
                                 </div>
                               );
                             }
@@ -400,9 +400,9 @@ export default function AIBookingChat({
                   </div>
                   <div className="bg-white border border-gray-100 rounded-2xl rounded-tl-none px-4 py-2.5 shadow-sm flex items-center gap-2">
                     <span className="flex gap-1">
-                      <span className="h-1.5 w-1.5 rounded-full bg-brand- animate-bounce" style={{ animationDelay: "0ms" }} />
-                      <span className="h-1.5 w-1.5 rounded-full bg-brand- animate-bounce" style={{ animationDelay: "150ms" }} />
-                      <span className="h-1.5 w-1.5 rounded-full bg-brand- animate-bounce" style={{ animationDelay: "300ms" }} />
+                      <span className="h-1.5 w-1.5 rounded-full bg-brand-500 animate-bounce" style={{ animationDelay: "0ms" }} />
+                      <span className="h-1.5 w-1.5 rounded-full bg-brand-500 animate-bounce" style={{ animationDelay: "150ms" }} />
+                      <span className="h-1.5 w-1.5 rounded-full bg-brand-500 animate-bounce" style={{ animationDelay: "300ms" }} />
                     </span>
                   </div>
                 </div>
@@ -427,7 +427,7 @@ export default function AIBookingChat({
       {/* FAB */}
       <button
         onClick={() => { setIsOpen((o) => !o); setHasNewMessage(false); }}
-        className="relative flex h-14 w-14 items-center justify-center rounded-full bg-brand- text-white transition-all hover:scale-110 active:scale-95"
+        className="relative flex h-14 w-14 items-center justify-center rounded-full bg-brand-500 hover:bg-brand-600 text-white transition-all hover:scale-110 active:scale-95"
         aria-label="Open asas Assistant"
       >
         {isOpen ? <ChevronDown className="h-6 w-6" /> : <MessageSquare className="h-6 w-6" />}

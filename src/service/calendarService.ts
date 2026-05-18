@@ -11,6 +11,7 @@ export interface CalendarEvent {
         calendar: string;
         originalStart?: string;
         originalEnd?: string;
+        isBooking?: boolean;
     };
 }
 
@@ -37,7 +38,7 @@ export const getCalendarEvents = async (userId: string): Promise<CalendarEvent[]
                 id,
                 customer_name,
                 status,
-                service:services(name),
+                service:services(name, duration_minutes),
                 slot:appointment_slots(date, time)
             `)
             .eq("business_id", business.id)
@@ -54,9 +55,9 @@ export const getCalendarEvents = async (userId: string): Promise<CalendarEvent[]
                 const startDateTime = `${slot.date}T${slot.time}`;
 
 
-                // For bookings, we might want to calculate end time based on service duration, 
-                // but for now let's default to 1 hour
-                const endDate = new Date(new Date(startDateTime).getTime() + 60 * 60 * 1000);
+                // Calculate end time based on service duration (default to 60 minutes if not specified)
+                const durationMinutes = service?.duration_minutes || 60;
+                const endDate = new Date(new Date(startDateTime).getTime() + durationMinutes * 60 * 1000);
                 const endDateTime = endDate.toISOString();
 
                 return {
@@ -69,6 +70,7 @@ export const getCalendarEvents = async (userId: string): Promise<CalendarEvent[]
                         calendar: b.status === 'completed' ? 'success' : 'primary',
                         originalStart: startDateTime,
                         originalEnd: endDateTime,
+                        isBooking: true,
                     },
                 } as CalendarEvent;
             });
@@ -85,6 +87,7 @@ export const getCalendarEvents = async (userId: string): Promise<CalendarEvent[]
             calendar: event.event_level,
             originalStart: event.start_date,
             originalEnd: event.end_date,
+            isBooking: false,
         },
     }));
 
@@ -115,6 +118,41 @@ export const saveCalendarEvent = async (userId: string, eventData: any, id?: str
         const { error } = await supabase
             .from("calendar_events")
             .insert([eventPayload]);
+
+        if (error) throw error;
+    }
+};
+
+export const deleteCalendarEvent = async (userId: string, id: string, isBooking?: boolean) => {
+    const supabase = createClient();
+    if (isBooking) {
+        const { data: booking, error: fetchErr } = await supabase
+            .from("bookings")
+            .select("slot_id")
+            .eq("id", id)
+            .single();
+            
+        if (fetchErr) throw fetchErr;
+
+        const { error: cancelErr } = await supabase
+            .from("bookings")
+            .update({ status: "cancelled", updated_at: new Date().toISOString() })
+            .eq("id", id);
+
+        if (cancelErr) throw cancelErr;
+
+        if (booking?.slot_id) {
+            await supabase
+                .from("appointment_slots")
+                .update({ is_booked: false })
+                .eq("id", booking.slot_id);
+        }
+    } else {
+        const { error } = await supabase
+            .from("calendar_events")
+            .delete()
+            .eq("id", id)
+            .eq("user_id", userId);
 
         if (error) throw error;
     }

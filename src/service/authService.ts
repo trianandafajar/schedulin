@@ -216,7 +216,7 @@ export const completeOnboardingClient = async (
   const result = response.data;
 
   if (response.status != 200) {
-    throw new Error(result.error || 'Gagal melakukan onboarding');
+    throw new Error(result.error || 'Failed to complete onboarding');
   }
 
   return result;

@@ -13,7 +13,7 @@ interface AppointmentSettingsProps {
   holidays: Holiday[];
   setSchedules: Dispatch<SetStateAction<Record<string, DaySchedule>>>;
   setHolidays: Dispatch<SetStateAction<Holiday[]>>;
-  onSave: () => any;
+  saveStatus: "idle" | "saving" | "saved" | "error";
 }
 
 interface DaySchedule {
@@ -44,13 +44,12 @@ const AppointmentSettings: React.FC<AppointmentSettingsProps> = ({
   holidays,
   setSchedules,
   setHolidays,
-  onSave
+  saveStatus
 }) => {
   const [isPublic, setIsPublic] = useState(business.is_public_enabled);
   const [isToggling, setIsToggling] = useState(false);
   const [copied, setCopied] = useState(false);
   const [bookingLink, setBookingLink] = useState("");
-  const [isSaving, setIsSaving] = useState(false);
   const [newHoliday, setNewHoliday] = useState({ date: "", name: "" });
 
   useEffect(() => {
@@ -70,11 +69,11 @@ const AppointmentSettings: React.FC<AppointmentSettingsProps> = ({
 
       if (result?.error) {
         setIsPublic(!newState);
-        alert("Gagal mengubah setting: " + result.error);
+        alert("Failed to change setting: " + result.error);
       }
     } catch (error) {
       setIsPublic(!newState);
-      alert("Terjadi kesalahan sistem saat mengubah visibilitas.");
+      alert("A system error occurred while changing visibility.");
     } finally {
       setIsToggling(false);
     }
@@ -91,6 +90,17 @@ const AppointmentSettings: React.FC<AppointmentSettingsProps> = ({
     field: keyof DaySchedule,
     value: string | boolean
   ) => {
+    if (field === "startTime" || field === "endTime") {
+      const current = schedules[day];
+      const newStartTime = field === "startTime" ? (value as string) : current.startTime;
+      const newEndTime = field === "endTime" ? (value as string) : current.endTime;
+
+      if (newStartTime && newEndTime && newEndTime < newStartTime) {
+        alert("End time cannot be earlier than start time.");
+        return;
+      }
+    }
+
     setSchedules((prev) => ({
       ...prev,
       [day]: { ...prev[day], [field]: value },
@@ -111,14 +121,7 @@ const AppointmentSettings: React.FC<AppointmentSettingsProps> = ({
     setHolidays((prev) => prev.filter((holiday) => holiday.id !== id));
   };
 
-  const handleSaveSettings = async () => {
-    setIsSaving(true);
-    try {
-      await (onSave as any)();
-    } finally {
-      setIsSaving(false);
-    }
-  };
+
 
   return (
     <div className="w-full max-w-5xl space-y-8">
@@ -282,7 +285,7 @@ const AppointmentSettings: React.FC<AppointmentSettingsProps> = ({
             <button
               onClick={handleAddHoliday}
               disabled={!newHoliday.date || !newHoliday.name}
-              className="h-11 whitespace-nowrap rounded-xl bg-brand- px-6 text-sm font-medium text-white transition-colors hover:bg-brand- disabled:cursor-not-allowed disabled:opacity-50   "
+              className="h-11 whitespace-nowrap rounded-xl bg-brand-500 px-6 text-sm font-medium text-white transition-colors hover:bg-brand-600 disabled:cursor-not-allowed disabled:opacity-50"
             >
               Add Date
             </button>
@@ -330,28 +333,16 @@ const AppointmentSettings: React.FC<AppointmentSettingsProps> = ({
         </div>
       </div>
 
-      <div className="sticky bottom-6 z-10 flex items-center justify-end rounded-2xl border border-gray-200 bg-white/80 p-4 shadow-lg backdrop-blur-md dark:border-gray-800 dark:bg-[#111111]/80">
-        <button
-          onClick={handleSaveSettings}
-          disabled={isSaving}
-          className={`relative inline-flex h-12 items-center justify-center overflow-hidden rounded-xl px-8 text-sm font-medium text-white transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] ${
-            isSaving 
-              ? "bg-brand-400 cursor-not-allowed" 
-              : "bg-brand-500 hover:bg-brand-600 hover:shadow-xl hover:shadow-brand-500/20"
-          }`}
-        >
-          {isSaving ? (
-            <span className="flex items-center gap-2">
-              <svg className="h-4 w-4 animate-spin text-white" viewBox="0 0 24 24">
-                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none"></circle>
-                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-              </svg>
-              Saving Changes...
-            </span>
+      <div className="sticky bottom-6 z-10 flex items-center justify-between rounded-2xl border border-gray-200 bg-white/80 px-6 py-4 shadow-lg backdrop-blur-md dark:border-gray-800 dark:bg-[#111111]/80">
+        <div className="text-sm font-medium text-gray-600 dark:text-gray-300">
+          {saveStatus === "saving" ? (
+            <span className="text-brand-500 dark:text-brand-400">Saving changes...</span>
+          ) : saveStatus === "error" ? (
+            <span className="text-red-500">Failed to save changes</span>
           ) : (
-            "Save All Settings"
+            <span>System active · Auto saved</span>
           )}
-        </button>
+        </div>
       </div>
     </div>
   );
