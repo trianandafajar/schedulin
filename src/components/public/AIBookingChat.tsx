@@ -163,12 +163,15 @@ export default function AIBookingChat({
   };
 
   const getToolInvocations = (m: any): any[] => {
+    if (m.toolInvocations && m.toolInvocations.length > 0) {
+      return m.toolInvocations;
+    }
     if (m.parts) {
       return m.parts
         .filter((p: any) => p.type === "tool-invocation" || (typeof p.type === "string" && p.type.startsWith("tool-")))
         .map((p: any) => p.toolInvocation || p);
     }
-    return m.toolInvocations || [];
+    return [];
   };
 
   const hasToolInvocations = (m: any): boolean => {

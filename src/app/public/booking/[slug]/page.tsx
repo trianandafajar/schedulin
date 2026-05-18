@@ -6,6 +6,7 @@ import Button from "@/components/ui/button/Button";
 import { Modal } from "@/components/ui/modal";
 import { getBusinessBySlug, getServicesByBusinessId, getBusinessSchedule, getBookedSlots, getBusinessHolidays, Service, BusinessSchedule, BusinessHoliday } from "@/actions/public";
 import { createPublicBooking } from "@/actions/public-booking";
+import AIBookingChat from "@/components/public/AIBookingChat";
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -316,9 +317,9 @@ export default function PublicBookingPage({ params }: PageProps) {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-blue-50 p-6 font-sans flex items-center justify-center">
+      <div className="min-h-screen bg-brand-50 p-6 font-sans flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-brand-600 mx-auto mb-4"></div>
           <p className="text-gray-600">Loading...</p>
         </div>
       </div>
@@ -327,7 +328,7 @@ export default function PublicBookingPage({ params }: PageProps) {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-blue-50 p-6 font-sans flex items-center justify-center">
+      <div className="min-h-screen bg-brand-50 p-6 font-sans flex items-center justify-center">
         <div className="text-center bg-white rounded-3xl shadow-lg p-8 max-w-md">
           <div className="text-red-500 mb-4">
             <Calendar className="w-16 h-16 mx-auto" />
@@ -341,7 +342,7 @@ export default function PublicBookingPage({ params }: PageProps) {
 
   if (bookingSuccess) {
     return (
-      <div className="min-h-screen bg-blue-50 p-6 font-sans flex items-center justify-center">
+      <div className="min-h-screen bg-brand-50 p-6 font-sans flex items-center justify-center">
         <div className="text-center bg-white rounded-3xl shadow-lg p-8 max-w-md">
           <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
             <Check className="w-8 h-8 text-green-600" />
@@ -350,8 +351,8 @@ export default function PublicBookingPage({ params }: PageProps) {
           <p className="text-gray-600 mb-4">
             Your appointment has been successfully booked.
           </p>
-          <div className="bg-blue-50 rounded-xl p-4 text-left mb-4">
-            <p className="font-semibold text-blue-700">{selectedService?.name}</p>
+          <div className="bg-brand-50 rounded-xl p-4 text-left mb-4">
+            <p className="font-semibold text-brand-700">{selectedService?.name}</p>
             <p className="text-sm text-gray-600">
               {selectedDate?.toDateString()} at {selectedTime}
             </p>
@@ -365,11 +366,11 @@ export default function PublicBookingPage({ params }: PageProps) {
   }
 
   return (
-    <div className="min-h-screen bg-blue-50 p-6 font-sans">
+    <div className="min-h-screen bg-brand-50 p-6 font-sans">
       <div className="max-w-6xl mx-auto bg-white rounded-3xl shadow-lg p-8">
 
         <div className="flex items-center gap-3 mb-8">
-          <h1 className="text-xl font-semibold text-blue-700">
+          <h1 className="text-xl font-semibold text-brand-700">
             Book Appointment - {businessName}
           </h1>
         </div>
@@ -381,13 +382,13 @@ export default function PublicBookingPage({ params }: PageProps) {
             <div className="mb-10">
               <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center gap-2">
-                  <Scissors className="w-4 h-4 text-blue-600" />
+                  <Scissors className="w-4 h-4 text-brand-600" />
                   <span className="font-semibold text-lg">Select Service</span>
                 </div>
                 {selectedService && (
                   <button
                     onClick={resetService}
-                    className="text-sm text-blue-600 hover:underline"
+                    className="text-sm text-brand-600 hover:underline"
                   >
                     Change
                   </button>
@@ -400,13 +401,13 @@ export default function PublicBookingPage({ params }: PageProps) {
                     <button
                       key={service.id}
                       onClick={() => handleServiceSelect(service)}
-                      className="p-4 border-2 border-gray-200 rounded-xl text-left hover:border-blue-500 hover:bg-blue-50 transition-all"
+                      className="p-4 border-2 border-gray-200 rounded-xl text-left hover:border-brand-500 hover:bg-brand-50 transition-all"
                     >
                       <div className="font-semibold text-gray-800">{service.name}</div>
                       <div className="text-sm text-gray-500 mt-1">
                         {service.duration_minutes} minutes
                       </div>
-                      <div className="text-blue-600 font-semibold mt-2">
+                      <div className="text-brand-600 font-semibold mt-2">
                         Rp {service.price.toLocaleString()}
                       </div>
                     </button>
@@ -418,9 +419,9 @@ export default function PublicBookingPage({ params }: PageProps) {
                   )}
                 </div>
               ) : (
-                <div className="p-4 bg-blue-50 border-2 border-blue-500 rounded-xl">
+                <div className="p-4 bg-brand-50 border-2 border-brand-500 rounded-xl">
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center">
+                    <div className="w-10 h-10 bg-brand-500 rounded-full flex items-center justify-center">
                       <Check className="w-5 h-5 text-white" />
                     </div>
                     <div>
@@ -438,7 +439,7 @@ export default function PublicBookingPage({ params }: PageProps) {
               <div className="mb-10">
                 <div className="flex items-center justify-between mb-4">
                   <div className="flex items-center gap-2">
-                    <Calendar className="w-4 h-4 text-blue-600" />
+                    <Calendar className="w-4 h-4 text-brand-600" />
                     <span className="font-semibold text-lg">
                       {selectedDate
                         ? selectedDate.toLocaleString("default", { month: "long", year: "numeric" })
@@ -496,8 +497,8 @@ export default function PublicBookingPage({ params }: PageProps) {
                         className={`p-2 rounded-full text-center transition
                           ${isDisabled ? "text-gray-300 cursor-not-allowed bg-gray-50" : ""}
                           ${isSelected && !isDisabled
-                            ? "bg-blue-600 text-white"
-                            : !isDisabled && "hover:bg-blue-100"
+                            ? "bg-brand-600 text-white"
+                            : !isDisabled && "hover:bg-brand-100"
                           }
                         `}
                       >
@@ -516,7 +517,7 @@ export default function PublicBookingPage({ params }: PageProps) {
             {selectedService && selectedDate && !isDateDisabled(selectedDate) && (
               <div>
                 <div className="flex items-center gap-2 mb-4">
-                  <Clock className="w-4 h-4 text-blue-600" />
+                  <Clock className="w-4 h-4 text-brand-600" />
                   <span className="font-semibold">
                     Select Time - {selectedDate.toDateString()}
                   </span>
@@ -553,8 +554,8 @@ export default function PublicBookingPage({ params }: PageProps) {
                           disabled={disabled}
                           onClick={() => handleTimeSelect(time)}
                           className={`p-3 border rounded-xl text-sm transition
-        ${selectedTime === time ? "bg-blue-600 text-white border-blue-600" : ""}
-        ${disabled ? "bg-gray-200 text-gray-400 cursor-not-allowed line-through" : "hover:bg-blue-100"}
+        ${selectedTime === time ? "bg-brand-600 text-white border-brand-600" : ""}
+        ${disabled ? "bg-gray-200 text-gray-400 cursor-not-allowed line-through" : "hover:bg-brand-100"}
       `}
                         >
                           {time}
@@ -588,9 +589,9 @@ export default function PublicBookingPage({ params }: PageProps) {
 
           {/* Booking Summary - Always visible */}
           <div className="w-full lg:w-96">
-            <div className="bg-blue-50 rounded-2xl shadow-md p-6 border flex flex-col gap-5 sticky top-6">
+            <div className="bg-brand-50 rounded-2xl shadow-md p-6 border flex flex-col gap-5 sticky top-6">
 
-              <h3 className="font-semibold text-lg text-blue-700">
+              <h3 className="font-semibold text-lg text-brand-700">
                 Booking Summary
               </h3>
 
@@ -621,13 +622,13 @@ export default function PublicBookingPage({ params }: PageProps) {
                 </div>
 
                 {selectedService && (
-                  <div className="font-semibold text-blue-700">
+                  <div className="font-semibold text-brand-700">
                     Rp {selectedService.price.toLocaleString()}
                   </div>
                 )}
               </div>
 
-              <div className="h-px bg-blue-200" />
+              <div className="h-px bg-brand-200" />
 
               <div className="flex justify-between font-semibold">
                 <span>Total</span>
@@ -659,7 +660,7 @@ export default function PublicBookingPage({ params }: PageProps) {
           </h5>
 
           {/* Booking Details */}
-          <div className="bg-blue-50 rounded-xl p-4 mb-4">
+          <div className="bg-brand-50 rounded-xl p-4 mb-4">
             <div className="flex justify-between items-center mb-2">
               <span className="text-sm text-gray-500">Service</span>
               <span className="font-medium">{selectedService?.name}</span>
@@ -672,9 +673,9 @@ export default function PublicBookingPage({ params }: PageProps) {
               <span className="text-sm text-gray-500">Time</span>
               <span className="font-medium">{selectedTime}</span>
             </div>
-            <div className="flex justify-between items-center pt-2 border-t border-blue-200">
+            <div className="flex justify-between items-center pt-2 border-t border-brand-200">
               <span className="font-semibold">Total</span>
-              <span className="font-semibold text-blue-700">
+              <span className="font-semibold text-brand-700">
                 Rp {selectedService?.price.toLocaleString()}
               </span>
             </div>
@@ -693,7 +694,7 @@ export default function PublicBookingPage({ params }: PageProps) {
                   value={customerName}
                   onChange={(e) => setCustomerName(e.target.value)}
                   required
-                  className="dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 pl-10 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
+                  className="dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 pl-10 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-500 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
                   placeholder="Enter your name"
                 />
               </div>
@@ -710,7 +711,7 @@ export default function PublicBookingPage({ params }: PageProps) {
                   value={customerPhone}
                   onChange={(e) => setCustomerPhone(e.target.value)}
                   required
-                  className="dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 pl-10 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
+                  className="dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 pl-10 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-500 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
                   placeholder="Enter your phone number"
                 />
               </div>
@@ -724,7 +725,7 @@ export default function PublicBookingPage({ params }: PageProps) {
                 value={customerNotes}
                 onChange={(e) => setCustomerNotes(e.target.value)}
                 rows={3}
-                className="dark:bg-dark-900 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
+                className="dark:bg-dark-900 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-500 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
                 placeholder="Any special requests..."
               />
             </div>
@@ -761,6 +762,23 @@ export default function PublicBookingPage({ params }: PageProps) {
           </form>
         </div>
       </Modal>
+
+      {businessId && (
+        <AIBookingChat 
+          businessId={businessId}
+          businessName={businessName}
+          services={services}
+          onSelectService={handleServiceSelect}
+          onSelectDateTimeAndOpenModal={(date, time) => {
+            const parsedDate = new Date(date);
+            if (!isNaN(parsedDate.getTime())) {
+              setSelectedDate(parsedDate);
+              setSelectedTime(time);
+              setIsModalOpen(true);
+            }
+          }}
+        />
+      )}
     </div>
   );
 }

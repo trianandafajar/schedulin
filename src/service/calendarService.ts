@@ -124,11 +124,62 @@ export const saveCalendarEvent = async (userId: string, eventData: any, id?: str
 };
 
 export const deleteCalendarEvent = async (userId: string, id: string) => {
-    const { error } = await supabase
+    // 1. Try to delete from manual calendar_events
+    const { data: deletedManual, error: deleteError } = await supabase
         .from("calendar_events")
         .delete()
         .eq("id", id)
-        .eq("user_id", userId);
+        .eq("user_id", userId)
+        .select();
 
-    if (error) throw error;
+    if (deleteError) throw deleteError;
+
+    // 2. If it was not a manual event, it might be a client booking
+    if (!deletedManual || deletedManual.length === 0) {
+        // Retrieve the business owned by the authenticated user to verify authorization
+        const { data: business, error: bizError } = await supabase
+            .from("business")
+            .select("id")
+            .eq("owner_id", userId)
+            .single();
+
+        if (bizError) throw bizError;
+
+        if (business) {
+            // Find the booking and get its slot_id
+            const { data: booking, error: bookingError } = await supabase
+                .from("bookings")
+                .select("id, slot_id")
+                .eq("id", id)
+                .eq("business_id", business.id)
+                .single();
+
+            if (bookingError && bookingError.code !== "PGRST116") { // Ignore "no rows returned"
+                throw bookingError;
+            }
+
+            if (booking) {
+                // Update booking status to cancelled
+                const { error: updateError } = await supabase
+                    .from("bookings")
+                    .update({
+                        status: "cancelled",
+                        updated_at: new Date().toISOString()
+                    })
+                    .eq("id", id);
+
+                if (updateError) throw updateError;
+
+                // Free up the corresponding appointment slot
+                if (booking.slot_id) {
+                    const { error: slotError } = await supabase
+                        .from("appointment_slots")
+                        .update({ is_booked: false })
+                        .eq("id", booking.slot_id);
+
+                    if (slotError) throw slotError;
+                }
+            }
+        }
+    }
 };

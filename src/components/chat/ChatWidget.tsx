@@ -11,8 +11,8 @@ import ReactMarkdown from "react-markdown";
 export default function ChatWidget() {
   const [isOpen, setIsOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
-  const scrollRef = useRef<HTMLDivElement>(null);
   const pathname = usePathname();
+  const scrollRef = useRef<HTMLDivElement>(null);
 
   // Detect if we're on a public booking page and grab the business slug from the URL
   const businessSlug = useMemo(() => {
@@ -55,6 +55,11 @@ export default function ChatWidget() {
   }, [messages]);
 
   if (!mounted) return null;
+
+  // Hide on public booking pages
+  if (pathname?.startsWith("/public/booking/")) {
+    return null;
+  }
 
   const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
