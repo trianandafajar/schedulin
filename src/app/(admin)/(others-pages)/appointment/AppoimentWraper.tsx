@@ -100,7 +100,7 @@ const AppointmentSettingsWrapper = ({ business }: AppointmentSettingsProps) => {
     }, [schedules, holidays, isLoading, business.id]);
 
     if (isLoading) {
-        return <div className="p-6 text-center text-gray-500">Memuat pengaturan...</div>;
+        return <div className="p-6 text-center text-gray-500">Loading settings...</div>;
     }
 
     return (
