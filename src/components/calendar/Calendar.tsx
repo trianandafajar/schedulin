@@ -25,6 +25,7 @@ interface CalendarEvent {
     calendar: string;
     originalStart?: string;
     originalEnd?: string;
+    isBooking?: boolean;
   };
 }
 
