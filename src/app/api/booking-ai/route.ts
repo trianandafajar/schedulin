@@ -208,7 +208,6 @@ NEVER output raw text. ALWAYS use 'interactiveOptions' unless you are submitting
       model: google("gemini-2.5-flash"),
       system: systemPrompt,
       messages: await convertToModelMessages(safeMessages),
-      maxSteps: 5,
       tools: {
         interactiveOptions: tool({
           description: "Display a message and a set of clickable options (buttons) to the user.",
